@@ -98,7 +98,6 @@ void Simulation::GenerateRandom(int numParticles, double sphereRadius)
 			continue;
 		}
 		
-
 		// now the velocity
 
 		particle.velocity.X = rndV(rndEngineVX);
@@ -119,29 +118,56 @@ void Simulation::GenerateRandom(int numParticles, double sphereRadius)
 void Simulation::BuildEventQueue()
 {
 	int numParticles = (int)particles.size();
+
+	eventsQueue.reserve((size_t)(1.2 * numParticles*(numParticles - 1) / 2 + numParticles));
+
 	for (int i = 0; i < numParticles; ++i)
 	{		
-		AddWallCollisionToQueue(i);
+		double colTime = particles[i].WallCollisionTime();
+
+		if (std::numeric_limits<double>::infinity() != colTime)
+		{
+			Event wallEvent;
+
+			wallEvent.type = Event::wallCollision;
+			wallEvent.particle1 = i;
+			wallEvent.eventTime = colTime;
+			
+			eventsQueue.push_back(wallEvent);
+		}
 
 		for (int j = i + 1; j < numParticles; ++j)
-			AddCollision(i, j);				
+		{
+			colTime = particles[i].CollisionTime(particles[j]);
+
+			if (std::numeric_limits<double>::infinity() != colTime)
+			{
+				Event collisionEvent;
+				
+				collisionEvent.particle1 = i;
+				collisionEvent.particle2 = j;
+				collisionEvent.eventTime = colTime;
+				
+				eventsQueue.push_back(collisionEvent);
+			}
+		}
 	}
+
+	std::make_heap(eventsQueue.begin(), eventsQueue.end());
 }
 
 
 
 void Simulation::Advance()
 {
+	RemoveNoEventsFromQueueFront();
 	if (eventsQueue.empty()) return; // should not happen, except when there are no particles
 
+	std::pop_heap(eventsQueue.begin(), eventsQueue.end());
+	Event nextEvent = std::move(eventsQueue.back());
+	eventsQueue.pop_back();
+
 	int numParticles = (int)particles.size();
-	Event nextEvent = *eventsQueue.begin();
-
-	eventsQueue.erase(eventsQueue.begin());
-
-	// not needed, noEvent is not used currently in the program
-	// it's here just to show how it should be handled if the eventsQueue implementation is changed
-	if (Event::EventType::noEvent == nextEvent.type) return;
 
 	AdjustForNextEvent(nextEvent);
 	EraseParticleEventsFromQueue(nextEvent); // also adjusts 'partners'

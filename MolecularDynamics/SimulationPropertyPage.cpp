@@ -53,7 +53,7 @@ void SimulationPropertyPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT6, exteriorSpheresRadius);
 	DDX_Text(pDX, IDC_EDIT7, exteriorSpheresMass);
 
-	DDV_MinMaxUInt(pDX, nrSpheres, 1, 99999);
+	DDV_MinMaxUInt(pDX, nrSpheres, 1, 20000);
 	DDV_MinMaxDouble(pDX, interiorRadius, 0, spaceSize / 2.);
 	DDV_MinMaxDouble(pDX, initialSpeed, 0, 99999);
 

@@ -23,16 +23,26 @@ public:
 
 	void Advance();
 
-	inline double NextEventTime() const
+	inline double NextEventTime()
 	{
-		if (!eventsQueue.empty()) return eventsQueue.begin()->eventTime;
+		RemoveNoEventsFromQueueFront();
 
-		return std::numeric_limits<double>::infinity();
+		if (eventsQueue.empty()) return std::numeric_limits<double>::infinity(); // should not happen, except when there are no particles
+
+		return eventsQueue.front().eventTime;
 	}
 
 protected:
-	std::multiset<Event> eventsQueue;
+	std::vector<Event> eventsQueue;
 
+	inline void RemoveNoEventsFromQueueFront()
+	{
+		while (!eventsQueue.empty() && Event::EventType::noEvent == eventsQueue.front().type)
+		{
+			std::pop_heap(eventsQueue.begin(), eventsQueue.end());
+			eventsQueue.pop_back();
+		}
+	}
 
 	static inline void AdjustVelocitiesForCollision(Particle& particle1, Particle& particle2)
 	{
@@ -76,10 +86,13 @@ protected:
 		if (std::numeric_limits<double>::infinity() != colTime)
 		{
 			Event wallEvent;
-			wallEvent.particle1 = particle;
-			wallEvent.type = Event::wallCollision;
+
+			wallEvent.type = Event::wallCollision; 
+			wallEvent.particle1 = particle;			
 			wallEvent.eventTime = colTime;
-			eventsQueue.insert(wallEvent);
+
+			eventsQueue.push_back(wallEvent);
+			std::push_heap(eventsQueue.begin(), eventsQueue.end());
 		}
 	}
 
@@ -93,20 +106,23 @@ protected:
 		if (std::numeric_limits<double>::infinity() != colTime)
 		{
 			Event collisionEvent;
+			
 			collisionEvent.particle1 = i;
 			collisionEvent.particle2 = j;
 			collisionEvent.eventTime = colTime;
 
-			eventsQueue.insert(collisionEvent);
+			eventsQueue.push_back(collisionEvent);
+			std::push_heap(eventsQueue.begin(), eventsQueue.end());
 		}
 	}
 
 
-	inline void AdjustPartner(const Event& colEvent, std::multiset<Event>::iterator it)
+	inline void AdjustPartner(const Event& colEvent, std::vector<Event>::iterator it)
 	{
-		if (it->type == Event::EventType::particleCollision)
+		if (Event::EventType::particleCollision == it->type)
 		{
 			int partner;
+
 			if (it->particle1 == colEvent.particle1 || it->particle1 == colEvent.particle2)
 				partner = it->particle2;
 			else partner = it->particle1;
@@ -121,29 +137,31 @@ protected:
 
 	inline void EraseParticleEventsFromQueue(const Event& colEvent)
 	{
-		if (colEvent.type == Event::particleCollision)
+		if (Event::particleCollision == colEvent.type)
 		{
-			for (auto it = eventsQueue.begin(); it != eventsQueue.end();)
+			for (auto it = eventsQueue.begin(); it != eventsQueue.end(); ++it)
 			{
+				if (Event::EventType::noEvent == it->type) continue;
+
 				if (it->particle1 == colEvent.particle1 || (it->type == Event::EventType::particleCollision && it->particle2 == colEvent.particle1) ||
 					it->particle1 == colEvent.particle2 || (it->type == Event::EventType::particleCollision && it->particle2 == colEvent.particle2))
 				{
 					AdjustPartner(colEvent, it);
-					it = eventsQueue.erase(it);
+					it->type = Event::EventType::noEvent;
 				}
-				else ++it;
 			}
 		}
 		else
 		{
-			for (auto it = eventsQueue.begin(); it != eventsQueue.end();)
+			for (auto it = eventsQueue.begin(); it != eventsQueue.end(); ++it)
 			{
+				if (Event::EventType::noEvent == it->type) continue;
+
 				if (it->particle1 == colEvent.particle1 || (it->type == Event::EventType::particleCollision && it->particle2 == colEvent.particle1))
 				{
 					AdjustPartner(colEvent, it);
-					it = eventsQueue.erase(it);
+					it->type = Event::EventType::noEvent;
 				}
-				else ++it;
 			}
 		}
 	}
@@ -153,7 +171,7 @@ protected:
 	{
 		particles[nextEvent.particle1].position += particles[nextEvent.particle1].velocity * (nextEvent.eventTime - particles[nextEvent.particle1].particleTime);
 
-		if (nextEvent.type == Event::EventType::particleCollision)
+		if (Event::EventType::particleCollision == nextEvent.type)
 		{
 			particles[nextEvent.particle2].position += particles[nextEvent.particle2].velocity * (nextEvent.eventTime - particles[nextEvent.particle2].particleTime);
 

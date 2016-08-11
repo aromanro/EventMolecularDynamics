@@ -28,7 +28,7 @@ public:
 
 	bool operator<(const Event& other) const 
 	{ 
-		return eventTime < other.eventTime; 
+		return eventTime > other.eventTime; 
 	}
 };
 

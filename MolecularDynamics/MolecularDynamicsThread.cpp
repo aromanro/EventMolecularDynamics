@@ -112,7 +112,7 @@ int MolecularDynamicsThread::Init()
 }
 
 
-double MolecularDynamicsThread::GetNextEventTime() const
+double MolecularDynamicsThread::GetNextEventTime()
 {
 	return simulation.NextEventTime();
 }

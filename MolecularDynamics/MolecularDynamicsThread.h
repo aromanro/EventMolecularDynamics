@@ -36,7 +36,7 @@ public:
 	void WakeUp();
 	void WaitForData();
 	int Init();
-	double GetNextEventTime() const;
+	double GetNextEventTime();
 	std::vector<Particle> GetParticles() const;
 	void WaitForWork();
 	void SignalMoreData();
