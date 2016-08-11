@@ -565,7 +565,6 @@ void CMolecularDynamicsView::Setup()
 
 	wglMakeCurrent(NULL, NULL);
 
-	// 50 frames/sec
 	if (!timer) timer = SetTimer(1, 30, NULL);
 
 	inited = true;
