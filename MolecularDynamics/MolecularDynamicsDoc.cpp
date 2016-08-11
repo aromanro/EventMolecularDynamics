@@ -52,6 +52,10 @@ BOOL CMolecularDynamicsDoc::OnNewDocument()
 
 	if (!CDocument::OnNewDocument())
 		return FALSE;
+	CString title;
+
+	title.Format(L"%d Hard Smooth Spheres", theApp.options.nrSpheres);
+	SetTitle(title);
 
 	bool reused = false;
 
