@@ -35,13 +35,31 @@ public:
 protected:
 	std::vector<Event> eventsQueue;
 
+	inline void RemoveFirstEventFromQueue()
+	{
+		std::pop_heap(eventsQueue.begin(), eventsQueue.end());
+		eventsQueue.pop_back();
+	}
+
+	inline Event GetAndRemoveFirstEventFromQueue()
+	{
+		std::pop_heap(eventsQueue.begin(), eventsQueue.end());
+		Event nextEvent = std::move(eventsQueue.back());
+		eventsQueue.pop_back();
+
+		return nextEvent;
+	}
+
+	inline void AddEventToQueue(const Event& event)
+	{
+		eventsQueue.push_back(event);
+		std::push_heap(eventsQueue.begin(), eventsQueue.end());
+	}
+
 	inline void RemoveNoEventsFromQueueFront()
 	{
 		while (!eventsQueue.empty() && Event::EventType::noEvent == eventsQueue.front().type)
-		{
-			std::pop_heap(eventsQueue.begin(), eventsQueue.end());
-			eventsQueue.pop_back();
-		}
+			RemoveFirstEventFromQueue();
 	}
 
 	static inline void AdjustVelocitiesForCollision(Particle& particle1, Particle& particle2)
@@ -91,8 +109,7 @@ protected:
 			wallEvent.particle1 = particle;			
 			wallEvent.eventTime = colTime;
 
-			eventsQueue.push_back(wallEvent);
-			std::push_heap(eventsQueue.begin(), eventsQueue.end());
+			AddEventToQueue(wallEvent);
 		}
 	}
 
@@ -111,8 +128,7 @@ protected:
 			collisionEvent.particle2 = j;
 			collisionEvent.eventTime = colTime;
 
-			eventsQueue.push_back(collisionEvent);
-			std::push_heap(eventsQueue.begin(), eventsQueue.end());
+			AddEventToQueue(collisionEvent);
 		}
 	}
 

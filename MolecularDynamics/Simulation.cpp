@@ -163,9 +163,7 @@ void Simulation::Advance()
 	RemoveNoEventsFromQueueFront();
 	if (eventsQueue.empty()) return; // should not happen, except when there are no particles
 
-	std::pop_heap(eventsQueue.begin(), eventsQueue.end());
-	Event nextEvent = std::move(eventsQueue.back());
-	eventsQueue.pop_back();
+	Event nextEvent = GetAndRemoveFirstEventFromQueue();
 
 	int numParticles = (int)particles.size();
 
