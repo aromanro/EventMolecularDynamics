@@ -119,7 +119,8 @@ void Simulation::BuildEventQueue()
 {
 	int numParticles = (int)particles.size();
 
-	eventsQueue.reserve((size_t)(1.2 * numParticles*(numParticles - 1) / 2 + numParticles));
+	size_t sizeGuess = (size_t)(1.2 * ceill(pow(numParticles*(numParticles - 1) / 2, 1./3.)) + numParticles);
+	eventsQueue.reserve(sizeGuess);
 
 	for (int i = 0; i < numParticles; ++i)
 	{		
