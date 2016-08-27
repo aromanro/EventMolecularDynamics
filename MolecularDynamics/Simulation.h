@@ -50,9 +50,9 @@ protected:
 		return nextEvent;
 	}
 
-	inline void AddEventToQueue(const Event& event)
+	inline void AddEventToQueue(Event& event)
 	{
-		eventsQueue.push_back(event);
+		eventsQueue.push_back(std::move(event));
 		std::push_heap(eventsQueue.begin(), eventsQueue.end());
 	}
 
@@ -79,16 +79,16 @@ protected:
 	{
 		switch (wall)
 		{
-		case top:
-		case bottom:
+		case Walls::top:
+		case Walls::bottom:
 			particle.velocity.Z *= -1;
 			break;
-		case left:
-		case right:
+		case Walls::left:
+		case Walls::right:
 			particle.velocity.X *= -1;
 			break;
-		case front:
-		case back:
+		case Walls::front:
+		case Walls::back:
 			particle.velocity.Y *= -1;
 			break;
 		}
@@ -133,15 +133,15 @@ protected:
 	}
 
 
-	inline void AdjustPartner(const Event& colEvent, std::vector<Event>::iterator it)
+	inline void AdjustPartner(const Event& colEvent, const Event& event)
 	{
-		if (Event::EventType::particleCollision == it->type)
+		if (Event::EventType::particleCollision == event.type)
 		{
 			int partner;
 
-			if (it->particle1 == colEvent.particle1 || it->particle1 == colEvent.particle2)
-				partner = it->particle2;
-			else partner = it->particle1;
+			if (event.particle1 == colEvent.particle1 || event.particle1 == colEvent.particle2)
+				partner = event.particle2;
+			else partner = event.particle1;
 
 			if (partner != colEvent.particle1 && partner != colEvent.particle2 && particles[partner].particleTime < colEvent.eventTime)
 			{
@@ -155,28 +155,28 @@ protected:
 	{
 		if (Event::particleCollision == colEvent.type)
 		{
-			for (auto it = eventsQueue.begin(); it != eventsQueue.end(); ++it)
+			for (auto &event : eventsQueue)
 			{
-				if (Event::EventType::noEvent == it->type) continue;
+				if (Event::EventType::noEvent == event.type) continue;
 
-				if (it->particle1 == colEvent.particle1 || (it->type == Event::EventType::particleCollision && it->particle2 == colEvent.particle1) ||
-					it->particle1 == colEvent.particle2 || (it->type == Event::EventType::particleCollision && it->particle2 == colEvent.particle2))
+				if (event.particle1 == colEvent.particle1 || (event.type == Event::EventType::particleCollision && event.particle2 == colEvent.particle1) ||
+					event.particle1 == colEvent.particle2 || (event.type == Event::EventType::particleCollision && event.particle2 == colEvent.particle2))
 				{
-					AdjustPartner(colEvent, it);
-					it->type = Event::EventType::noEvent;
+					AdjustPartner(colEvent, event);
+					event.type = Event::EventType::noEvent;
 				}
 			}
 		}
 		else
 		{
-			for (auto it = eventsQueue.begin(); it != eventsQueue.end(); ++it)
+			for (auto &event : eventsQueue)
 			{
-				if (Event::EventType::noEvent == it->type) continue;
+				if (Event::EventType::noEvent == event.type) continue;
 
-				if (it->particle1 == colEvent.particle1 || (it->type == Event::EventType::particleCollision && it->particle2 == colEvent.particle1))
+				if (event.particle1 == colEvent.particle1 || (event.type == Event::EventType::particleCollision && event.particle2 == colEvent.particle1))
 				{
-					AdjustPartner(colEvent, it);
-					it->type = Event::EventType::noEvent;
+					AdjustPartner(colEvent, event);
+					event.type = Event::EventType::noEvent;
 				}
 			}
 		}
