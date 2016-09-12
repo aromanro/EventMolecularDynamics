@@ -1,12 +1,16 @@
 #include "stdafx.h"
 #include "ComputationResult.h"
 
-
-ComputationResult::ComputationResult()
-{
-}
+namespace MolecularDynamics {
 
 
-ComputationResult::~ComputationResult()
-{
+	ComputationResult::ComputationResult()
+	{
+	}
+
+
+	ComputationResult::~ComputationResult()
+	{
+	}
+
 }

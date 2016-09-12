@@ -70,14 +70,14 @@ BOOL CMolecularDynamicsDoc::OnNewDocument()
 	}
 
 
-	std::queue<ComputationResult> emptyQueue;
+	std::queue<MolecularDynamics::ComputationResult> emptyQueue;
 
 	resultsQueue.swap(emptyQueue);
 
 	// copy the options, they can change during running and we need the ones set at initialization of the 'document'
 	options = theApp.options;
 
-	theThread = new MolecularDynamicsThread();
+	theThread = new MolecularDynamics::MolecularDynamicsThread();
 
 	nrParticles = theThread->Init();
 	simulationTime = 0;

@@ -1,32 +1,35 @@
 #pragma once
 
-class Event
-{
-public:
-	Event();
-	~Event();
+namespace MolecularDynamics {
 
-	double eventTime;
+	class Event
+	{
+	public:
+		Event();
+		~Event();
 
-	typedef enum EventType {
-		particleCollision,
-		wallCollision,
-		// here other kind of events could be added - of course they must be handled appropriately
-		// for example crossings into other sectors
+		double eventTime;
 
-		noEvent
-	} EventType;
+		typedef enum EventType {
+			particleCollision,
+			wallCollision,
+			// here other kind of events could be added - of course they must be handled appropriately
+			// for example crossings into other sectors
 
-	EventType type;
+			noEvent
+		} EventType;
 
-	int particle1;
-	int particle2;
+		EventType type;
 
-	bool InvolvesParticle(int particle) { return particle1 == particle || (type == particleCollision && particle2 == particle); }
+		int particle1;
+		int particle2;
 
-	bool operator<(const Event& other) const 
-	{ 
-		return eventTime > other.eventTime; 
-	}
-};
+		bool InvolvesParticle(int particle) { return particle1 == particle || (type == particleCollision && particle2 == particle); }
 
+		bool operator<(const Event& other) const
+		{
+			return eventTime > other.eventTime;
+		}
+	};
+
+}

@@ -10,35 +10,39 @@
 
 class CMolecularDynamicsDoc;
 
-class MolecularDynamicsThread :
-	public ComputationThread
-{
-public:
-	MolecularDynamicsThread();
-	virtual ~MolecularDynamicsThread();
-
-	CMolecularDynamicsDoc *doc;
-
-	std::atomic_bool Terminate;
-protected:
-	Simulation simulation;
-
-	std::mutex m;
-	std::condition_variable cv;
-
-	bool wakeup;
-	bool processed;
+namespace MolecularDynamics {
 
 
-	virtual void Calculate();
-	bool PostDataToMainThread();
-public:
-	void WakeUp();
-	void WaitForData();
-	int Init();
-	double GetNextEventTime();
-	std::vector<Particle> GetParticles() const;
-	void WaitForWork();
-	void SignalMoreData();
-};
+	class MolecularDynamicsThread :
+		public ComputationThread
+	{
+	public:
+		MolecularDynamicsThread();
+		virtual ~MolecularDynamicsThread();
 
+		CMolecularDynamicsDoc *doc;
+
+		std::atomic_bool Terminate;
+	protected:
+		Simulation simulation;
+
+		std::mutex m;
+		std::condition_variable cv;
+
+		bool wakeup;
+		bool processed;
+
+
+		virtual void Calculate();
+		bool PostDataToMainThread();
+	public:
+		void WakeUp();
+		void WaitForData();
+		int Init();
+		double GetNextEventTime();
+		std::vector<Particle> GetParticles() const;
+		void WaitForWork();
+		void SignalMoreData();
+	};
+
+}

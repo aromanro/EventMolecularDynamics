@@ -4,14 +4,18 @@
 
 #include "Particle.h"
 
-class ComputationResult
-{
-public:
-	ComputationResult();
-	~ComputationResult();
+namespace MolecularDynamics {
 
-	std::vector<Particle> particles;
 
-	double nextEventTime;
-};
+	class ComputationResult
+	{
+	public:
+		ComputationResult();
+		~ComputationResult();
 
+		std::vector<Particle> particles;
+
+		double nextEventTime;
+	};
+
+}

@@ -29,15 +29,15 @@ public:
 
 	std::atomic<double> simulationTime;
 
-	ComputationResult curResult;
+	MolecularDynamics::ComputationResult curResult;
 
 	std::mutex dataSection;
-	std::queue<ComputationResult> resultsQueue;
+	std::queue<MolecularDynamics::ComputationResult> resultsQueue;
 
 
 	Options options; // a copy of the options, they might change during running
 private:
-	MolecularDynamicsThread *theThread;
+	MolecularDynamics::MolecularDynamicsThread *theThread;
 
 // Operations
 public:
