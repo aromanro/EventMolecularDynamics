@@ -13,10 +13,10 @@
 
 // SimulationPropertyPage dialog
 
-IMPLEMENT_DYNAMIC(SimulationPropertyPage, CPropertyPage)
+IMPLEMENT_DYNAMIC(SimulationPropertyPage, CMFCPropertyPage)
 
 SimulationPropertyPage::SimulationPropertyPage()
-	: CPropertyPage(IDD_SIMULATIONPROPERTYPAGE)
+	: CMFCPropertyPage(IDD_SIMULATIONPROPERTYPAGE)
 {
 	nrSpheres = theApp.options.nrSpheres;
 	interiorRadius = theApp.options.interiorRadius;
@@ -34,7 +34,7 @@ SimulationPropertyPage::~SimulationPropertyPage()
 
 void SimulationPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 
 	DDX_Control(pDX, IDC_EDIT2, interiorRadiusControl);
 	DDX_Control(pDX, IDC_EDIT3, initialSpeedControl);
@@ -65,7 +65,7 @@ void SimulationPropertyPage::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(SimulationPropertyPage, CPropertyPage)
+BEGIN_MESSAGE_MAP(SimulationPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT1, &SimulationPropertyPage::OnEnChangeEdit)
 	ON_EN_CHANGE(IDC_EDIT2, &SimulationPropertyPage::OnEnChangeEdit)
 	ON_EN_CHANGE(IDC_EDIT3, &SimulationPropertyPage::OnEnChangeEdit)
@@ -85,13 +85,13 @@ BOOL SimulationPropertyPage::OnApply()
 
 	ApplyValues();
 
-	return CPropertyPage::OnApply();
+	return CMFCPropertyPage::OnApply();
 }
 
 
 BOOL SimulationPropertyPage::OnInitDialog()
 {
-	CPropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	interiorRadiusControl.allowNegative = false;
 	initialSpeedControl.allowNegative = false;

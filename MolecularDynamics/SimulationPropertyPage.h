@@ -5,7 +5,7 @@
 
 // SimulationPropertyPage dialog
 
-class SimulationPropertyPage : public CPropertyPage
+class SimulationPropertyPage : public CMFCPropertyPage
 {
 	DECLARE_DYNAMIC(SimulationPropertyPage)
 

@@ -17,10 +17,10 @@
 
 // DisplayPropertyPage dialog
 
-IMPLEMENT_DYNAMIC(DisplayPropertyPage, CPropertyPage)
+IMPLEMENT_DYNAMIC(DisplayPropertyPage, CMFCPropertyPage)
 
 DisplayPropertyPage::DisplayPropertyPage()
-	: CPropertyPage(IDD_DISPLAYPROPERTYPAGE)
+	: CMFCPropertyPage(IDD_DISPLAYPROPERTYPAGE)
 {
 
 }
@@ -31,13 +31,13 @@ DisplayPropertyPage::~DisplayPropertyPage()
 
 void DisplayPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_MFCCOLORBUTTON1, m_ColorControl1);
 	DDX_Control(pDX, IDC_MFCCOLORBUTTON2, m_ColorControl2);
 }
 
 
-BEGIN_MESSAGE_MAP(DisplayPropertyPage, CPropertyPage)
+BEGIN_MESSAGE_MAP(DisplayPropertyPage, CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_MFCCOLORBUTTON1, &DisplayPropertyPage::OnBnClickedMfccolorbutton)
 	ON_BN_CLICKED(IDC_MFCCOLORBUTTON2, &DisplayPropertyPage::OnBnClickedMfccolorbutton)
 END_MESSAGE_MAP()
@@ -52,13 +52,13 @@ BOOL DisplayPropertyPage::OnApply()
 
 	ApplyValues();
 
-	return CPropertyPage::OnApply();
+	return CMFCPropertyPage::OnApply();
 }
 
 
 BOOL DisplayPropertyPage::OnInitDialog()
 {
-	CPropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	m_ColorControl1.EnableOtherButton(_T("More Colors..."));
 	m_ColorControl1.SetColor(theApp.options.bigSphereColor);

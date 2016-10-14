@@ -15,10 +15,10 @@
 
 // CameraPropertyPage dialog
 
-IMPLEMENT_DYNAMIC(CameraPropertyPage, CPropertyPage)
+IMPLEMENT_DYNAMIC(CameraPropertyPage, CMFCPropertyPage)
 
 CameraPropertyPage::CameraPropertyPage()
-	: CPropertyPage(IDD_CAMERAPROPERTYPAGE)
+	: CMFCPropertyPage(IDD_CAMERAPROPERTYPAGE)
 {
 
 }
@@ -29,7 +29,7 @@ CameraPropertyPage::~CameraPropertyPage()
 
 void CameraPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 
 	DDX_Control(pDX, IDC_SLIDER1, m_Slider1);
 	DDX_Control(pDX, IDC_SLIDER2, m_Slider2);
@@ -40,7 +40,7 @@ void CameraPropertyPage::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CameraPropertyPage, CPropertyPage)
+BEGIN_MESSAGE_MAP(CameraPropertyPage, CMFCPropertyPage)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER1, &CameraPropertyPage::OnTRBNThumbPosChangingSlider1)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER2, &CameraPropertyPage::OnTRBNThumbPosChangingSlider2)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER3, &CameraPropertyPage::OnTRBNThumbPosChangingSlider3)
@@ -52,7 +52,7 @@ END_MESSAGE_MAP()
 
 BOOL CameraPropertyPage::OnInitDialog()
 {
-	CPropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	m_Slider1.SetRange(25, 400);
 	m_Slider2.SetRange(25, 400);
@@ -83,7 +83,7 @@ BOOL CameraPropertyPage::OnApply()
 
 	ApplyValues();
 
-	return CPropertyPage::OnApply();
+	return CMFCPropertyPage::OnApply();
 }
 
 
