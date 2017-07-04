@@ -28,7 +28,8 @@ namespace MolecularDynamics {
 
 		std::mutex mw;
 		std::mutex mp;
-		std::condition_variable cv;
+		std::condition_variable cvw;
+		std::condition_variable cvp;
 
 		bool wakeup;
 		bool processed;

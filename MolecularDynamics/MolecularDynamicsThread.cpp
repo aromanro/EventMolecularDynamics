@@ -79,7 +79,7 @@ namespace MolecularDynamics {
 			std::lock_guard<std::mutex> lk(mw);
 			wakeup = true;
 		}
-		cv.notify_one();
+		cvw.notify_one();
 	}
 
 	void MolecularDynamicsThread::SignalMoreData()
@@ -87,21 +87,21 @@ namespace MolecularDynamics {
 		std::unique_lock<std::mutex> lk(mp);
 		processed = true;
 		lk.unlock();
-		cv.notify_one();
+		cvp.notify_one();
 	}
 
 	void MolecularDynamicsThread::WaitForData()
 	{
 		//wait for the worker thread to finish some work
 		std::unique_lock<std::mutex> lk(mp);
-		cv.wait(lk, [this] { return processed; });
+		cvp.wait(lk, [this] { return processed; });
 		processed = false;
 	}
 
 	void MolecularDynamicsThread::WaitForWork()
 	{
 		std::unique_lock<std::mutex> lk(mw);
-		cv.wait(lk, [this] { return wakeup; });
+		cvw.wait(lk, [this] { return wakeup; });
 		wakeup = false;
 	}
 
