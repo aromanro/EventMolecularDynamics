@@ -76,7 +76,7 @@ namespace MolecularDynamics {
 	{
 		// signal the worker thread to wake up if it's waiting
 		{
-			std::lock_guard<std::mutex> lk(m);
+			std::lock_guard<std::mutex> lk(mw);
 			wakeup = true;
 		}
 		cv.notify_one();
@@ -84,7 +84,7 @@ namespace MolecularDynamics {
 
 	void MolecularDynamicsThread::SignalMoreData()
 	{
-		std::unique_lock<std::mutex> lk(m);
+		std::unique_lock<std::mutex> lk(mp);
 		processed = true;
 		lk.unlock();
 		cv.notify_one();
@@ -93,14 +93,14 @@ namespace MolecularDynamics {
 	void MolecularDynamicsThread::WaitForData()
 	{
 		//wait for the worker thread to finish some work
-		std::unique_lock<std::mutex> lk(m);
+		std::unique_lock<std::mutex> lk(mp);
 		cv.wait(lk, [this] { return processed; });
 		processed = false;
 	}
 
 	void MolecularDynamicsThread::WaitForWork()
 	{
-		std::unique_lock<std::mutex> lk(m);
+		std::unique_lock<std::mutex> lk(mw);
 		cv.wait(lk, [this] { return wakeup; });
 		wakeup = false;
 	}

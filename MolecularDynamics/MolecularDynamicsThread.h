@@ -26,7 +26,8 @@ namespace MolecularDynamics {
 	protected:
 		Simulation simulation;
 
-		std::mutex m;
+		std::mutex mw;
+		std::mutex mp;
 		std::condition_variable cv;
 
 		bool wakeup;
