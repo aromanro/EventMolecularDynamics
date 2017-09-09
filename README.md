@@ -3,6 +3,10 @@ A program implementing event driven molecular dynamics for hard smooth spheres
 
 A more detailed description is on the blog: http://compphys.go.ro/event-driven-molecular-dynamics/
 
+### PROGRAM IN ACTION
+
+[![Program video](https://img.youtube.com/vi/nvIyzSbPECE/0.jpg)](https://youtu.be/nvIyzSbPECE)
+
 ### Tools
 
 The project compiles on Windows with Visual Studio 2015.
