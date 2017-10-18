@@ -123,7 +123,7 @@ namespace OpenGL {
 	}
 
 
-	Vector3D<double> Camera::getNormalizedForward()
+	Vector3D<double> Camera::getNormalizedForward() const
 	{
 		Vector3D<double> forward = lookAt - eyePos;
 
@@ -131,7 +131,7 @@ namespace OpenGL {
 	}
 
 
-	Vector3D<double> Camera::getNormalizedUp()
+	Vector3D<double> Camera::getNormalizedUp() const
 	{
 		Vector3D<double> forward = getNormalizedForward();
 		Vector3D<double> upVec(up);
