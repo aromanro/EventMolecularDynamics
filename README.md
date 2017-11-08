@@ -1,7 +1,7 @@
 # EventMolecularDynamics
 A program implementing event driven molecular dynamics for hard smooth spheres
 
-A more detailed description is on the blog: http://compphys.go.ro/event-driven-molecular-dynamics/
+A more detailed description is on the blog: https://compphys.go.ro/event-driven-molecular-dynamics/
 
 ### PROGRAM IN ACTION
 

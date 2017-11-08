@@ -24,7 +24,7 @@ namespace MolecularDynamics {
 		int particle1;
 		int particle2;
 
-		bool InvolvesParticle(int particle) { return particle1 == particle || (type == particleCollision && particle2 == particle); }
+		bool InvolvesParticle(int particle) const { return particle1 == particle || (type == particleCollision && particle2 == particle); }
 
 		bool operator<(const Event& other) const
 		{

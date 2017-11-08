@@ -88,7 +88,7 @@ namespace MolecularDynamics {
 				//double t2 = (-b + sdelta) / difVel2;
 
 				// if this time would be negative, that is, it would be as if it took place in the past
-				// perhaps there was a real collision after it that changed the trajectory?
+				// perhaps there was a real collision after it, that changed the trajectory?
 				if (t1 >= 0) return refTime + t1;
 			}
 
