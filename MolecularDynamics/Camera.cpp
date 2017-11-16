@@ -6,6 +6,7 @@
 
 #include <gtc\type_ptr.hpp>
 
+#include "Options.h"
 #include "MolecularDynamics.h"
 #include "Camera.h"
 
@@ -18,7 +19,7 @@
 namespace OpenGL {
 
 	Camera::Camera()
-		: eyePos(spaceSize / 2, spaceSize * 3, spaceSize / 2), up(0, 0, 1), lookAt(spaceSize / 2, spaceSize / 2 , spaceSize / 2)
+		: rotateAngle(0), translateDist(0), eyePos(60., 220., 160.), up(0, 0, 1), lookAt(0,0,0)		
 	{
 		SetSpeeds(theApp.options.translationSpeed, theApp.options.rotationSpeed);
 	}
@@ -59,7 +60,7 @@ namespace OpenGL {
 
 	void Camera::MoveLeft(double amount)
 	{
-		Vector3D<double> left = getNormalizedUp() % getNormalizedForward();
+		const Vector3D<double> left = getNormalizedUp() % getNormalizedForward();
 
 		ShiftCameraPosition(left*amount);
 	}
@@ -85,7 +86,7 @@ namespace OpenGL {
 
 	void Camera::PitchDown(double amount)
 	{
-		Vector3D<double> left = getNormalizedUp() % getNormalizedForward();
+		const Vector3D<double> left = getNormalizedUp() % getNormalizedForward();
 		Vector3D<double> forward = lookAt - eyePos;
 
 		up = up.RotateAround(left, amount);
@@ -101,7 +102,7 @@ namespace OpenGL {
 
 	void Camera::RollRight(double amount)
 	{
-		Vector3D<double> forward = lookAt - eyePos;
+		const Vector3D<double> forward = lookAt - eyePos;
 
 		up = up.RotateAround(forward, amount);
 	}
@@ -115,7 +116,7 @@ namespace OpenGL {
 	{
 		Vector3D<double> forward = lookAt - eyePos;
 
-		Vector3D<double> left = getNormalizedUp() % forward.Normalize();
+		const Vector3D<double> left = getNormalizedUp() % forward.Normalize();
 		up = (forward % left).Normalize();
 
 		forward = forward.RotateAround(up, -amount);
@@ -125,7 +126,7 @@ namespace OpenGL {
 
 	Vector3D<double> Camera::getNormalizedForward() const
 	{
-		Vector3D<double> forward = lookAt - eyePos;
+		const Vector3D<double> forward = lookAt - eyePos;
 
 		return forward.Normalize();
 	}
@@ -133,10 +134,10 @@ namespace OpenGL {
 
 	Vector3D<double> Camera::getNormalizedUp() const
 	{
-		Vector3D<double> forward = getNormalizedForward();
+		const Vector3D<double> forward = getNormalizedForward();
 		Vector3D<double> upVec(up);
 
-		double projection = upVec * forward;
+		const double projection = upVec * forward;
 
 		upVec -= projection * forward;
 
@@ -212,7 +213,7 @@ void OpenGL::Camera::ProgressiveMove(Movements movement, int nrticks, bool fromM
 		movements.push_back(Movement(movement, nrticks, fromMouse));
 }
 
-void OpenGL::Camera::ProgressiveRotate(Vector3D<double>& towards, int nrticks)
+void OpenGL::Camera::ProgressiveRotate(const Vector3D<double>& towards, int nrticks)
 {
 	if (movements.size() == 0)
 	{
@@ -222,7 +223,7 @@ void OpenGL::Camera::ProgressiveRotate(Vector3D<double>& towards, int nrticks)
 }
 
 
-void OpenGL::Camera::RotateTowards(double angle, Vector3D<double>& towards)
+void OpenGL::Camera::RotateTowards(double angle, const Vector3D<double>& towards)
 {
 	Vector3D<double> forward = lookAt - eyePos;
 
@@ -230,7 +231,7 @@ void OpenGL::Camera::RotateTowards(double angle, Vector3D<double>& towards)
 
 	lookAt = eyePos + forward;
 	
-	Vector3D<double> left = getNormalizedUp() % forward.Normalize();
+	const Vector3D<double> left = getNormalizedUp() % forward.Normalize();
 	up = (forward % left).Normalize();
 }
 

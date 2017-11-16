@@ -21,7 +21,7 @@ namespace MolecularDynamics {
 
 		void BuildEventQueue();
 
-		unsigned int count() const { return (unsigned int)particles.size(); }
+		unsigned int count() const { return static_cast<unsigned int>(particles.size()); }
 
 		void Advance();
 
@@ -66,12 +66,12 @@ namespace MolecularDynamics {
 
 		static inline void AdjustVelocitiesForCollision(Particle& particle1, Particle& particle2)
 		{
-			double totalMass = particle1.mass + particle2.mass;
-			Vector3D<double> velDif = particle1.velocity - particle2.velocity;
-			Vector3D<double> dir = (particle1.position - particle2.position).Normalize();
+			const double totalMass = particle1.mass + particle2.mass;
+			const Vector3D<double> velDif = particle1.velocity - particle2.velocity;
+			const Vector3D<double> dir = (particle1.position - particle2.position).Normalize();
 
 
-			Vector3D<double> mult = 2 * (velDif * dir) * dir / totalMass;
+			const Vector3D<double> mult = 2 * (velDif * dir) * dir / totalMass;
 
 			particle1.velocity -= particle2.mass * mult;
 			particle2.velocity += particle1.mass * mult;
@@ -101,7 +101,7 @@ namespace MolecularDynamics {
 		{
 			//return;
 
-			double colTime = particles[particle].WallCollisionTime();
+			const double colTime = particles[particle].WallCollisionTime();
 
 			if (std::numeric_limits<double>::infinity() != colTime)
 			{
@@ -120,7 +120,7 @@ namespace MolecularDynamics {
 		{
 			//return;  // to test only collisions with the walls
 
-			double colTime = particles[i].CollisionTime(particles[j]);
+			const double colTime = particles[i].CollisionTime(particles[j]);
 
 			if (std::numeric_limits<double>::infinity() != colTime)
 			{
@@ -139,11 +139,10 @@ namespace MolecularDynamics {
 		{
 			if (Event::EventType::particleCollision == event.type)
 			{
-				int partner;
+				int partner = event.particle1;
 
 				if (event.particle1 == colEvent.particle1 || event.particle1 == colEvent.particle2)
 					partner = event.particle2;
-				else partner = event.particle1;
 
 				if (partner != colEvent.particle1 && partner != colEvent.particle2 && particles[partner].particleTime < colEvent.eventTime)
 				{

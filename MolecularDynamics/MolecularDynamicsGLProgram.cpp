@@ -6,6 +6,7 @@
 #define GLSL(src) "#version 330\n" #src
 
 MolecularDynamicsGLProgram::MolecularDynamicsGLProgram()
+	: matLocation(0), scaleLocation(0), modelPosLocation(0), colorLocation(0), viewPosLocation(0)
 {
 }
 

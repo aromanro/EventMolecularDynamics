@@ -156,7 +156,7 @@ void CMolecularDynamicsView::Dump(CDumpContext& dc) const
 CMolecularDynamicsDoc* CMolecularDynamicsView::GetDocument() const // non-debug version is inline
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CMolecularDynamicsDoc)));
-	return (CMolecularDynamicsDoc*)m_pDocument;
+	return dynamic_cast<CMolecularDynamicsDoc*>(m_pDocument);
 }
 #endif //_DEBUG
 
@@ -169,7 +169,6 @@ int CMolecularDynamicsView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CView::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	int nPixelFormat;
 	m_hDC = ::GetDC(m_hWnd);
 
 	static PIXELFORMATDESCRIPTOR pfd = {
@@ -185,7 +184,7 @@ int CMolecularDynamicsView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		PFD_MAIN_PLANE,
 		0,0,0,0 };
 
-	nPixelFormat = ChoosePixelFormat(m_hDC, &pfd);
+	const int nPixelFormat = ChoosePixelFormat(m_hDC, &pfd);
 	SetPixelFormat(m_hDC, nPixelFormat, &pfd);
 
 	return 0;
@@ -249,44 +248,43 @@ BOOL CMolecularDynamicsView::OnEraseBkgnd(CDC* /*pDC*/)
 void CMolecularDynamicsView::InitializePalette(void)
 {
 	PIXELFORMATDESCRIPTOR pfd;
-	LOGPALETTE *pPal;
-	int nPixelFormat;
-	WORD nColors;
+	BYTE RedRng = 0, GreenRng = 0, BlueRng = 0;
 
-	BYTE RedRng, GreenRng, BlueRng;
-
-	nPixelFormat = GetPixelFormat(m_hDC);
+	const int nPixelFormat = GetPixelFormat(m_hDC);
 	DescribePixelFormat(m_hDC, nPixelFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
 
 	if (!(pfd.dwFlags & PFD_NEED_PALETTE)) return;
 
-	nColors = (WORD)(1 << pfd.cColorBits);
+	const WORD nColors = static_cast<WORD>(1 << pfd.cColorBits);
 
-	pPal = (LOGPALETTE*)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
+	LOGPALETTE *pPal = (LOGPALETTE*)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
 
-	pPal->palVersion = 0x300;
-	pPal->palNumEntries = nColors;
-
-	RedRng = (BYTE)((1 << pfd.cRedBits) - 1);
-	GreenRng = (BYTE)((1 << pfd.cGreenBits) - 1);
-	BlueRng = (BYTE)((1 << pfd.cBlueBits) - 1);
-
-	for (unsigned int i = 0; i < nColors; i++)
+	if (pPal)
 	{
-		pPal->palPalEntry[i].peRed = (BYTE)((i >> pfd.cRedShift) & RedRng);
-		pPal->palPalEntry[i].peRed = (unsigned char)((double)pPal->palPalEntry[i].peRed * 255.0 / RedRng);
-		pPal->palPalEntry[i].peGreen = (BYTE)((i >> pfd.cGreenShift) & GreenRng);
-		pPal->palPalEntry[i].peGreen = (unsigned char)((double)pPal->palPalEntry[i].peGreen * 255.0 / GreenRng);
-		pPal->palPalEntry[i].peBlue = (BYTE)((i >> pfd.cBlueShift) & BlueRng);
-		pPal->palPalEntry[i].peBlue = (unsigned char)((double)pPal->palPalEntry[i].peBlue * 255.0 / BlueRng);
-		pPal->palPalEntry[i].peFlags = (unsigned char)NULL;
+		pPal->palVersion = 0x300;
+		pPal->palNumEntries = nColors;
+
+		RedRng = static_cast<BYTE>((1 << pfd.cRedBits) - 1);
+		GreenRng = static_cast<BYTE>((1 << pfd.cGreenBits) - 1);
+		BlueRng = static_cast<BYTE>((1 << pfd.cBlueBits) - 1);
+
+		for (unsigned int i = 0; i < nColors; i++)
+		{
+			pPal->palPalEntry[i].peRed = static_cast<BYTE>((i >> pfd.cRedShift) & RedRng);
+			pPal->palPalEntry[i].peRed = static_cast<unsigned char>(static_cast<double>(pPal->palPalEntry[i].peRed) * 255.0 / RedRng);
+			pPal->palPalEntry[i].peGreen = static_cast<BYTE>((i >> pfd.cGreenShift) & GreenRng);
+			pPal->palPalEntry[i].peGreen = static_cast<unsigned char>(static_cast<double>(pPal->palPalEntry[i].peGreen) * 255.0 / GreenRng);
+			pPal->palPalEntry[i].peBlue = static_cast<BYTE>((i >> pfd.cBlueShift) & BlueRng);
+			pPal->palPalEntry[i].peBlue = static_cast<unsigned char>(static_cast<double>(pPal->palPalEntry[i].peBlue) * 255.0 / BlueRng);
+			pPal->palPalEntry[i].peFlags = 0;
+		}
+
+		m_GLPalette.CreatePalette(pPal);
+		SelectPalette(m_hDC, (HPALETTE)m_GLPalette, FALSE);
+		RealizePalette(m_hDC);
+
+		free(pPal);
 	}
-
-	m_GLPalette.CreatePalette(pPal);
-	SelectPalette(m_hDC, (HPALETTE)m_GLPalette, FALSE);
-	RealizePalette(m_hDC);
-
-	free(pPal);
 }
 
 BOOL CMolecularDynamicsView::OnQueryNewPalette()
@@ -294,7 +292,7 @@ BOOL CMolecularDynamicsView::OnQueryNewPalette()
 	if ((HPALETTE)m_GLPalette)
 	{
 		SelectPalette(m_hDC, (HPALETTE)m_GLPalette, FALSE);
-		unsigned int nRet = RealizePalette(m_hDC);
+		const unsigned int nRet = RealizePalette(m_hDC);
 		InvalidateRect(NULL, FALSE);
 
 		return nRet ? TRUE : FALSE;
@@ -406,7 +404,7 @@ BOOL CMolecularDynamicsView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 	if (distanceTicks >= WHEEL_DELTA) {
 		distanceTicks /= WHEEL_DELTA;
-		bool forward = (wheelAccumulator > 0 ? true : false);
+		const bool forward = (wheelAccumulator > 0 ? true : false);
 		wheelAccumulator %= WHEEL_DELTA;
 
 		camera.ProgressiveMove(forward ? OpenGL::Camera::Movements::moveForward : OpenGL::Camera::Movements::moveBackward, distanceTicks, true);
@@ -415,19 +413,19 @@ BOOL CMolecularDynamicsView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	return CView::OnMouseWheel(nFlags, zDelta, pt);
 }
 
-Vector3D<double> CMolecularDynamicsView::GetTowardsVector(CPoint& point, Vector3D<double>& forward)
+Vector3D<double> CMolecularDynamicsView::GetTowardsVector(CPoint& point, const Vector3D<double>& forward)
 {
 	CRect rect;
 	GetClientRect(rect);
 
-	double pixelSize = 2.*nearPlaneDistance*tan(cameraAngle / 2.) / rect.Height();
+	const double pixelSize = 2.*nearPlaneDistance*tan(cameraAngle / 2.) / rect.Height();
 
 	point.x -= rect.Width() / 2;
 	point.y -= rect.Height() / 2;
 	point.y = -point.y;
 
-	Vector3D<double> right = (forward % camera.up).Normalize();
-	Vector3D<double> up = (right % forward).Normalize();
+	const Vector3D<double> right = (forward % camera.up).Normalize();
+	const Vector3D<double> up = (right % forward).Normalize();
 
 	return (nearPlaneDistance*forward + pixelSize * point.x * right + pixelSize * point.y * up).Normalize();
 }
@@ -439,7 +437,7 @@ void CMolecularDynamicsView::OnLButtonDown(UINT nFlags, CPoint point)
 	Vector3D<double> towards = GetTowardsVector(point, forward);
 
 	double angle = acos(towards * forward);
-	int numticks = (int)(angle / camera.GetRotateAngle());
+	const int numticks = static_cast<int>(angle / camera.GetRotateAngle());
 
 	camera.RotateTowards(angle - numticks * camera.GetRotateAngle(), towards);
 	camera.ProgressiveRotate(towards, numticks);
@@ -517,16 +515,16 @@ void CMolecularDynamicsView::Setup()
 		colors.resize(doc->nrParticles * 3);
 		scale.resize(doc->nrParticles);
 		int index = 0;
-		double avgRadius = (doc->options.exteriorSpheresRadius + doc->options.interiorSpheresRadius) / 2;
+		const double avgRadius = (doc->options.exteriorSpheresRadius + doc->options.interiorSpheresRadius) / 2.;
 
-		for (auto &&particle : doc->curResult.particles)
+		for (const auto &particle : doc->curResult.particles)
 		{
 
-			scale[index] = (GLfloat)particle.radius;
+			scale[index] = static_cast<GLfloat>(particle.radius);
 
-			colors[3 * index] = (float)((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor))/255.);
-			colors[3 * index + 1] = (float)((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor))/255.);
-			colors[3 * index + 2] = (float)((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3 * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3 * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3 * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
 
 			++index;
 		}
@@ -536,21 +534,21 @@ void CMolecularDynamicsView::Setup()
 	if (doc) {
 		glEnableVertexAttribArray(2);
 		posBuffer->setData(NULL, doc->nrParticles * 3 * sizeof(GLfloat), GL_STREAM_DRAW);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 	}
 
 	colorBuffer = new OpenGL::VertexBufferObject();
 	if (doc) {
 		glEnableVertexAttribArray(3);
 		colorBuffer->setData(colors.data(), doc->nrParticles * 3 * sizeof(GLfloat));
-		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);		
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 	}
 
 	scaleBuffer = new OpenGL::VertexBufferObject();
 	if (doc) {
 		glEnableVertexAttribArray(4);
 		scaleBuffer->setData(scale.data(), doc->nrParticles * sizeof(GLfloat));
-		glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(GLfloat), (void*)0);
+		glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(GLfloat), 0);
 	}
 
 	glVertexAttribDivisor(2, 1);
@@ -574,11 +572,11 @@ void CMolecularDynamicsView::Setup()
 bool CMolecularDynamicsView::SetupShaders()
 {
 	program = new MolecularDynamicsGLProgram();
-	
+
 	program->lights.push_back(MolecularDynamicsGLProgram::Light());
 	program->lights.back().lightPos = glm::vec3(-0.3, 0.8, 0.5);
 	program->lights.back().atten = 0.8f;
-	
+
 	return program->SetupShaders();
 }
 
@@ -594,7 +592,7 @@ void CMolecularDynamicsView::RenderScene()
 
 	program->Use();
 
-	glUniform3f(program->viewPosLocation, (float)(camera.eyePos.X), (float)(camera.eyePos.Y), (float)(camera.eyePos.Z));
+	glUniform3f(program->viewPosLocation, static_cast<float>(camera.eyePos.X), static_cast<float>(camera.eyePos.Y), static_cast<float>(camera.eyePos.Z));
 	glUniformMatrix4fv(program->matLocation, 1, GL_FALSE, value_ptr(mat));
 
 
@@ -609,7 +607,7 @@ void CMolecularDynamicsView::RenderScene()
 	// now particles!!!
 
 	int index = 0;
-	for (auto &&particle : doc->curResult.particles)
+	for (const auto &particle : doc->curResult.particles)
 	{
 		Vector3D<double> particlePos = particle.GetPosition(doc->simulationTime/*, spaceSize*/);
 		glm::vec3 pos = glm::vec3(particlePos.X, particlePos.Y, particlePos.Z);
@@ -618,14 +616,14 @@ void CMolecularDynamicsView::RenderScene()
 		position[3 * index] = pos.x;
 		position[3 * index + 1] = pos.y;
 		position[3 * index + 2] = pos.z;
-		
+
 		++index;
 	}
 
 	glEnableVertexAttribArray(2);
 	posBuffer->setData(NULL, doc->nrParticles * 3 * sizeof(GLfloat), GL_STREAM_DRAW); // orphaning
 	posBuffer->setSubData(position.data(), doc->nrParticles * 3 * sizeof(GLfloat));
-	
+
 	sphere->DrawInstanced(doc->nrParticles);
 
 	program->UnUse();
@@ -638,7 +636,7 @@ void CMolecularDynamicsView::Resize(GLsizei h, GLsizei w)
 
 	glViewport(0, 0, w, h);
 
-	const double ar = (double)w / (double)h;
+	const double ar = static_cast<double>(w) / h;
 	perspectiveMatrix = glm::perspective(cameraAngle, ar, nearPlaneDistance, farPlaneDistance);
 }
 
@@ -668,15 +666,15 @@ void CMolecularDynamicsView::SetColors()
 	CMolecularDynamicsDoc *doc = GetDocument();
 
 	if (doc)
-	{		
+	{
 		int index = 0;
-		double avgRadius = (doc->options.exteriorSpheresRadius + doc->options.interiorSpheresRadius) / 2;
+		const double avgRadius = (doc->options.exteriorSpheresRadius + doc->options.interiorSpheresRadius) / 2;
 
-		for (auto &&particle : doc->curResult.particles)
+		for (const auto &particle : doc->curResult.particles)
 		{
-			colors[3 * index] = (float)((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3 * index + 1] = (float)((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3 * index + 2] = (float)((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3 * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3 * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3 * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
 
 			++index;
 		}
@@ -688,11 +686,11 @@ void CMolecularDynamicsView::SetColors()
 
 		glEnableVertexAttribArray(3);
 		colorBuffer->setData(colors.data(), doc->nrParticles * 3 * sizeof(GLfloat));
-		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 		glVertexAttribDivisor(3, 1);
 
 		wglMakeCurrent(NULL, NULL);
-	}	
+	}
 }
 
 

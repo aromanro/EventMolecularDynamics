@@ -19,6 +19,8 @@ public:
 		GLint attenPos;
 		glm::vec3 lightPos;
 		float atten;
+
+		Light() : lightDirPos(0), attenPos(0), lightPos(0, 0, 0), atten(0) {}
 	};
 
 	std::vector<Light> lights;

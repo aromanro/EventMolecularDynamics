@@ -5,6 +5,7 @@ namespace MolecularDynamics {
 
 
 	ComputationResult::ComputationResult()
+		: nextEventTime(0)
 	{
 	}
 

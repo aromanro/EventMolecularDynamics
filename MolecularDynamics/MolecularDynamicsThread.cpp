@@ -42,7 +42,7 @@ namespace MolecularDynamics {
 	{
 		if (!doc) return false;
 
-		double nextSimulationTime = simulation.NextEventTime();
+		const double nextSimulationTime = simulation.NextEventTime();
 
 		if (doc->simulationTime >= nextSimulationTime)
 			return true; // don't bother adding this, it needs data for the future already

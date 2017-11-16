@@ -27,8 +27,8 @@ Options::~Options()
 
 void Options::Load()
 {
-	int res = (int)theApp.GetProfileInt(L"options", L"gamma", 0);
-	gammaCorrection = (res != 0 ? true : false);
+	const int res = static_cast<int>(theApp.GetProfileInt(L"options", L"gamma", 0));
+	gammaCorrection = (res != 0);
 
 	translationSpeed = theApp.GetProfileInt(L"options", L"translationSpeed", 100);
 	rotationSpeed = theApp.GetProfileInt(L"options", L"rotationSpeed", 100);
@@ -51,11 +51,11 @@ void Options::Load()
 void Options::Save()
 {
 	theApp.WriteProfileInt(L"options", L"gamma", gammaCorrection ? 1 : 0);
-	theApp.WriteProfileInt(L"options", L"translationSpeed", (int)translationSpeed);
-	theApp.WriteProfileInt(L"options", L"rotationSpeed", (int)rotationSpeed);
-	theApp.WriteProfileInt(L"options", L"scrollSpeed", (int)scrollSpeed);
+	theApp.WriteProfileInt(L"options", L"translationSpeed", static_cast<int>(translationSpeed));
+	theApp.WriteProfileInt(L"options", L"rotationSpeed", static_cast<int>(rotationSpeed));
+	theApp.WriteProfileInt(L"options", L"scrollSpeed", static_cast<int>(scrollSpeed));
 
-	theApp.WriteProfileInt(L"options", L"nrSpheres", (int)nrSpheres);
+	theApp.WriteProfileInt(L"options", L"nrSpheres", static_cast<int>(nrSpheres));
 
 	theApp.WriteProfileBinary(L"options", L"interiorSphereRadius", (LPBYTE)&interiorSpheresRadius, sizeof(double));
 	theApp.WriteProfileBinary(L"options", L"exteriorSphereRadius", (LPBYTE)&exteriorSpheresRadius, sizeof(double));

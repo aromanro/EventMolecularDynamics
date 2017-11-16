@@ -78,7 +78,7 @@ void DisplayPropertyPage::ApplyValues()
 
 	theApp.options.Save();
 
-	CMolecularDynamicsDoc* doc = ((CMolecularDynamicsDoc*)((CMainFrame*)theApp.m_pMainWnd)->GetActiveDocument());
+	CMolecularDynamicsDoc* doc = dynamic_cast<CMolecularDynamicsDoc*>(dynamic_cast<CMainFrame*>(theApp.m_pMainWnd)->GetActiveDocument());
 	if (!doc) return;
 
 	CMolecularDynamicsView *view = doc->GetMainView();

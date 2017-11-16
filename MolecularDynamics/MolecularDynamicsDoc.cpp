@@ -102,7 +102,7 @@ CMolecularDynamicsView* CMolecularDynamicsDoc::GetMainView(void)
 	{
 		CView* pView = GetNextView(pos);
 		if (pView->IsKindOf(RUNTIME_CLASS(CMolecularDynamicsView)))
-			return (CMolecularDynamicsView*)pView;
+			return dynamic_cast<CMolecularDynamicsView*>(pView);
 	}
 
 	return NULL;
@@ -199,7 +199,7 @@ void CMolecularDynamicsDoc::Dump(CDumpContext& dc) const
 
 void CMolecularDynamicsDoc::Advance()
 {
-	bool isEmpty;
+	bool isEmpty = true;
 
 	while (curResult.nextEventTime < simulationTime)
 	{

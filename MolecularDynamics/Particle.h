@@ -39,12 +39,12 @@ namespace MolecularDynamics {
 			return Vector3D<double>(AdjustValue(pos.X, period), AdjustValue(pos.Y, period), AdjustValue(pos.Z, period));
 		}
 
-		inline double CollisionTime(Particle& other) const
+		inline double CollisionTime(const Particle& other) const
 		{
 			// start from whatever time is bigger, this is the reference time
-			double refTime = std::max<double>(particleTime, other.particleTime);
+			const double refTime = std::max<double>(particleTime, other.particleTime);
 
-			double difTime = other.particleTime - particleTime;
+			const double difTime = other.particleTime - particleTime;
 
 			Vector3D<double> difPos = position - other.position;
 
@@ -63,13 +63,13 @@ namespace MolecularDynamics {
 
 			difPos += (difTime > 0 ? velocity : other.velocity) * difTime;
 
-			Vector3D<double> difVel = velocity - other.velocity;
-			double b = difPos * difVel;
-			double minDist = radius + other.radius; // collision distance
-			double C = difPos * difPos - minDist * minDist;
-			double difVel2 = difVel * difVel;
+			const Vector3D<double> difVel = velocity - other.velocity;
+			const double b = difPos * difVel;
+			const double minDist = radius + other.radius; // collision distance
+			const double C = difPos * difPos - minDist * minDist;
+			const double difVel2 = difVel * difVel;
 
-			double delta = b * b - difVel2 * C;
+			const double delta = b * b - difVel2 * C;
 
 			// a delta < 0 means to complex solutions, that is, no real solution = the spheres do not collide
 			// delta = 0 is the degenerate case, the spheres meet in the trajectory and depart at the same time = tangential touch, no need to handle it, they are smooth spheres
@@ -81,9 +81,9 @@ namespace MolecularDynamics {
 			// the b < 0 condition is the condition that the centers approach, b > 0 means that they are departing
 			if (delta > 0 && b < 0)
 			{
-				double sdelta = sqrt(delta);
+				const double sdelta = sqrt(delta);
 
-				double t1 = (-b - sdelta) / difVel2;
+				const double t1 = (-b - sdelta) / difVel2;
 				// t2 is not needed, it's the bigger time when they would be again at the radius1+radius2 distance if they would pass through each other
 				//double t2 = (-b + sdelta) / difVel2;
 

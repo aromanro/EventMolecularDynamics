@@ -48,7 +48,7 @@ namespace MolecularDynamics {
 		Vector3D<double> centerSpace(spaceSize / 2, spaceSize / 2, spaceSize / 2);
 
 		// this is just some limit to prevent running forever
-		unsigned long int maxAttempts = 300000ul * numParticles;
+		const unsigned long int maxAttempts = 300000ul * numParticles;
 		unsigned long int attempt = 0;
 
 		for (int i = 0; i < numParticles; ++i)
@@ -78,7 +78,7 @@ namespace MolecularDynamics {
 			// or a part outside the walls - should not happen unless the sphereRadius is set too big
 
 			bool overlap = false;
-			for (auto &&part : particles)
+			for (const auto &part : particles)
 			{
 				if ((part.position - particle.position).Length() <= part.radius + particle.radius ||
 					part.position.X > spaceSize - part.radius || part.position.Y > spaceSize - part.radius || part.position.Z > spaceSize - part.radius ||
@@ -120,9 +120,9 @@ namespace MolecularDynamics {
 
 	void Simulation::BuildEventQueue()
 	{
-		int numParticles = (int)particles.size();
+		const int numParticles = static_cast<int>(particles.size());
 
-		size_t sizeGuess = (size_t)(1.2 * ceill(pow(numParticles*(numParticles - 1) / 2, 1. / 3.)) + numParticles);
+		const size_t sizeGuess = static_cast<size_t>(1.2 * ceill(pow(numParticles*(numParticles - 1) / 2, 1. / 3.)) + numParticles);
 		eventsQueue.reserve(sizeGuess);
 
 		for (int i = 0; i < numParticles; ++i)
@@ -169,7 +169,7 @@ namespace MolecularDynamics {
 
 		Event nextEvent = GetAndRemoveFirstEventFromQueue();
 
-		int numParticles = (int)particles.size();
+		const int numParticles = static_cast<int>(particles.size());
 
 		AdjustForNextEvent(nextEvent);
 		EraseParticleEventsFromQueue(nextEvent); // also adjusts 'partners'

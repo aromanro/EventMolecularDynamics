@@ -67,8 +67,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CFrameWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	BOOL bNameValid;
-
 	if (!m_wndMenuBar.Create(this))
 	{
 		TRACE0("Failed to create menubar\n");
@@ -88,7 +86,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	CString strToolBarName;
-	bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
+	BOOL bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
 	ASSERT(bNameValid);
 	m_wndToolBar.SetWindowText(strToolBarName);
 
@@ -333,7 +331,7 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 
 afx_msg LRESULT CMainFrame::OnToolbarReset(WPARAM wp, LPARAM)
 {
-	UINT uiToolBarId = (UINT)wp;
+	const UINT uiToolBarId = static_cast<UINT>(wp);
 	if (uiToolBarId == IDR_MAINFRAME || uiToolBarId == IDR_MAINFRAME_256)
 	{
 		CMFCToolBarSlider btnSlider(ID_SLIDER);
@@ -341,7 +339,7 @@ afx_msg LRESULT CMainFrame::OnToolbarReset(WPARAM wp, LPARAM)
 		CWnd* pWndMain = AfxGetMainWnd();
 		if (pWndMain)
 		{
-			CMolecularDynamicsDoc* pDoc = (CMolecularDynamicsDoc*)((CFrameWnd*)pWndMain)->GetActiveDocument();
+			const CMolecularDynamicsDoc* pDoc = dynamic_cast<CMolecularDynamicsDoc*>(dynamic_cast<CFrameWnd*>(pWndMain)->GetActiveDocument());
 			if (pDoc) btnSlider.SetPos(ID_SLIDER, (int)pDoc->nrsteps);
 		}
 
@@ -363,7 +361,7 @@ void CMainFrame::OnSlider()
 	{
 		int npos = CMFCToolBarSlider::GetPos(ID_SLIDER);
 
-		CMolecularDynamicsDoc* pDoc = (CMolecularDynamicsDoc*)((CFrameWnd*)pWndMain)->GetActiveDocument();
+		CMolecularDynamicsDoc* pDoc = dynamic_cast<CMolecularDynamicsDoc*>(dynamic_cast<CFrameWnd*>(pWndMain)->GetActiveDocument());
 
 		pDoc->nrsteps = npos;
 	}
@@ -376,13 +374,13 @@ CMolecularDynamicsView* CMainFrame::getView()
 
 	if (pWndMain)
 	{
-		CDocument* pDoc = ((CFrameWnd*)pWndMain)->GetActiveDocument();
+		const CDocument* pDoc = dynamic_cast<CFrameWnd*>(pWndMain)->GetActiveDocument();
 		if (pDoc)
 		{
 			POSITION pos = pDoc->GetFirstViewPosition();
 			if (pos)
 			{
-				return (CMolecularDynamicsView*)pDoc->GetNextView(pos);
+				return dynamic_cast<CMolecularDynamicsView*>(pDoc->GetNextView(pos));
 			}
 		}
 	}
@@ -408,7 +406,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 	CMolecularDynamicsView* view = getView();
 	if (view)
 	{
-		bool handled = view->KeyPressHandler(pMsg);
+		const bool handled = view->KeyPressHandler(pMsg);
 		if (handled) return TRUE;
 	}
 
@@ -444,7 +442,7 @@ void CMainFrame::OnViewFullscreen()
 		POSITION pos = lstBars.GetHeadPosition();
 		while (pos != NULL)
 		{
-			CWnd* wnd = (CWnd*)lstBars.GetNext(pos);
+			const CWnd* wnd = dynamic_cast<CWnd*>(lstBars.GetNext(pos));
 			if (wnd->IsKindOf(RUNTIME_CLASS(CMFCToolBar)) && !wnd->IsKindOf(RUNTIME_CLASS(CMFCStatusBar)) && !wnd->IsKindOf(RUNTIME_CLASS(CMFCMenuBar)) && wnd->GetSafeHwnd() != m_wndToolBar.GetSafeHwnd())
 				wnd->GetParent()->ShowWindow(SW_HIDE);
 		}

@@ -64,7 +64,7 @@ private:
 
 	void InitializePalette(void);
 	void Resize(GLsizei h, GLsizei w);
-	Vector3D<double> GetTowardsVector(CPoint& point, Vector3D<double>& forward);
+	Vector3D<double> GetTowardsVector(CPoint& point, const Vector3D<double>& forward);
 // Operations
 public:
 

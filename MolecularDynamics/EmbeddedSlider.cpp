@@ -127,7 +127,7 @@ void CEmbeddedSlider::RetrievePos()
 	CWnd* pWndMain = AfxGetMainWnd();
 	if (pWndMain)
 	{
-		CMolecularDynamicsDoc* pDoc = (CMolecularDynamicsDoc*)((CFrameWnd*)pWndMain)->GetActiveDocument();
+		const CMolecularDynamicsDoc* pDoc = dynamic_cast<CMolecularDynamicsDoc*>(dynamic_cast<CFrameWnd*>(pWndMain)->GetActiveDocument());
 		if (pDoc) {
 			position = (int)pDoc->nrsteps;
 			if (GetSafeHwnd()) SetPos(position);
