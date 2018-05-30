@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CC7F0C77-53FA-40D0-BAA0-7B7508F14AC3}</ProjectGuid>
     <RootNamespace>MolecularDynamics</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <Keyword>MFCProj</Keyword>
     <ProjectName>EventMolecularDynamics</ProjectName>
   </PropertyGroup>
