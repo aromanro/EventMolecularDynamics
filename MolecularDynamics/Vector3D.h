@@ -33,7 +33,7 @@ public:
 	Vector3D& operator*=(T s);
 	Vector3D& operator/=(T s);
 
-	T Length() const;
+	double Length() const;
 	Vector3D Normalize() const;
 
 	template<typename O, typename A> Vector3D RotateAround(const Vector3D<O>& other, A angle) const;
@@ -42,6 +42,11 @@ public:
 
 template<typename T> Vector3D<T> operator*(T o, const Vector3D<T>& t) { return t*o; }
 template<typename T> bool operator==(const Vector3D<T>& f, const Vector3D<T>& t) { return f.X == t.X && f.Y == t.Y && f.Z == t.Z; }
+
+template<typename T> bool operator<(const Vector3D<T>& lhs, const Vector3D<T>& rhs)
+{
+	return std::tie(lhs.X, lhs.Y, lhs.Z) < std::tie(rhs.X, rhs.Y, rhs.Z);
+}
 
 #ifndef _VECTOR_3D_IMPL
 #include "Vector3D.inl"
