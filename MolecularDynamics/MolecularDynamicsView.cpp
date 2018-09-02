@@ -573,7 +573,7 @@ bool CMolecularDynamicsView::SetupShaders()
 {
 	program = new MolecularDynamicsGLProgram();
 
-	program->lights.push_back(MolecularDynamicsGLProgram::Light());
+	program->lights.emplace_back(MolecularDynamicsGLProgram::Light());
 	program->lights.back().lightPos = glm::vec3(-0.3, 0.8, 0.5);
 	program->lights.back().atten = 0.8f;
 

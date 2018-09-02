@@ -54,7 +54,7 @@ namespace MolecularDynamics {
 
 		inline void AddEventToQueue(Event& event)
 		{
-			eventsQueue.push_back(std::move(event));
+			eventsQueue.emplace_back(std::move(event));
 			std::push_heap(eventsQueue.begin(), eventsQueue.end());
 		}
 
@@ -152,6 +152,7 @@ namespace MolecularDynamics {
 			}
 		}
 
+		// this is the place where one must look first for performance enhancements
 		inline void EraseParticleEventsFromQueue(const Event& colEvent)
 		{
 			if (Event::particleCollision == colEvent.type)
@@ -160,8 +161,8 @@ namespace MolecularDynamics {
 				{
 					if (Event::EventType::noEvent == event.type) continue;
 
-					if (event.particle1 == colEvent.particle1 || (event.type == Event::EventType::particleCollision && event.particle2 == colEvent.particle1) ||
-						event.particle1 == colEvent.particle2 || (event.type == Event::EventType::particleCollision && event.particle2 == colEvent.particle2))
+					if (event.particle1 == colEvent.particle1 || event.particle1 == colEvent.particle2 || 
+						 (event.type == Event::EventType::particleCollision && (event.particle2 == colEvent.particle1 || event.particle2 == colEvent.particle2)))
 					{
 						AdjustPartner(colEvent, event);
 						event.type = Event::EventType::noEvent;

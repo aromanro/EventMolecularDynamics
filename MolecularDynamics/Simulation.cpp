@@ -112,7 +112,7 @@ namespace MolecularDynamics {
 			// now the magnitude, can be a constant or distributed as a gaussian, for now just a single value
 			particle.velocity *= theApp.options.initialSpeed;
 
-			particles.push_back(particle);
+			particles.emplace_back(particle);
 		}
 	}
 
@@ -137,7 +137,7 @@ namespace MolecularDynamics {
 				wallEvent.particle1 = i;
 				wallEvent.eventTime = colTime;
 
-				eventsQueue.push_back(wallEvent);
+				eventsQueue.emplace_back(wallEvent);
 			}
 
 			for (int j = i + 1; j < numParticles; ++j)
@@ -152,7 +152,7 @@ namespace MolecularDynamics {
 					collisionEvent.particle2 = j;
 					collisionEvent.eventTime = colTime;
 
-					eventsQueue.push_back(collisionEvent);
+					eventsQueue.emplace_back(collisionEvent);
 				}
 			}
 		}
