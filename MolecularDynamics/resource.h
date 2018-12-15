@@ -39,7 +39,9 @@
 #define IDC_EDIT2                       1004
 #define IDC_STATIC3                     1005
 #define IDC_EDIT3                       1005
+#define IDC_MFCLINK1                    1005
 #define IDC_EDIT4                       1006
+#define IDC_MFCLINK2                    1006
 #define IDC_EDIT5                       1007
 #define IDC_EDIT6                       1008
 #define IDC_EDIT7                       1009
@@ -51,9 +53,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        312
+#define _APS_NEXT_RESOURCE_VALUE        313
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1005
+#define _APS_NEXT_CONTROL_VALUE         1006
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif
