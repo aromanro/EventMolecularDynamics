@@ -5,7 +5,7 @@
 #include "Options.h"
 #include "MolecularDynamics.h"
 
-#include <random>
+
 
 namespace MolecularDynamics {
 
@@ -22,11 +22,6 @@ namespace MolecularDynamics {
 
 	void Simulation::GenerateRandom(int numParticles, double sphereRadius)
 	{
-		std::mt19937 rndEngineX, rndEngineY, rndEngineZ;
-		std::random_device rdev{};
-
-		std::mt19937 rndEngineVX, rndEngineVY, rndEngineVZ;
-
 		rndEngineX.seed(rdev());
 		rndEngineY.seed(rdev());
 		rndEngineZ.seed(rdev());
@@ -133,7 +128,7 @@ namespace MolecularDynamics {
 			{
 				Event wallEvent;
 
-				wallEvent.type = Event::wallCollision;
+				wallEvent.type = Event::EventType::wallCollision;
 				wallEvent.particle1 = i;
 				wallEvent.eventTime = colTime;
 

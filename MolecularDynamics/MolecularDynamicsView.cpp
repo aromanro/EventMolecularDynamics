@@ -511,8 +511,8 @@ void CMolecularDynamicsView::Setup()
 
 	if (doc)
 	{
-		position.resize(doc->nrParticles * 3);
-		colors.resize(doc->nrParticles * 3);
+		position.resize(doc->nrParticles * 3ULL);
+		colors.resize(doc->nrParticles * 3ULL);
 		scale.resize(doc->nrParticles);
 		int index = 0;
 		const double avgRadius = (doc->options.exteriorSpheresRadius + doc->options.interiorSpheresRadius) / 2.;
@@ -522,9 +522,9 @@ void CMolecularDynamicsView::Setup()
 
 			scale[index] = static_cast<GLfloat>(particle.radius);
 
-			colors[3 * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3 * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3 * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3ULL * index + 1ULL] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3ULL * index + 2ULL] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
 
 			++index;
 		}
@@ -613,9 +613,9 @@ void CMolecularDynamicsView::RenderScene()
 		glm::vec3 pos = glm::vec3(particlePos.X, particlePos.Y, particlePos.Z);
 		//glm::vec3 pos = glm::vec3(particle.position.X, particle.position.Y, particle.position.Z);
 
-		position[3 * index] = pos.x;
-		position[3 * index + 1] = pos.y;
-		position[3 * index + 2] = pos.z;
+		position[3ULL * index] = pos.x;
+		position[3ULL * index + 1ULL] = pos.y;
+		position[3ULL * index + 2ULL] = pos.z;
 
 		++index;
 	}
@@ -672,9 +672,9 @@ void CMolecularDynamicsView::SetColors()
 
 		for (const auto &particle : doc->curResult.particles)
 		{
-			colors[3 * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3 * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3 * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3ULL * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3ULL * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
 
 			++index;
 		}

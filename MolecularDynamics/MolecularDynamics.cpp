@@ -29,6 +29,7 @@ END_MESSAGE_MAP()
 // CMolecularDynamicsApp construction
 
 CMolecularDynamicsApp::CMolecularDynamicsApp()
+	: m_nAppLook(0)
 {
 	m_bHiColorIcons = TRUE;
 

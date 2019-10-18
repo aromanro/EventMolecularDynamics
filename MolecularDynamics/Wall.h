@@ -3,13 +3,13 @@
 namespace MolecularDynamics {
 
 
-	typedef enum Walls {
+	enum class Walls {
 		top,
 		bottom,
 		left,
 		right,
 		front,
 		back
-	} Walls;
+	};
 
 }

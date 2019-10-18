@@ -6,6 +6,8 @@
 #include "Event.h"
 #include "Particle.h"
 
+#include <random>
+
 namespace MolecularDynamics {
 
 
@@ -107,7 +109,7 @@ namespace MolecularDynamics {
 			{
 				Event wallEvent;
 
-				wallEvent.type = Event::wallCollision;
+				wallEvent.type = Event::EventType::wallCollision;
 				wallEvent.particle1 = particle;
 				wallEvent.eventTime = colTime;
 
@@ -155,7 +157,7 @@ namespace MolecularDynamics {
 		// this is the place where one must look first for performance enhancements
 		inline void EraseParticleEventsFromQueue(const Event& colEvent)
 		{
-			if (Event::particleCollision == colEvent.type)
+			if (Event::EventType::particleCollision == colEvent.type)
 			{
 				for (auto &event : eventsQueue)
 				{
@@ -204,6 +206,12 @@ namespace MolecularDynamics {
 
 			particles[nextEvent.particle1].particleTime = nextEvent.eventTime;
 		}
+
+
+		std::mt19937 rndEngineX, rndEngineY, rndEngineZ;
+		std::random_device rdev;
+
+		std::mt19937 rndEngineVX, rndEngineVY, rndEngineVZ;
 	};
 
 }

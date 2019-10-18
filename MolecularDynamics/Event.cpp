@@ -4,7 +4,7 @@
 namespace MolecularDynamics {
 
 	Event::Event()
-		: eventTime(0), type(particleCollision),
+		: eventTime(0), type(EventType::particleCollision),
 		particle1(-1), particle2(-1)
 	{
 	}
