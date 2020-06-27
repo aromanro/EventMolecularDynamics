@@ -44,11 +44,8 @@ namespace OpenGL {
 				double YTex0 = static_cast<double>(i) / lats;
 				double YTex1 = (static_cast<double>(i) + 1.) / lats;
 
-				double lng = sqrt(x*x + y*y + z0*z0);
-
 				double x1 = r1 * c;
 				double y1 = r1 * s;
-				double lng1 = sqrt(x1*x1 + y1*y1 + z1*z1);
 
 				// vertex
 				const size_t base = i * (longs + 1ULL) * STEP_SIZE + j * STEP_SIZE;
@@ -57,9 +54,9 @@ namespace OpenGL {
 				buffer[base + 2] = static_cast<float>(z1);
 
 				// normal
-				buffer[base + 3] = static_cast<float>(x1 / lng1);
-				buffer[base + 4] = static_cast<float>(y1 / lng1);
-				buffer[base + 5] = static_cast<float>(z1 / lng1);
+				buffer[base + 3] = static_cast<float>(x1 / r);
+				buffer[base + 4] = static_cast<float>(y1 / r);
+				buffer[base + 5] = static_cast<float>(z1 / r);
 
 				// texture coordinate
 				if (useTexture)
@@ -74,9 +71,9 @@ namespace OpenGL {
 				buffer[base + 8 + (useTexture ? 2 : 0)] = static_cast<float>(z0);
 
 				// normal
-				buffer[base + 9 + (useTexture ? 2 : 0)] = static_cast<float>(x / lng);
-				buffer[base + 10 + (useTexture ? 2 : 0)] = static_cast<float>(y / lng);
-				buffer[base + 11 + (useTexture ? 2 : 0)] = static_cast<float>(z0 / lng);
+				buffer[base + 9 + (useTexture ? 2 : 0)] = static_cast<float>(x / r);
+				buffer[base + 10 + (useTexture ? 2 : 0)] = static_cast<float>(y / r);
+				buffer[base + 11 + (useTexture ? 2 : 0)] = static_cast<float>(z0 / r);
 
 				// texture coordinate
 				if (useTexture)
