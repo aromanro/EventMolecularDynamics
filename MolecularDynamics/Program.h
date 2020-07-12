@@ -17,18 +17,18 @@ namespace OpenGL {
 		Program();
 		virtual ~Program();
 
-		virtual void Bind(); // it's actually a link
+		virtual void Bind() override; // it's actually a link
 		virtual GLuint getType() const;
 
 		void Use();
 		void UnUse();
 
-		virtual void UnBind(); // same as UnUse
+		virtual void UnBind() override; // same as UnUse
 
 		void Attach(const Shader& shader);
 
-		virtual bool getStatus() const;
-		virtual const char* getStatusMessage();
+		virtual bool getStatus() const override;
+		virtual const char* getStatusMessage() override;
 	};
 
 }
