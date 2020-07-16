@@ -62,7 +62,7 @@ namespace MolecularDynamics {
 			result.particles = simulation.particles;
 			result.nextEventTime = nextSimulationTime;
 
-			doc->resultsQueue.push(result);
+			doc->resultsQueue.emplace(std::move(result));
 		}
 
 		// let the main thread know that new processed data is available

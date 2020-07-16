@@ -13,6 +13,40 @@ namespace MolecularDynamics {
 		ComputationResult();
 		~ComputationResult();
 
+		ComputationResult(const ComputationResult& other)
+			: particles(other.particles),
+			nextEventTime(other.nextEventTime)
+		{					
+		}
+
+		ComputationResult(ComputationResult&& other)
+			: nextEventTime(other.nextEventTime)
+		{
+			particles.swap(other.particles);
+		}
+
+
+		ComputationResult& operator=(const ComputationResult& other)
+		{
+			if (this != &other) 
+			{ 
+				particles = other.particles;
+				nextEventTime = other.nextEventTime;
+			}
+
+			return *this;
+		}
+
+		ComputationResult& operator=(ComputationResult&& other)
+		{
+			if (this != &other) 
+			{
+				particles.swap(other.particles);
+				nextEventTime = other.nextEventTime;
+			}
+			return *this;
+		}
+
 		std::vector<Particle> particles;
 
 		double nextEventTime;
