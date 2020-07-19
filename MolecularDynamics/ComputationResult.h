@@ -11,6 +11,7 @@ namespace MolecularDynamics {
 	{
 	public:
 		ComputationResult();
+		ComputationResult(const std::vector<Particle>& part, double ne);
 		~ComputationResult();
 
 		ComputationResult(const ComputationResult& other)
@@ -19,12 +20,11 @@ namespace MolecularDynamics {
 		{					
 		}
 
-		ComputationResult(ComputationResult&& other)
+		ComputationResult(ComputationResult&& other) noexcept
 			: nextEventTime(other.nextEventTime)
 		{
 			particles.swap(other.particles);
 		}
-
 
 		ComputationResult& operator=(const ComputationResult& other)
 		{

@@ -50,17 +50,15 @@ namespace MolecularDynamics {
 		if (doc->resultsQueue.size() > 10) return false; //queue full
 
 		{
-			ComputationResult result;
-
-			std::lock_guard<std::mutex> lock(doc->dataSection);
+			std::unique_lock<std::mutex> lock(doc->dataSection);
 
 			if (doc->resultsQueue.size() && doc->resultsQueue.back().nextEventTime == nextSimulationTime)
 				return true;
 
 			// now copy data
-
-			result.particles = simulation.particles;
-			result.nextEventTime = nextSimulationTime;
+			ComputationResult result(simulation.particles, nextSimulationTime);
+			
+			lock.unlock();
 
 			doc->resultsQueue.emplace(std::move(result));
 		}
