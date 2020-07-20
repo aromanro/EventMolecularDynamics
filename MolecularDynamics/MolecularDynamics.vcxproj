@@ -234,9 +234,13 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Simulation.h" />
     <ClInclude Include="SimulationPropertyPage.h" />
+    <ClInclude Include="SkyBase.h" />
+    <ClInclude Include="SkyBoxCubeMapProgram.h" />
+    <ClInclude Include="SkySphereProgram.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="VertexBufferRenderable.h" />
     <ClInclude Include="Wall.h" />
@@ -266,6 +270,9 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="SimulationPropertyPage.cpp" />
+    <ClCompile Include="SkyBase.cpp" />
+    <ClCompile Include="SkyBoxCubeMapProgram.cpp" />
+    <ClCompile Include="SkySphereProgram.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -273,6 +280,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VertexBufferRenderable.cpp" />
   </ItemGroup>
   <ItemGroup>
