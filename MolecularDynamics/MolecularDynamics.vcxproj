@@ -217,6 +217,7 @@
     <ClInclude Include="EmbeddedSlider.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MemoryBitmap.h" />
     <ClInclude Include="MFCToolBarSlider.h" />
     <ClInclude Include="MolecularDynamics.h" />
     <ClInclude Include="MolecularDynamicsDoc.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="OptionsPropertySheet.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Program.h" />
+    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Shader.h" />
@@ -254,6 +256,7 @@
     <ClCompile Include="EmbeddedSlider.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MemoryBitmap.cpp" />
     <ClCompile Include="MFCToolBarSlider.cpp" />
     <ClCompile Include="MolecularDynamics.cpp" />
     <ClCompile Include="MolecularDynamicsDoc.cpp" />
@@ -266,6 +269,7 @@
     <ClCompile Include="OptionsPropertySheet.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Simulation.cpp" />
