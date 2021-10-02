@@ -559,6 +559,7 @@ void CMolecularDynamicsView::Setup()
 		ClearProgram();
 		return;
 	}
+	program->DetachShaders();
 	program->SetupLights();
 
 	wglMakeCurrent(NULL, NULL);
