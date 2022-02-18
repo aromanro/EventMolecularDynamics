@@ -36,14 +36,13 @@ public:
 
 
 	Options options; // a copy of the options, they might change during running
+
 private:
 	MolecularDynamics::MolecularDynamicsThread *theThread;
 
 // Operations
 public:
-
 // Overrides
-public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
 #ifdef SHARED_HANDLERS
@@ -61,8 +60,6 @@ public:
 
 	CMolecularDynamicsView* GetMainView();
 
-
-
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -71,6 +68,7 @@ protected:
 	// Helper function that sets search content for a Search Handler
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+
 public:
 	void Advance();
 };

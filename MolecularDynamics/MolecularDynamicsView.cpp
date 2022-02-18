@@ -68,7 +68,6 @@ CMolecularDynamicsView::CMolecularDynamicsView()
 	posBuffer(nullptr), colorBuffer(nullptr), scaleBuffer(nullptr)
 {
 	// TODO: add construction code here
-
 }
 
 CMolecularDynamicsView::~CMolecularDynamicsView()
@@ -130,7 +129,7 @@ void CMolecularDynamicsView::OnDraw(CDC* /*pDC*/)
 void CMolecularDynamicsView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
 	ClientToScreen(&point);
-
+	// TODO: Implement something here if needed
 }
 
 void CMolecularDynamicsView::OnContextMenu(CWnd* /* pWnd */, CPoint /*point*/)
@@ -335,59 +334,7 @@ bool CMolecularDynamicsView::KeyPressHandler(MSG* pMsg)
 		shift = ((::GetKeyState(VK_SHIFT) & 0x8000) != 0 ? true : false);
 
 		// pMSG->wParam contains the key code
-		switch (pMsg->wParam)
-		{
-		case VK_UP:
-			if (ctrl) movement = OpenGL::Camera::Movements::pitchUp;
-			else if (shift) movement = OpenGL::Camera::Movements::moveUp;
-			else movement = OpenGL::Camera::Movements::moveForward;
-			handled = true;
-			break;
-		case VK_DOWN:
-			if (ctrl) movement = OpenGL::Camera::Movements::pitchDown;
-			else if (shift) movement = OpenGL::Camera::Movements::moveDown;
-			else movement = OpenGL::Camera::Movements::moveBackward;
-			handled = true;
-			break;
-		case VK_LEFT:
-			if (ctrl) movement = OpenGL::Camera::Movements::yawLeft;
-			else if (shift) movement = OpenGL::Camera::Movements::rollLeft;
-			else movement = OpenGL::Camera::Movements::moveLeft;
-			handled = true;
-			break;
-		case VK_RIGHT:
-			if (ctrl) movement = OpenGL::Camera::Movements::yawRight;
-			else if (shift) movement = OpenGL::Camera::Movements::rollRight;
-			else movement = OpenGL::Camera::Movements::moveRight;
-			handled = true;
-			break;
-		case VK_ADD:
-		case VK_OEM_PLUS:
-		{
-			CMolecularDynamicsDoc *doc = GetDocument();
-			if (doc->nrsteps < MAX_NRSTEPS)
-			{
-				++doc->nrsteps;
-				CMFCToolBarSlider::SetPos(ID_SLIDER, (int)doc->nrsteps);
-			}
-		}
-		handled = true;
-		break;
-		case VK_SUBTRACT:
-		case VK_OEM_MINUS:
-		{
-			CMolecularDynamicsDoc *doc = GetDocument();
-			if (doc->nrsteps > 1)
-			{
-				--doc->nrsteps;
-				CMFCToolBarSlider::SetPos(ID_SLIDER, (int)doc->nrsteps);
-			}
-		}
-		handled = true;
-		break;
-		default:
-			movement = OpenGL::Camera::Movements::noMove;
-		}
+		handled = HandleKeyPress(pMsg->wParam, ctrl, shift);
 
 		Invalidate();
 	}
@@ -395,6 +342,68 @@ bool CMolecularDynamicsView::KeyPressHandler(MSG* pMsg)
 
 	return handled;
 }
+
+bool CMolecularDynamicsView::HandleKeyPress(WPARAM wParam, bool ctrl, bool shift)
+{
+	bool handled = false;
+
+	switch (wParam)
+	{
+	case VK_UP:
+		if (ctrl) movement = OpenGL::Camera::Movements::pitchUp;
+		else if (shift) movement = OpenGL::Camera::Movements::moveUp;
+		else movement = OpenGL::Camera::Movements::moveForward;
+		handled = true;
+		break;
+	case VK_DOWN:
+		if (ctrl) movement = OpenGL::Camera::Movements::pitchDown;
+		else if (shift) movement = OpenGL::Camera::Movements::moveDown;
+		else movement = OpenGL::Camera::Movements::moveBackward;
+		handled = true;
+		break;
+	case VK_LEFT:
+		if (ctrl) movement = OpenGL::Camera::Movements::yawLeft;
+		else if (shift) movement = OpenGL::Camera::Movements::rollLeft;
+		else movement = OpenGL::Camera::Movements::moveLeft;
+		handled = true;
+		break;
+	case VK_RIGHT:
+		if (ctrl) movement = OpenGL::Camera::Movements::yawRight;
+		else if (shift) movement = OpenGL::Camera::Movements::rollRight;
+		else movement = OpenGL::Camera::Movements::moveRight;
+		handled = true;
+		break;
+	case VK_ADD:
+	case VK_OEM_PLUS:
+	{
+		CMolecularDynamicsDoc* doc = GetDocument();
+		if (doc->nrsteps < MAX_NRSTEPS)
+		{
+			++doc->nrsteps;
+			CMFCToolBarSlider::SetPos(ID_SLIDER, (int)doc->nrsteps);
+		}
+	}
+	handled = true;
+	break;
+	case VK_SUBTRACT:
+	case VK_OEM_MINUS:
+	{
+		CMolecularDynamicsDoc* doc = GetDocument();
+		if (doc->nrsteps > 1)
+		{
+			--doc->nrsteps;
+			CMFCToolBarSlider::SetPos(ID_SLIDER, (int)doc->nrsteps);
+		}
+	}
+	handled = true;
+	break;
+	default:
+		movement = OpenGL::Camera::Movements::noMove;
+	}
+
+	return handled;
+}
+
 
 BOOL CMolecularDynamicsView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
@@ -457,6 +466,25 @@ void CMolecularDynamicsView::Setup()
 {
 	if (inited) return;
 
+	SetupGl();
+
+	SetupSpheres();
+
+	glVertexAttribDivisor(2, 1);
+	glVertexAttribDivisor(3, 1);
+	glVertexAttribDivisor(4, 1);
+
+	SetupProgram();
+
+	wglMakeCurrent(NULL, NULL);
+
+	if (!timer) timer = SetTimer(1, 30, NULL);
+
+	inited = true;
+}
+
+void CMolecularDynamicsView::SetupGl()
+{
 	if (!m_hRC)
 	{
 		m_hRC = wglCreateContext(m_hDC);
@@ -504,10 +532,14 @@ void CMolecularDynamicsView::Setup()
 		if (theApp.options.gammaCorrection) glEnable(GL_FRAMEBUFFER_SRGB);
 		else glDisable(GL_FRAMEBUFFER_SRGB);
 	}
+}
 
+
+void CMolecularDynamicsView::SetupSpheres()
+{
 	sphere = new OpenGL::Sphere(1, 32, 32, false);
 
-	CMolecularDynamicsDoc *doc = GetDocument();
+	CMolecularDynamicsDoc* doc = GetDocument();
 
 	if (doc)
 	{
@@ -517,9 +549,8 @@ void CMolecularDynamicsView::Setup()
 		int index = 0;
 		const double avgRadius = (doc->options.exteriorSpheresRadius + doc->options.interiorSpheresRadius) / 2.;
 
-		for (const auto &particle : doc->curResult.particles)
+		for (const auto& particle : doc->curResult.particles)
 		{
-
 			scale[index] = static_cast<GLfloat>(particle.radius);
 
 			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
@@ -550,24 +581,19 @@ void CMolecularDynamicsView::Setup()
 		scaleBuffer->setData(scale.data(), doc->nrParticles * sizeof(GLfloat));
 		glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(GLfloat), 0);
 	}
+}
 
-	glVertexAttribDivisor(2, 1);
-	glVertexAttribDivisor(3, 1);
-	glVertexAttribDivisor(4, 1);
 
+void CMolecularDynamicsView::SetupProgram()
+{
 	if (!SetupShaders()) {
 		ClearProgram();
 		return;
 	}
 	program->DetachShaders();
 	program->SetupLights();
-
-	wglMakeCurrent(NULL, NULL);
-
-	if (!timer) timer = SetTimer(1, 30, NULL);
-
-	inited = true;
 }
+
 
 
 bool CMolecularDynamicsView::SetupShaders()
@@ -663,7 +689,6 @@ void CMolecularDynamicsView::Reset()
 
 void CMolecularDynamicsView::SetColors()
 {
-
 	CMolecularDynamicsDoc *doc = GetDocument();
 
 	if (doc)

@@ -65,15 +65,12 @@ private:
 	void InitializePalette(void);
 	void Resize(GLsizei h, GLsizei w);
 	Vector3D<double> GetTowardsVector(CPoint& point, const Vector3D<double>& forward);
+
 // Operations
 public:
-
-
 // Overrides
-public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-protected:
 
 // Implementation
 public:
@@ -84,13 +81,12 @@ public:
 #endif
 
 protected:
-
 // Generated message map functions
-protected:
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
+
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
@@ -110,6 +106,12 @@ public:
 	bool KeyPressHandler(MSG* pMsg);
 	void SetColors();
 	void SetSpeeds(double translate, double rotate);
+
+protected:
+	bool HandleKeyPress(WPARAM wParam, bool ctrl, bool shift);
+	void SetupProgram();
+	void SetupSpheres();
+	void SetupGl();
 };
 
 #ifndef _DEBUG  // debug version in MolecularDynamicsView.cpp

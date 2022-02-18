@@ -8,20 +8,15 @@ class CMolecularDynamicsView;
 
 class CMainFrame : public CFrameWndEx
 {
-	
 protected: // create from serialization only
 	CMainFrame();
 	DECLARE_DYNCREATE(CMainFrame)
 
 // Attributes
 public:
-
 // Operations
-public:
-
 	CMolecularDynamicsView* getView();
 // Overrides
-public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 

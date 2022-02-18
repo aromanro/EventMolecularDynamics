@@ -32,7 +32,6 @@ CMolecularDynamicsDoc::CMolecularDynamicsDoc()
 	: nrsteps(1), simulationTime(0), theThread(nullptr), nrParticles(0)
 {
 	// TODO: add one-time construction code here
-
 }
 
 CMolecularDynamicsDoc::~CMolecularDynamicsDoc()
@@ -222,7 +221,6 @@ void CMolecularDynamicsDoc::Advance()
 			theThread->WakeUp();
 		}
 	}
-
 }
 
 

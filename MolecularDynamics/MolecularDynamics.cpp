@@ -167,7 +167,6 @@ void CMolecularDynamicsApp::OnAppAbout()
 
 void CMolecularDynamicsApp::PreLoadState()
 {
-
 }
 
 void CMolecularDynamicsApp::LoadCustomState()

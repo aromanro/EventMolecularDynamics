@@ -22,7 +22,6 @@ IMPLEMENT_DYNAMIC(DisplayPropertyPage, CMFCPropertyPage)
 DisplayPropertyPage::DisplayPropertyPage()
 	: CMFCPropertyPage(IDD_DISPLAYPROPERTYPAGE)
 {
-
 }
 
 DisplayPropertyPage::~DisplayPropertyPage()

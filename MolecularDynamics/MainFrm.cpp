@@ -326,7 +326,6 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
-
 }
 
 afx_msg LRESULT CMainFrame::OnToolbarReset(WPARAM wp, LPARAM)
