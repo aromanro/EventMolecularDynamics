@@ -350,27 +350,19 @@ bool CMolecularDynamicsView::HandleKeyPress(WPARAM wParam, bool ctrl, bool shift
 	switch (wParam)
 	{
 	case VK_UP:
-		if (ctrl) movement = OpenGL::Camera::Movements::pitchUp;
-		else if (shift) movement = OpenGL::Camera::Movements::moveUp;
-		else movement = OpenGL::Camera::Movements::moveForward;
+		HandleUp(ctrl, shift);
 		handled = true;
 		break;
 	case VK_DOWN:
-		if (ctrl) movement = OpenGL::Camera::Movements::pitchDown;
-		else if (shift) movement = OpenGL::Camera::Movements::moveDown;
-		else movement = OpenGL::Camera::Movements::moveBackward;
+		HandleDown(ctrl, shift);
 		handled = true;
 		break;
 	case VK_LEFT:
-		if (ctrl) movement = OpenGL::Camera::Movements::yawLeft;
-		else if (shift) movement = OpenGL::Camera::Movements::rollLeft;
-		else movement = OpenGL::Camera::Movements::moveLeft;
+		HandleLeft(ctrl, shift);
 		handled = true;
 		break;
 	case VK_RIGHT:
-		if (ctrl) movement = OpenGL::Camera::Movements::yawRight;
-		else if (shift) movement = OpenGL::Camera::Movements::rollRight;
-		else movement = OpenGL::Camera::Movements::moveRight;
+		HandleRight(ctrl, shift);
 		handled = true;
 		break;
 	case VK_ADD:
@@ -403,6 +395,35 @@ bool CMolecularDynamicsView::HandleKeyPress(WPARAM wParam, bool ctrl, bool shift
 
 	return handled;
 }
+
+void CMolecularDynamicsView::HandleUp(bool ctrl, bool shift)
+{
+	if (ctrl) movement = OpenGL::Camera::Movements::pitchUp;
+	else if (shift) movement = OpenGL::Camera::Movements::moveUp;
+	else movement = OpenGL::Camera::Movements::moveForward;
+}
+
+void CMolecularDynamicsView::HandleDown(bool ctrl, bool shift)
+{
+	if (ctrl) movement = OpenGL::Camera::Movements::pitchDown;
+	else if (shift) movement = OpenGL::Camera::Movements::moveDown;
+	else movement = OpenGL::Camera::Movements::moveBackward;
+}
+
+void CMolecularDynamicsView::HandleLeft(bool ctrl, bool shift)
+{
+	if (ctrl) movement = OpenGL::Camera::Movements::yawLeft;
+	else if (shift) movement = OpenGL::Camera::Movements::rollLeft;
+	else movement = OpenGL::Camera::Movements::moveLeft;
+}
+
+void CMolecularDynamicsView::HandleRight(bool ctrl, bool shift)
+{
+	if (ctrl) movement = OpenGL::Camera::Movements::yawRight;
+	else if (shift) movement = OpenGL::Camera::Movements::rollRight;
+	else movement = OpenGL::Camera::Movements::moveRight;
+}
+
 
 
 BOOL CMolecularDynamicsView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)

@@ -34,9 +34,9 @@ namespace OpenGL {
 		VertexArrayObject();
 		virtual ~VertexArrayObject();
 
-		virtual void Bind() override;
-		virtual void UnBind() override;
-		virtual GLuint getType() const override;
+		void Bind() override;
+		void UnBind() override;
+		GLuint getType() const override;
 	};
 
 

@@ -73,7 +73,6 @@ public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
 // Implementation
-public:
 	virtual ~CMolecularDynamicsView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -112,6 +111,11 @@ protected:
 	void SetupProgram();
 	void SetupSpheres();
 	void SetupGl();
+
+	void HandleUp(bool ctrl, bool shift);
+	void HandleDown(bool ctrl, bool shift);
+	void HandleLeft(bool ctrl, bool shift);
+	void HandleRight(bool ctrl, bool shift);
 };
 
 #ifndef _DEBUG  // debug version in MolecularDynamicsView.cpp
