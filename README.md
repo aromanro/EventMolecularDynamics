@@ -1,6 +1,8 @@
 # EventMolecularDynamics
 A program implementing event driven molecular dynamics for hard smooth spheres
 
+[![CodeFactor](https://www.codefactor.io/repository/github/aromanro/eventmoleculardynamics/badge)](https://www.codefactor.io/repository/github/aromanro/eventmoleculardynamics)
+
 A more detailed description is on the blog: https://compphys.go.ro/event-driven-molecular-dynamics/
 
 ### PROGRAM IN ACTION
