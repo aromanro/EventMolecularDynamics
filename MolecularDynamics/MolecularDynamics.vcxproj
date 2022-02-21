@@ -214,9 +214,12 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraPropertyPage.h" />
+    <ClInclude Include="Chart.h" />
+    <ClInclude Include="ChartAxis.h" />
     <ClInclude Include="ComputationResult.h" />
     <ClInclude Include="ComputationThread.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="DataSets.h" />
     <ClInclude Include="DisplayPropertyPage.h" />
     <ClInclude Include="EmbeddedSlider.h" />
     <ClInclude Include="Event.h" />
@@ -254,8 +257,11 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraPropertyPage.cpp" />
+    <ClCompile Include="Chart.cpp" />
+    <ClCompile Include="ChartAxis.cpp" />
     <ClCompile Include="ComputationResult.cpp" />
     <ClCompile Include="ComputationThread.cpp" />
+    <ClCompile Include="DataSets.cpp" />
     <ClCompile Include="DisplayPropertyPage.cpp" />
     <ClCompile Include="EmbeddedSlider.cpp" />
     <ClCompile Include="Event.cpp" />
