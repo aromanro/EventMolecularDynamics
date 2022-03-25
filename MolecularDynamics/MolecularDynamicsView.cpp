@@ -204,7 +204,7 @@ void CMolecularDynamicsView::OnTimer(UINT_PTR nIDEvent)
 		camera.Tick();
 		if (keyDown) camera.Move(movement);
 
-		Invalidate();
+		RedrawWindow(0, 0, RDW_INTERNALPAINT | RDW_NOERASE | RDW_NOFRAME | RDW_UPDATENOW);
 	}
 
 	CView::OnTimer(nIDEvent);
