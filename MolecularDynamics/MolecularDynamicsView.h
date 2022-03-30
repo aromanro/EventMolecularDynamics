@@ -15,6 +15,9 @@
 #include "Program.h"
 #include "Sphere.h"
 #include "MolecularDynamicsGLProgram.h"
+#include "Rectangle.h"
+#include "Texture.h"
+#include "MemoryBitmap.h"
 
 
 class CMolecularDynamicsView : public CView
@@ -53,6 +56,12 @@ private:
 
 	OpenGL::VertexBufferObject *scaleBuffer;
 	std::vector<GLfloat> scale;
+
+
+	OpenGL::Rectangle* billboardRectangle;
+	OpenGL::Texture* billboardTexture;
+	MemoryBitmap memoryBitmap;
+	CFont font;
 
 
 	bool keyDown;
@@ -105,6 +114,11 @@ public:
 	bool KeyPressHandler(MSG* pMsg);
 	void SetColors();
 	void SetSpeeds(double translate, double rotate);
+
+	void EnableAntialias();
+	void DisableAntialias();
+	void DisplayBilboard();
+	void SetBillboardText(const char* text);
 
 protected:
 	bool HandleKeyPress(WPARAM wParam, bool ctrl, bool shift);

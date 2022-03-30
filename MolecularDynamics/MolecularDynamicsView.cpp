@@ -65,7 +65,8 @@ CMolecularDynamicsView::CMolecularDynamicsView()
 	keyDown(false), ctrl(false), shift(false), wheelAccumulator(0),
 	movement(OpenGL::Camera::Movements::noMove), m_hRC(0), m_hDC(0),
 	Width(0), Height(0), program(nullptr),
-	posBuffer(nullptr), colorBuffer(nullptr), scaleBuffer(nullptr)
+	posBuffer(nullptr), colorBuffer(nullptr), scaleBuffer(nullptr),
+	billboardRectangle(nullptr), billboardTexture(nullptr)
 {
 	// TODO: add construction code here
 }
@@ -78,6 +79,9 @@ CMolecularDynamicsView::~CMolecularDynamicsView()
 	delete posBuffer;
 	delete colorBuffer;
 	delete scaleBuffer;
+
+	delete billboardRectangle;
+	delete billboardTexture;
 }
 
 BOOL CMolecularDynamicsView::PreCreateWindow(CREATESTRUCT& cs)
@@ -489,6 +493,21 @@ void CMolecularDynamicsView::Setup()
 
 	SetupGl();
 
+	const int billboardAspectRatio = 16;
+	billboardRectangle = new OpenGL::Rectangle(billboardAspectRatio);
+
+	const int height = 128;
+	memoryBitmap.SetSize(static_cast<int>(billboardAspectRatio * height), height);
+
+	if (!font.GetSafeHandle())
+	{
+		const int fontSize = static_cast<int>(height * 0.8);
+		const int fontHeight = -MulDiv(fontSize, CDC::FromHandle(::GetDC(NULL))->GetDeviceCaps(LOGPIXELSY), 72);
+		font.CreateFont(fontHeight, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_MODERN, _T("Courier New"));
+	}
+
+	billboardTexture = new OpenGL::Texture();
+
 	SetupSpheres();
 
 	glVertexAttribDivisor(2, 1);
@@ -519,8 +538,7 @@ void CMolecularDynamicsView::SetupGl()
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-		glEnable(GL_LINE_SMOOTH);
-		glEnable(GL_POLYGON_SMOOTH);
+		EnableAntialias();
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_DEPTH_RANGE);
@@ -674,6 +692,9 @@ void CMolecularDynamicsView::RenderScene()
 
 	sphere->DrawInstanced(doc->nrParticles);
 
+	if (theApp.options.showBillboard)
+		DisplayBilboard();
+
 	program->UnUse();
 }
 
@@ -699,6 +720,12 @@ void CMolecularDynamicsView::Reset()
 	colorBuffer = nullptr;
 	delete scaleBuffer;
 	scaleBuffer = nullptr;
+
+	delete billboardRectangle;
+	billboardRectangle = NULL;
+
+	delete billboardTexture;
+	billboardTexture = NULL;
 
 	ClearProgram();
 
@@ -744,4 +771,96 @@ void CMolecularDynamicsView::SetColors()
 void CMolecularDynamicsView::SetSpeeds(double translate, double rotate)
 {
 	camera.SetSpeeds(translate, rotate);
+}
+
+void CMolecularDynamicsView::SetBillboardText(const char* text)
+{
+	if (!billboardTexture) return;
+
+	memoryBitmap.WriteText(text, font);
+
+	wglMakeCurrent(m_hDC, m_hRC);
+	memoryBitmap.SetIntoTexture(*billboardTexture);
+	wglMakeCurrent(NULL, NULL);
+}
+
+
+void CMolecularDynamicsView::EnableAntialias()
+{
+	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_DITHER);
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_MULTISAMPLE_ARB);
+}
+
+
+void CMolecularDynamicsView::DisableAntialias()
+{
+	glDisable(GL_LINE_SMOOTH);
+	glDisable(GL_POLYGON_SMOOTH);
+	glDisable(GL_DITHER);
+	glDisable(GL_POINT_SMOOTH);
+	glDisable(GL_MULTISAMPLE_ARB);
+}
+
+
+void CMolecularDynamicsView::DisplayBilboard()
+{
+	glm::dmat4 precisionMat(camera.getMatrixDouble());
+	// cancel out the translation of the camera, but preserve rotation:
+	precisionMat[3][0] = 0;
+	precisionMat[3][1] = 0;
+	precisionMat[3][2] = 0;
+
+	// put the billboard in front of the camera
+	const Vector3D<double> forward = camera.getNormalizedForward();
+	glm::dvec3 pos(forward.X, forward.Y, forward.Z);
+	pos *= 0.101;
+
+	// but shifted downwards a little
+	const Vector3D<double> up = camera.getNormalizedUp();
+	pos -= 0.038 * glm::dvec3(up.X, up.Y, up.Z);
+
+	const glm::dvec3 cameraVector = glm::dvec3(camera.eyePos.X, camera.eyePos.Y, camera.eyePos.Z);
+	const glm::dvec3 billboardPos = cameraVector + pos;
+
+	const double scale = 0.0025f;
+
+	const glm::dmat4 modelMatHP = glm::scale(glm::translate(glm::dmat4(1.), billboardPos), glm::dvec3(scale, scale, scale)) * glm::transpose(precisionMat);
+	const glm::mat4 modelMat(modelMatHP);
+	const glm::mat3 transpInvModelMat(glm::transpose(glm::inverse(modelMatHP)));
+
+	/*
+	glUniformMatrix4fv(program->modelMatLocation, 1, GL_FALSE, value_ptr(modelMat));
+	glUniformMatrix3fv(program->transpInvModelMatLocation, 1, GL_FALSE, value_ptr(transpInvModelMat));
+
+	glUniform1i(program->isSunLocation, 1); // don't use lightning on it
+
+	glUniform4f(program->colorLocation, 0.0f, 0.0f, 1.0f, 0.6f); // blue with alpha blending for now
+
+	billboardTexture->Bind();
+	glUniform1i(program->useTextLocation, 1); // use texture
+
+	glUniform1i(program->useAlphaBlend, 1);
+
+	glUniform1i(program->alphaInTransparentTexture, 0);
+	*/
+
+	DisableAntialias(); // otherwise a diagonal line is shown over the rectangle sometimes, with alpha blending on
+
+	glEnable(GL_BLEND);
+	glDepthMask(GL_FALSE);
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendEquation(GL_FUNC_ADD);
+
+	billboardRectangle->Draw();
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+
+	glDisable(GL_BLEND);
+
+	EnableAntialias();
 }

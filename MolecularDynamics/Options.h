@@ -8,7 +8,6 @@ public:
 
 	bool gammaCorrection;
 
-
 	unsigned int nrSpheres;
 	
 	double interiorSpheresRadius;
@@ -21,6 +20,8 @@ public:
 
 	COLORREF smallSphereColor;
 	COLORREF bigSphereColor;
+
+	bool showBillboard;
 
 	Options();
 	~Options();

@@ -15,7 +15,8 @@ Options::Options()
 	initialSpeed(1),
 	interiorRadius(30),
 	smallSphereColor(RGB(0, 255, 0)),
-	bigSphereColor(RGB(255, 0, 0))
+	bigSphereColor(RGB(255, 0, 0)),
+	showBillboard(false)
 {
 }
 
@@ -27,7 +28,7 @@ Options::~Options()
 
 void Options::Load()
 {
-	const int res = static_cast<int>(theApp.GetProfileInt(L"options", L"gamma", 0));
+	int res = static_cast<int>(theApp.GetProfileInt(L"options", L"gamma", 0));
 	gammaCorrection = (res != 0);
 
 	translationSpeed = theApp.GetProfileInt(L"options", L"translationSpeed", 100);
@@ -45,6 +46,9 @@ void Options::Load()
 
 	smallSphereColor = GetColor(L"smallSphereColor", RGB(0, 255, 0));
 	bigSphereColor = GetColor(L"bigSphereColor", RGB(255, 0, 0));
+
+	res = static_cast<int>(theApp.GetProfileInt(L"options", L"showBillboard", 0));
+	showBillboard = (res != 0 ? true : false);
 }
 
 
@@ -67,6 +71,8 @@ void Options::Save()
 
 	theApp.WriteProfileBinary(L"options", L"smallSphereColor", (LPBYTE)&smallSphereColor, sizeof(COLORREF));
 	theApp.WriteProfileBinary(L"options", L"bigSphereColor", (LPBYTE)&bigSphereColor, sizeof(COLORREF));
+
+	theApp.WriteProfileInt(L"options", L"showBillboard", showBillboard ? 1 : 0);
 }
 
 COLORREF Options::GetColor(LPCTSTR param, COLORREF defval)
