@@ -15,6 +15,7 @@
 #include "Program.h"
 #include "Sphere.h"
 #include "MolecularDynamicsGLProgram.h"
+#include "BillboardGLProgram.h"
 #include "Rectangle.h"
 #include "Texture.h"
 #include "MemoryBitmap.h"
@@ -58,6 +59,7 @@ private:
 	std::vector<GLfloat> scale;
 
 
+	BillboardGLProgram* billboardProgram;
 	OpenGL::Rectangle* billboardRectangle;
 	OpenGL::Texture* billboardTexture;
 	MemoryBitmap memoryBitmap;
@@ -107,8 +109,10 @@ public:
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	void ClearProgram();
+	void ClearBillboardProgram();
 	void Setup();
 	bool SetupShaders();
+	bool SetupBillboardShaders();
 	void RenderScene();
 	void Reset();
 	bool KeyPressHandler(MSG* pMsg);
@@ -117,12 +121,13 @@ public:
 
 	void EnableAntialias();
 	void DisableAntialias();
-	void DisplayBilboard();
+	void DisplayBilboard(glm::mat4& mat);
 	void SetBillboardText(const char* text);
 
 protected:
 	bool HandleKeyPress(WPARAM wParam, bool ctrl, bool shift);
 	void SetupProgram();
+	void SetupBillboardProgram();
 	void SetupSpheres();
 	void SetupGl();
 

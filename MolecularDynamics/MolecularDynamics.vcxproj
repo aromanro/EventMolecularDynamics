@@ -212,6 +212,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BillboardGLProgram.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraPropertyPage.h" />
     <ClInclude Include="Chart.h" />
@@ -255,6 +256,7 @@
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BillboardGLProgram.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraPropertyPage.cpp" />
     <ClCompile Include="Chart.cpp" />

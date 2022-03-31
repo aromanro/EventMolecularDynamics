@@ -66,7 +66,7 @@ CMolecularDynamicsView::CMolecularDynamicsView()
 	movement(OpenGL::Camera::Movements::noMove), m_hRC(0), m_hDC(0),
 	Width(0), Height(0), program(nullptr),
 	posBuffer(nullptr), colorBuffer(nullptr), scaleBuffer(nullptr),
-	billboardRectangle(nullptr), billboardTexture(nullptr)
+	billboardProgram(nullptr), billboardRectangle(nullptr), billboardTexture(nullptr)
 {
 	// TODO: add construction code here
 }
@@ -75,6 +75,7 @@ CMolecularDynamicsView::~CMolecularDynamicsView()
 {
 	delete sphere;
 	ClearProgram();
+	ClearBillboardProgram();
 
 	delete posBuffer;
 	delete colorBuffer;
@@ -124,7 +125,7 @@ void CMolecularDynamicsView::OnDraw(CDC* /*pDC*/)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		RenderScene();
 
-		glFlush();
+		//glFlush(); // not really needed, SwapBuffers should take care of things
 		SwapBuffers(m_hDC);
 		wglMakeCurrent(m_hDC, NULL);
 	}
@@ -208,7 +209,7 @@ void CMolecularDynamicsView::OnTimer(UINT_PTR nIDEvent)
 		camera.Tick();
 		if (keyDown) camera.Move(movement);
 
-		RedrawWindow(0, 0, RDW_INTERNALPAINT | RDW_NOERASE | RDW_NOFRAME | RDW_UPDATENOW);
+		RedrawWindow(0, 0, RDW_INTERNALPAINT | RDW_NOERASE | RDW_NOFRAME | RDW_UPDATENOW);		
 	}
 
 	CView::OnTimer(nIDEvent);
@@ -487,13 +488,20 @@ void CMolecularDynamicsView::ClearProgram()
 }
 
 
+void CMolecularDynamicsView::ClearBillboardProgram()
+{
+	delete billboardProgram;
+	billboardProgram = nullptr;
+}
+
+
 void CMolecularDynamicsView::Setup()
 {
 	if (inited) return;
 
 	SetupGl();
 
-	const int billboardAspectRatio = 16;
+	const int billboardAspectRatio = 8;
 	billboardRectangle = new OpenGL::Rectangle(billboardAspectRatio);
 
 	const int height = 128;
@@ -515,6 +523,10 @@ void CMolecularDynamicsView::Setup()
 	glVertexAttribDivisor(4, 1);
 
 	SetupProgram();
+
+	SetupBillboardProgram();
+
+	//SetBillboardText("Test!");
 
 	wglMakeCurrent(NULL, NULL);
 
@@ -647,6 +659,25 @@ bool CMolecularDynamicsView::SetupShaders()
 }
 
 
+void CMolecularDynamicsView::SetupBillboardProgram()
+{
+	if (!SetupBillboardShaders()) {
+		ClearBillboardProgram();
+		return;
+	}
+	billboardProgram->DetachShaders();
+}
+
+
+
+bool CMolecularDynamicsView::SetupBillboardShaders()
+{
+	billboardProgram = new BillboardGLProgram();
+
+	return billboardProgram->SetupShaders();
+}
+
+
 void CMolecularDynamicsView::RenderScene()
 {
 	if (NULL == program) return;
@@ -660,7 +691,6 @@ void CMolecularDynamicsView::RenderScene()
 
 	glUniform3f(program->viewPosLocation, static_cast<float>(camera.eyePos.X), static_cast<float>(camera.eyePos.Y), static_cast<float>(camera.eyePos.Z));
 	glUniformMatrix4fv(program->matLocation, 1, GL_FALSE, value_ptr(mat));
-
 
 	for (unsigned int i = 0; i < program->lights.size(); ++i)
 	{
@@ -692,10 +722,10 @@ void CMolecularDynamicsView::RenderScene()
 
 	sphere->DrawInstanced(doc->nrParticles);
 
-	if (theApp.options.showBillboard)
-		DisplayBilboard();
-
 	program->UnUse();
+
+	if (theApp.options.showBillboard)
+		DisplayBilboard(mat);
 }
 
 
@@ -728,6 +758,7 @@ void CMolecularDynamicsView::Reset()
 	billboardTexture = NULL;
 
 	ClearProgram();
+	ClearBillboardProgram();
 
 	inited = false;
 
@@ -805,8 +836,16 @@ void CMolecularDynamicsView::DisableAntialias()
 }
 
 
-void CMolecularDynamicsView::DisplayBilboard()
+void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 {
+	if (!billboardProgram) return;
+
+	billboardProgram->Use();
+	
+	glUniform1i(billboardProgram->textureLoc, 0);
+
+	glUniformMatrix4fv(billboardProgram->matLocation, 1, GL_FALSE, value_ptr(mat));
+
 	glm::dmat4 precisionMat(camera.getMatrixDouble());
 	// cancel out the translation of the camera, but preserve rotation:
 	precisionMat[3][0] = 0;
@@ -829,23 +868,10 @@ void CMolecularDynamicsView::DisplayBilboard()
 
 	const glm::dmat4 modelMatHP = glm::scale(glm::translate(glm::dmat4(1.), billboardPos), glm::dvec3(scale, scale, scale)) * glm::transpose(precisionMat);
 	const glm::mat4 modelMat(modelMatHP);
-	const glm::mat3 transpInvModelMat(glm::transpose(glm::inverse(modelMatHP)));
 
-	/*
-	glUniformMatrix4fv(program->modelMatLocation, 1, GL_FALSE, value_ptr(modelMat));
-	glUniformMatrix3fv(program->transpInvModelMatLocation, 1, GL_FALSE, value_ptr(transpInvModelMat));
-
-	glUniform1i(program->isSunLocation, 1); // don't use lightning on it
-
-	glUniform4f(program->colorLocation, 0.0f, 0.0f, 1.0f, 0.6f); // blue with alpha blending for now
+	glUniformMatrix4fv(billboardProgram->modelMatLocation, 1, GL_FALSE, value_ptr(modelMat));
 
 	billboardTexture->Bind();
-	glUniform1i(program->useTextLocation, 1); // use texture
-
-	glUniform1i(program->useAlphaBlend, 1);
-
-	glUniform1i(program->alphaInTransparentTexture, 0);
-	*/
 
 	DisableAntialias(); // otherwise a diagonal line is shown over the rectangle sometimes, with alpha blending on
 
@@ -863,4 +889,6 @@ void CMolecularDynamicsView::DisplayBilboard()
 	glDisable(GL_BLEND);
 
 	EnableAntialias();
+
+	billboardProgram->UnUse();
 }

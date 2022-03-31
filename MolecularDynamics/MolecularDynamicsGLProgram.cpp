@@ -83,6 +83,7 @@ bool MolecularDynamicsGLProgram::SetupVertexShader()
 	layout(location = 4) in float scale;
 
 	uniform mat4 transformMat;
+	uniform mat4 modelMat;
 	
 	out vec3 Normal;
 	out vec3 FragPos;
@@ -96,11 +97,11 @@ bool MolecularDynamicsGLProgram::SetupVertexShader()
 			vec4(0.0, 0.0, scale, 0.0),
 			vec4(center.x, center.y, center.z, 1.0)
 		);
-		
+
 		gl_Position = transformMat * mm * vec4(position.x, position.y, position.z, 1.0);
 
 		Normal = normalize(transpose(inverse(mat3(mm))) * normal);
-		
+
 		FragPos = vec3(mm * vec4(position, 1.0));
 
 		theColor = color;
@@ -173,7 +174,7 @@ bool MolecularDynamicsGLProgram::SetupFragmentShader()
 			light += Lights[i].atten * CalcLight(normalize(Lights[i].lightDir), viewDir, normal, theColor);
 		}
 
-	    outputColor = vec4(light, 1);
+		outputColor = vec4(light, 1);
 	}
 
 	)), lights.size());
