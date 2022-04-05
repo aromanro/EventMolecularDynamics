@@ -273,6 +273,8 @@
     <ClCompile Include="MolecularDynamics.cpp" />
     <ClCompile Include="MolecularDynamicsDoc.cpp" />
     <ClCompile Include="MolecularDynamicsGLProgram.cpp" />
+    <ClCompile Include="MolecularDynamicsViewRender.cpp" />
+    <ClCompile Include="MolecularDynamicsViewSetup.cpp" />
     <ClCompile Include="MolecularDynamicsThread.cpp" />
     <ClCompile Include="MolecularDynamicsView.cpp" />
     <ClCompile Include="NumberEdit.cpp" />
