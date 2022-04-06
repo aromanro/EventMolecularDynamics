@@ -114,9 +114,9 @@ void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 	const glm::dvec3 cameraVector = glm::dvec3(camera.eyePos.X, camera.eyePos.Y, camera.eyePos.Z);
 	const glm::dvec3 billboardPos = cameraVector + pos;
 
-	const double scale = 0.0025f;
+	const double bscale = 0.0025f;
 
-	const glm::dmat4 modelMatHP = glm::scale(glm::translate(glm::dmat4(1.), billboardPos), glm::dvec3(scale, scale, scale)) * glm::transpose(precisionMat);
+	const glm::dmat4 modelMatHP = glm::scale(glm::translate(glm::dmat4(1.), billboardPos), glm::dvec3(bscale, bscale, bscale)) * glm::transpose(precisionMat);
 	const glm::mat4 modelMat(modelMatHP);
 
 	glUniformMatrix4fv(billboardProgram->modelMatLocation, 1, GL_FALSE, value_ptr(modelMat));
