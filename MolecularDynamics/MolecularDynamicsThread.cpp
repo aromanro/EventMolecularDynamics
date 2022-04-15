@@ -19,6 +19,7 @@ namespace MolecularDynamics {
 
 	MolecularDynamicsThread::~MolecularDynamicsThread()
 	{
+		Terminate = true; // should be true here anyway, but it doesn't hurt to set it
 		join();
 	}
 
@@ -31,14 +32,14 @@ namespace MolecularDynamics {
 		{
 			if (needsData) simulation.Advance();
 
-			needsData = PostDataToMainThread();
+			needsData = PostDataToOtherThread();
 
 			if (!needsData) WaitForWork();
 		}
 	}
 
 
-	bool MolecularDynamicsThread::PostDataToMainThread()
+	bool MolecularDynamicsThread::PostDataToOtherThread()
 	{
 		if (!doc) return false;
 

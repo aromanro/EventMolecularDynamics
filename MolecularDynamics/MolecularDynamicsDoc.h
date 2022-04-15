@@ -9,6 +9,7 @@
 
 #include "Simulation.h"
 #include "MolecularDynamicsThread.h"
+#include "StatisticsThread.h"
 #include "ComputationResult.h"
 #include "Options.h"
 
