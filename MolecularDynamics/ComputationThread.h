@@ -1,11 +1,13 @@
 #pragma once
 
 #include <thread>
+#include <atomic>
+#include <mutex>
 
 class ComputationThread
 {
 public:
-	void Start();
+	virtual void Start();
 protected:
 	std::thread mThread;
 	virtual ~ComputationThread();

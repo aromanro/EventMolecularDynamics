@@ -8,7 +8,6 @@
 #include <queue>
 
 #include "Simulation.h"
-#include "MolecularDynamicsThread.h"
 #include "StatisticsThread.h"
 #include "ComputationResult.h"
 #include "Options.h"
@@ -39,7 +38,7 @@ public:
 	Options options; // a copy of the options, they might change during running
 
 private:
-	MolecularDynamics::MolecularDynamicsThread *theThread;
+	MolecularDynamics::StatisticsThread* theThread;
 
 // Operations
 public:

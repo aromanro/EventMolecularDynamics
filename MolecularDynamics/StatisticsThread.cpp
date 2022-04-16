@@ -7,7 +7,7 @@
 namespace MolecularDynamics {
 
 	StatisticsThread::StatisticsThread()
-		: doc(nullptr), Terminate(false),
+		: Terminate(false), doc(nullptr),
 		wakeup(false), processed(false)
 	{
 	}
@@ -16,26 +16,42 @@ namespace MolecularDynamics {
 	StatisticsThread::~StatisticsThread()
 	{
 		molecularDynamicsThread.Terminate = true;
+		Terminate = true;
 		molecularDynamicsThread.WakeUp();
 		molecularDynamicsThread.join();
-		Terminate = true;
 		join();
+	}
+
+	void StatisticsThread::Start()
+	{
+		molecularDynamicsThread.Start();
+		ComputationThread::Start();
 	}
 
 
 	void StatisticsThread::Calculate()
 	{
-		bool needsData = true;
+		bool needsData;
 
 		while (!Terminate)
 		{
-			if (needsData) {
-				// grab data from molecular dynamics thread, compute statistics, whatever
+			{
+				std::lock_guard<std::mutex> lock(dataSection);
+				needsData = resultsQueue.empty();
 
+				if (!needsData)
+				{
+					// from time to time, compute statistics
+					// for example, after 100 collision results or so (maybe depending on the number of particles)
+				}
+			}
+
+			if (needsData) {
+				molecularDynamicsThread.WakeUp();
+				molecularDynamicsThread.WaitForData();
 			}
 
 			needsData = PostDataToOtherThread();
-
 			if (!needsData) WaitForWork();
 		}
 	}
@@ -44,27 +60,27 @@ namespace MolecularDynamics {
 	bool StatisticsThread::PostDataToOtherThread()
 	{
 		if (!doc) return false;
-
-		//const double nextSimulationTime = simulation.NextEventTime();
-
-		//if (doc->simulationTime >= nextSimulationTime)
-		//	return true; // don't bother adding this, it needs data for the future already
-
-		if (doc->resultsQueue.size() > 10) return false; //queue full
+		else if (doc->resultsQueue.size() > 10) return false; //queue full
+		
 
 		{
 			std::unique_lock<std::mutex> lock(doc->dataSection);
 
+			if (resultsQueue.empty()) return false;
+
 			// now copy data
-			//ComputationResult result(simulation.particles, nextSimulationTime);
+			ComputationResult result = std::move(resultsQueue.front());
+			resultsQueue.pop();
 
 			lock.unlock();
 
-			//doc->resultsQueue.emplace(std::move(result));
+			doc->resultsQueue.emplace(std::move(result));
 		}
 
 		// let the main thread know that new processed data is available
 		SignalMoreData();
+
+		molecularDynamicsThread.WakeUp();
 
 		return true;
 	}

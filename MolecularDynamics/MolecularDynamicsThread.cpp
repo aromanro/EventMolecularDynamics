@@ -5,13 +5,14 @@
 #include "Options.h"
 #include "MolecularDynamicsDoc.h"
 #include "ComputationResult.h"
+#include "StatisticsThread.h"
 
 
 namespace MolecularDynamics {
 
 
 	MolecularDynamicsThread::MolecularDynamicsThread()
-		: doc(nullptr), Terminate(false),
+		: Terminate(false), doc(nullptr), statisticsThread(nullptr),
 		wakeup(false), processed(false)
 	{
 	}
@@ -41,24 +42,24 @@ namespace MolecularDynamics {
 
 	bool MolecularDynamicsThread::PostDataToOtherThread()
 	{
-		if (!doc) return false;
+		if (!doc || !statisticsThread) return false;
 
 		const double nextSimulationTime = simulation.NextEventTime();
 
 		if (doc->simulationTime >= nextSimulationTime)
 			return true; // don't bother adding this, it needs data for the future already
 
-		if (doc->resultsQueue.size() > 10) return false; //queue full
+		if (statisticsThread->resultsQueue.size() > 10) return false; //queue full
 
 		{
-			std::unique_lock<std::mutex> lock(doc->dataSection);
+			std::unique_lock<std::mutex> lock(statisticsThread->dataSection);
 
 			// now copy data
 			ComputationResult result(simulation.particles, nextSimulationTime);
 			
 			lock.unlock();
 
-			doc->resultsQueue.emplace(std::move(result));
+			statisticsThread->resultsQueue.emplace(std::move(result));
 		}
 
 		// let the main thread know that new processed data is available

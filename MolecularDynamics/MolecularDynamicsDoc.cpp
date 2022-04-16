@@ -76,7 +76,8 @@ BOOL CMolecularDynamicsDoc::OnNewDocument()
 	// copy the options, they can change during running and we need the ones set at initialization of the 'document'
 	options = theApp.options;
 
-	theThread = new MolecularDynamics::MolecularDynamicsThread();
+	//theThread = new MolecularDynamics::MolecularDynamicsThread();
+	theThread = new MolecularDynamics::StatisticsThread();
 
 	nrParticles = theThread->Init();
 	simulationTime = 0;
@@ -88,7 +89,7 @@ BOOL CMolecularDynamicsDoc::OnNewDocument()
 	if (reused) GetMainView()->Reset();
 	else GetMainView()->Setup();
 
-	theThread->doc = this;
+	theThread->SetDocument(this);
 	theThread->Start();
 
 	return TRUE;

@@ -1,16 +1,16 @@
 #pragma once
 
-#include <atomic>
-#include <mutex>
+
 
 #include "ComputationThread.h"
 #include "Simulation.h"
 
-
 class CMolecularDynamicsDoc;
+
 
 namespace MolecularDynamics {
 
+	class StatisticsThread;
 
 	class MolecularDynamicsThread :
 		public ComputationThread
@@ -19,10 +19,11 @@ namespace MolecularDynamics {
 		MolecularDynamicsThread();
 		virtual ~MolecularDynamicsThread();
 
-		CMolecularDynamicsDoc *doc;
-
 		std::atomic_bool Terminate;
 	protected:
+		CMolecularDynamicsDoc* doc;
+		StatisticsThread* statisticsThread;
+
 		Simulation simulation;
 
 		std::mutex mw;
@@ -37,6 +38,9 @@ namespace MolecularDynamics {
 		virtual void Calculate();
 		bool PostDataToOtherThread();
 	public:
+		void SetDocument(CMolecularDynamicsDoc* d) { doc = d; }
+		void SetStatisticsThread(StatisticsThread* t) { statisticsThread = t; }
+
 		void WakeUp();
 		void WaitForData();
 		int Init();
