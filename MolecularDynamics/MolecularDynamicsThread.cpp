@@ -12,8 +12,7 @@ namespace MolecularDynamics {
 
 
 	MolecularDynamicsThread::MolecularDynamicsThread()
-		: Terminate(false), doc(nullptr), statisticsThread(nullptr),
-		wakeup(false), processed(false)
+		: Terminate(false), doc(nullptr), statisticsThread(nullptr)
 	{
 	}
 
@@ -68,39 +67,6 @@ namespace MolecularDynamics {
 		return true;
 	}
 
-
-	void MolecularDynamicsThread::WakeUp()
-	{
-		// signal the worker thread to wake up if it's waiting
-		{
-			std::lock_guard<std::mutex> lk(mw);
-			wakeup = true;
-		}
-		cvw.notify_one();
-	}
-
-	void MolecularDynamicsThread::SignalMoreData()
-	{
-		std::unique_lock<std::mutex> lk(mp);
-		processed = true;
-		lk.unlock();
-		cvp.notify_one();
-	}
-
-	void MolecularDynamicsThread::WaitForData()
-	{
-		//wait for the worker thread to finish some work
-		std::unique_lock<std::mutex> lk(mp);
-		cvp.wait(lk, [this] { return processed; });
-		processed = false;
-	}
-
-	void MolecularDynamicsThread::WaitForWork()
-	{
-		std::unique_lock<std::mutex> lk(mw);
-		cvw.wait(lk, [this] { return wakeup; });
-		wakeup = false;
-	}
 
 
 	int MolecularDynamicsThread::Init()
