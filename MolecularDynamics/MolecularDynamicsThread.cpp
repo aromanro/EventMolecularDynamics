@@ -53,9 +53,6 @@ namespace MolecularDynamics {
 		{
 			std::unique_lock<std::mutex> lock(doc->dataSection);
 
-			if (doc->resultsQueue.size() && doc->resultsQueue.back().nextEventTime == nextSimulationTime)
-				return true;
-
 			// now copy data
 			ComputationResult result(simulation.particles, nextSimulationTime);
 			
