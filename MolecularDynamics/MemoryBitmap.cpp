@@ -180,6 +180,51 @@ void MemoryBitmap::WriteText(const char* text, CFont& font, DWORD color, DWORD b
 	dcMemory.SelectObject(pOldBitmap);	
 }
 
+void MemoryBitmap::DrawChart(Chart& chart)
+{
+	const HDC hDC = GetDC(NULL);
+	if (NULL == hDC) return;
+	CDC* pDC = CDC::FromHandle(hDC);
+	if (!pDC) return;
+
+	CBitmap bitmap;
+	CDC dcMemory;
+
+	dcMemory.CreateCompatibleDC(pDC);
+	bitmap.CreateCompatibleBitmap(pDC, m_width, m_height);
+	//pDC->DeleteDC();
+
+	CBitmap* pOldBitmap = dcMemory.SelectObject(&bitmap);
+
+	RECT rect;
+	rect.left = rect.top = 0;
+	rect.right = m_width;
+	rect.bottom = m_height;
+
+	int nOldBkMode = dcMemory.SetBkMode(TRANSPARENT);
+
+	// paint the chart
+	CRect drawRect(rect);
+	chart.Draw(&dcMemory, drawRect);
+
+	BITMAPINFO bmi;
+	ZeroMemory(&bmi, sizeof(BITMAPINFOHEADER));
+
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmi.bmiHeader.biWidth = m_width;
+	bmi.bmiHeader.biHeight = m_height;
+	bmi.bmiHeader.biPlanes = 1;
+	bmi.bmiHeader.biBitCount = 24;
+	bmi.bmiHeader.biCompression = BI_RGB;
+
+	::GetDIBits(dcMemory.GetSafeHdc(), bitmap, 0, m_height, data, &bmi, DIB_RGB_COLORS);
+
+	dcMemory.SetBkMode(nOldBkMode);
+
+	dcMemory.SelectObject(pOldBitmap);
+}
+
+
 void MemoryBitmap::SetIntoTexture(OpenGL::Texture& texture, int nr)
 {
 	if (!data) return;

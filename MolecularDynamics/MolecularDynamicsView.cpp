@@ -509,4 +509,13 @@ void CMolecularDynamicsView::SetBillboardText(const char* text)
 	wglMakeCurrent(NULL, NULL);
 }
 
+void CMolecularDynamicsView::PaintBillboarChart()
+{
+	memoryBitmap.DrawChart(chart);
+
+	wglMakeCurrent(m_hDC, m_hRC);
+	memoryBitmap.SetIntoTexture(*billboardTexture);
+	wglMakeCurrent(NULL, NULL);
+}
+
 

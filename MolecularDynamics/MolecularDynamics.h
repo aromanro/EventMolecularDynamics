@@ -9,6 +9,11 @@
 
 #include "resource.h"       // main symbols
 
+#include <objidl.h>
+#include <gdiplus.h>
+
+#pragma comment (lib,"Gdiplus.lib")
+
 #include "Options.h"
 // CMolecularDynamicsApp:
 // See MolecularDynamics.cpp for the implementation of this class
@@ -19,6 +24,8 @@ class CMolecularDynamicsApp : public CWinAppEx
 public:
 	CMolecularDynamicsApp();
 
+private:
+	ULONG_PTR gdiplusToken;
 
 // Overrides
 public:
@@ -35,6 +42,7 @@ public:
 	virtual void SaveCustomState();
 
 	afx_msg void OnAppAbout();
+	virtual int ExitInstance();
 	DECLARE_MESSAGE_MAP()
 };
 

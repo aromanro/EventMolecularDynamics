@@ -80,6 +80,7 @@ void CMolecularDynamicsView::Setup()
 	SetupBillboardProgram();
 
 	//SetBillboardText("Test!");
+	//PaintBillboarChart();
 
 	wglMakeCurrent(NULL, NULL);
 

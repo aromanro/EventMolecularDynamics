@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Texture.h"
+#include "Chart.h"
 
 // to use direct transfer (that is, not copying data into 'texdata'
 // the stride must be of proper length, so not all resolutions will work
@@ -82,6 +83,7 @@ public:
 	void Draw(CDC* pDC, CRect& rect, int origWidth = 0, int origHeight = 0);
 
 	void WriteText(const char* text, CFont& font, DWORD color = RGB(0, 0, 255), DWORD bkcolor = RGB(0, 0, 0));
+	void DrawChart(Chart& chart);
 
 	void SetIntoTexture(OpenGL::Texture& texture, int nr = 0);
 

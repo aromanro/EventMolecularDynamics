@@ -29,7 +29,7 @@ END_MESSAGE_MAP()
 // CMolecularDynamicsApp construction
 
 CMolecularDynamicsApp::CMolecularDynamicsApp()
-	: m_nAppLook(0)
+	: gdiplusToken(0), m_nAppLook(0)
 {
 	m_bHiColorIcons = TRUE;
 
@@ -62,6 +62,8 @@ BOOL CMolecularDynamicsApp::InitInstance()
 
 	CWinAppEx::InitInstance();
 
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
 	EnableTaskbarInteraction(FALSE);
 
@@ -180,4 +182,9 @@ void CMolecularDynamicsApp::SaveCustomState()
 // CMolecularDynamicsApp message handlers
 
 
+int CMolecularDynamicsApp::ExitInstance()
+{
+	Gdiplus::GdiplusShutdown(gdiplusToken);
 
+	return CWinAppEx::ExitInstance();
+}

@@ -19,6 +19,7 @@
 #include "Rectangle.h"
 #include "Texture.h"
 #include "MemoryBitmap.h"
+#include "Chart.h"
 
 
 class CMolecularDynamicsView : public CView
@@ -73,6 +74,8 @@ private:
 
 	bool inited;
 
+	Chart chart;
+
 	void InitializePalette(void);
 	void Resize(GLsizei h, GLsizei w);
 	Vector3D<double> GetTowardsVector(CPoint& point, const Vector3D<double>& forward);
@@ -123,6 +126,7 @@ public:
 	void DisableAntialias();
 	void DisplayBilboard(glm::mat4& mat);
 	void SetBillboardText(const char* text);
+	void PaintBillboarChart();
 
 protected:
 	bool HandleKeyPress(WPARAM wParam, bool ctrl, bool shift);
