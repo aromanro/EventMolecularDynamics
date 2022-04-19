@@ -568,7 +568,7 @@ bool CMolecularDynamicsView::SetDataIntoChart()
 
 void CMolecularDynamicsView::PaintBillboarChart()
 {
-	if (!SetDataIntoChart()) return;
+	SetDataIntoChart();
 
 	memoryBitmap.DrawChart(chart);
 
