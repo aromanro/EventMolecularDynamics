@@ -48,16 +48,14 @@ namespace MolecularDynamics {
 		if (doc->simulationTime >= nextSimulationTime)
 			return true; // don't bother adding this, it needs data for the future already
 
-		if (statisticsThread->resultsQueue.size() > 10) return false; //queue full
-
 		{
-			std::unique_lock<std::mutex> lock(statisticsThread->dataSection);
+			std::lock_guard<std::mutex> lock(statisticsThread->dataSection);
+
+			if (statisticsThread->resultsQueue.size() > 10) return false; //queue full
 
 			// now copy data
 			ComputationResult result(simulation.particles, nextSimulationTime);
 			
-			lock.unlock();
-
 			statisticsThread->resultsQueue.emplace(std::move(result));
 		}
 

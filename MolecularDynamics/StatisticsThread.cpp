@@ -59,19 +59,16 @@ namespace MolecularDynamics {
 	bool StatisticsThread::PostDataToOtherThread()
 	{
 		if (!doc) return false;
-		else if (doc->resultsQueue.size() > 10) return false; //queue full
-		
 
 		{
-			std::unique_lock<std::mutex> lock(doc->dataSection);
+			std::scoped_lock lock(dataSection, doc->dataSection);
 
 			if (resultsQueue.empty()) return false;
+			else if (doc->resultsQueue.size() > 10) return false; //queue full
 
 			// now copy data
 			ComputationResult result = std::move(resultsQueue.front());
 			resultsQueue.pop();
-
-			lock.unlock();
 
 			doc->resultsQueue.emplace(std::move(result));
 		}
