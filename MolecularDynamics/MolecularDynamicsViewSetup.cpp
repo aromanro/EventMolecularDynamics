@@ -226,7 +226,7 @@ void CMolecularDynamicsView::SetColors()
 {
 	CMolecularDynamicsDoc* doc = GetDocument();
 
-	if (doc)
+	if (doc && colorBuffer)
 	{
 		int index = 0;
 		const double avgRadius = (doc->options.exteriorSpheresRadius + doc->options.interiorSpheresRadius) / 2;
@@ -242,8 +242,8 @@ void CMolecularDynamicsView::SetColors()
 
 		if (inited)	wglMakeCurrent(m_hDC, m_hRC);
 
-		delete colorBuffer;
-		colorBuffer = new OpenGL::VertexBufferObject();
+		//delete colorBuffer;
+		//colorBuffer = new OpenGL::VertexBufferObject();
 
 		glEnableVertexAttribArray(3);
 		colorBuffer->setData(colors.data(), doc->nrParticles * 3 * sizeof(GLfloat));

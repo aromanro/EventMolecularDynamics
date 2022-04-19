@@ -83,6 +83,9 @@ void DisplayPropertyPage::ApplyValues()
 	CMolecularDynamicsView *view = doc->GetMainView();
 	if (!view) return;
 
+	doc->options.bigSphereColor = theApp.options.bigSphereColor;
+	doc->options.smallSphereColor = theApp.options.smallSphereColor;
+
 	view->SetColors();
 }
 
