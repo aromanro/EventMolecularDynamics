@@ -16,7 +16,9 @@ Options::Options()
 	interiorRadius(30),
 	smallSphereColor(RGB(0, 255, 0)),
 	bigSphereColor(RGB(255, 0, 0)),
-	showBillboard(false)
+	showBillboard(false),
+	nrBins(30),
+	maxSpeed(15)
 {
 }
 
@@ -47,8 +49,11 @@ void Options::Load()
 	smallSphereColor = GetColor(L"smallSphereColor", RGB(0, 255, 0));
 	bigSphereColor = GetColor(L"bigSphereColor", RGB(255, 0, 0));
 
-	res = static_cast<int>(theApp.GetProfileInt(L"options", L"showBillboard", 0));
+	res = static_cast<int>(theApp.GetProfileInt(L"options", L"showBillboard", 1));
 	showBillboard = (res != 0 ? true : false);
+
+	nrBins = theApp.GetProfileInt(L"options", L"nrBins", 30);
+	maxSpeed = GetDouble(L"maxSpeed", 15.);
 }
 
 
@@ -73,6 +78,9 @@ void Options::Save()
 	theApp.WriteProfileBinary(L"options", L"bigSphereColor", (LPBYTE)&bigSphereColor, sizeof(COLORREF));
 
 	theApp.WriteProfileInt(L"options", L"showBillboard", showBillboard ? 1 : 0);
+
+	theApp.WriteProfileInt(L"options", L"nrBins", static_cast<int>(nrBins));
+	theApp.WriteProfileBinary(L"options", L"maxSpeed", (LPBYTE)&maxSpeed, sizeof(double));
 }
 
 COLORREF Options::GetColor(LPCTSTR param, COLORREF defval)

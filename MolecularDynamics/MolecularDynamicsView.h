@@ -126,6 +126,7 @@ public:
 	void DisableAntialias();
 	void DisplayBilboard(glm::mat4& mat);
 	void SetBillboardText(const char* text);
+	bool SetDataIntoChart();
 	void PaintBillboarChart();
 
 protected:

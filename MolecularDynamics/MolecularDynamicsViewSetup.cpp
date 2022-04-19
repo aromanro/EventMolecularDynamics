@@ -54,10 +54,10 @@ void CMolecularDynamicsView::Setup()
 
 	SetupGl();
 
-	const int billboardAspectRatio = 8;
+	const double billboardAspectRatio = 2;
 	billboardRectangle = new OpenGL::Rectangle(billboardAspectRatio);
 
-	const int height = 128;
+	const int height = 1024;
 	memoryBitmap.SetSize(static_cast<int>(billboardAspectRatio * height), height);
 
 	if (!font.GetSafeHandle())
@@ -80,7 +80,17 @@ void CMolecularDynamicsView::Setup()
 	SetupBillboardProgram();
 
 	//SetBillboardText("Test!");
-	//PaintBillboarChart();
+	
+	chart.title = L"Speed distribution";
+	chart.XAxisLabel = L"Speed";
+	chart.YAxisLabel = L"Number (normalized)";
+	chart.useSpline = true;
+	chart.antialias = true;
+	chart.YAxisMax = chart.XAxisMin = 0;
+
+
+	if (theApp.options.showBillboard)
+		PaintBillboarChart();
 
 	wglMakeCurrent(NULL, NULL);
 

@@ -109,12 +109,12 @@ void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 
 	// but shifted downwards a little
 	const Vector3D<double> up = camera.getNormalizedUp();
-	pos -= 0.038 * glm::dvec3(up.X, up.Y, up.Z);
+	pos -= 0.025 * glm::dvec3(up.X, up.Y, up.Z);
 
 	const glm::dvec3 cameraVector = glm::dvec3(camera.eyePos.X, camera.eyePos.Y, camera.eyePos.Z);
 	const glm::dvec3 billboardPos = cameraVector + pos;
 
-	const double bscale = 0.0025f;
+	const double bscale = 0.03f;
 
 	const glm::dmat4 modelMatHP = glm::scale(glm::translate(glm::dmat4(1.), billboardPos), glm::dvec3(bscale, bscale, bscale)) * glm::transpose(precisionMat);
 	const glm::mat4 modelMat(modelMatHP);

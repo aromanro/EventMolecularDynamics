@@ -25,6 +25,11 @@ namespace MolecularDynamics {
 		std::mutex dataSection;
 		std::queue<MolecularDynamics::ComputationResult> resultsQueue;
 
+		std::atomic_bool CalculateStatistics;
+
+		std::vector<unsigned int> results1;
+		std::vector<unsigned int> results2;
+
 	protected:
 		CMolecularDynamicsDoc* doc;
 

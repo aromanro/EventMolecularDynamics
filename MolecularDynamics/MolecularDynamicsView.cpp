@@ -19,6 +19,7 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 
+#include <numeric>
 
 #include "Camera.h"
 
@@ -199,10 +200,18 @@ void CMolecularDynamicsView::OnTimer(UINT_PTR nIDEvent)
 {
 	if (inited)
 	{
-		CMolecularDynamicsDoc *doc = GetDocument();
-		if (doc) {
-			doc->simulationTime = doc->simulationTime + doc->nrsteps * timeStep;
+		static long long int ticks = 0;
 
+		CMolecularDynamicsDoc *doc = GetDocument();
+
+		if (doc) {
+			if (++ticks % 100 == 0)
+			{
+				PaintBillboarChart();
+				doc->RetrieveStatistics();
+			}
+
+			doc->simulationTime = doc->simulationTime + doc->nrsteps * timeStep;
 			doc->Advance();
 		}
 
@@ -509,8 +518,58 @@ void CMolecularDynamicsView::SetBillboardText(const char* text)
 	wglMakeCurrent(NULL, NULL);
 }
 
+
+bool CMolecularDynamicsView::SetDataIntoChart()
+{
+	std::vector<unsigned int> results1;
+	std::vector<unsigned int> results2;
+
+	CMolecularDynamicsDoc* doc = GetDocument();
+	{
+		std::lock_guard<std::mutex> lock(doc->dataSection);
+		if (doc->results1.empty() || doc->results2.empty()) return false;
+
+		results1.swap(doc->results1);
+		results2.swap(doc->results2);
+	}
+
+	const unsigned int nrBins = doc->options.nrBins;
+	const double maxSpeed = doc->options.maxSpeed;
+	const double vu = maxSpeed / nrBins;
+
+	std::vector<double> dresults1(nrBins, 0.);
+	std::vector<double> dresults2(nrBins, 0.);
+
+	std::copy(results1.begin(), results1.end(), dresults1.begin());
+	results1.clear();
+	std::copy(results2.begin(), results2.end(), dresults2.begin());
+	results2.clear();
+
+	double nr1 = std::accumulate(dresults1.begin(), dresults1.end(), 0.);
+	if (nr1 < 1) nr1 = 1;
+	double nr2 = std::accumulate(dresults2.begin(), dresults2.end(), 0.);
+	if (nr2 < 1) nr2 = 1;
+
+	for (double& res : dresults1)
+		res /= nr1;
+	for (double& res : dresults2)
+		res /= nr2;
+
+	chart.clear();
+	chart.AddDataSet(vu / 2., vu, dresults1.data(), nrBins, 3, doc->options.bigSphereColor);
+	chart.AddDataSet(vu / 2., vu, dresults2.data(), nrBins, 3, doc->options.smallSphereColor);
+
+	chart.XAxisMax = doc->options.maxSpeed;
+	const unsigned int ymax = static_cast<unsigned int>(100 * std::max(*std::max_element(dresults1.begin(), dresults1.end()), *std::max_element(dresults2.begin(), dresults2.end()))) + 1;
+	chart.YAxisMax = ymax / 100.;
+	
+	return true;
+}
+
 void CMolecularDynamicsView::PaintBillboarChart()
 {
+	if (!SetDataIntoChart()) return;
+
 	memoryBitmap.DrawChart(chart);
 
 	wglMakeCurrent(m_hDC, m_hRC);

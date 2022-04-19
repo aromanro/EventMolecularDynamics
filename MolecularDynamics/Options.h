@@ -23,6 +23,9 @@ public:
 
 	bool showBillboard;
 
+	unsigned int nrBins;
+	double maxSpeed;
+
 	Options();
 	~Options();
 

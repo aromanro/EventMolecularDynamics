@@ -32,6 +32,10 @@ public:
 	MolecularDynamics::ComputationResult curResult;
 
 	std::mutex dataSection;
+
+	std::vector<unsigned int> results1;
+	std::vector<unsigned int> results2;
+
 	std::queue<MolecularDynamics::ComputationResult> resultsQueue;
 
 
@@ -59,6 +63,12 @@ public:
 #endif
 
 	CMolecularDynamicsView* GetMainView();
+
+	void RetrieveStatistics()
+	{
+		if (theThread)
+			theThread->CalculateStatistics = true;
+	}
 
 // Generated message map functions
 protected:
