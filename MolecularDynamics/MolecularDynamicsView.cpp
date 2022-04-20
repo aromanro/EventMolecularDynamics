@@ -557,8 +557,8 @@ bool CMolecularDynamicsView::SetDataIntoChart()
 	chart.AddDataSet(vu / 2., vu, dresults2.data(), nrBins, static_cast<float>(doc->options.lineThickness), doc->options.smallSphereColor);
 
 	chart.XAxisMax = doc->options.maxSpeed;
-	const unsigned int ymax = static_cast<unsigned int>(100 * std::max(*std::max_element(dresults1.begin(), dresults1.end()), *std::max_element(dresults2.begin(), dresults2.end()))) + 1;
-	chart.YAxisMax = ymax / 100.;
+	const unsigned int ymax = static_cast<unsigned int>(10 * std::max(*std::max_element(dresults1.begin(), dresults1.end()), *std::max_element(dresults2.begin(), dresults2.end()))) + 1;
+	chart.YAxisMax = ymax / 10.;
 	
 	return true;
 }
