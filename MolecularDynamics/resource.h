@@ -28,6 +28,8 @@
 #define IDD_DISPLAYPROPERTYPAGE         310
 #define IDD_CAMERAPROPERTYPAGE          311
 #define IDD_SIMULATIONPROPERTYPAGE      312
+#define IDD_CAMERAPROPERTYPAGE1         313
+#define IDD_CHARTPROPERTYPAGE           313
 #define IDC_SLIDER1                     1000
 #define IDC_STATIC1                     1001
 #define IDC_SLIDER2                     1002

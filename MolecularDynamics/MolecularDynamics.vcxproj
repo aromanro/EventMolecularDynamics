@@ -217,6 +217,7 @@
     <ClInclude Include="CameraPropertyPage.h" />
     <ClInclude Include="Chart.h" />
     <ClInclude Include="ChartAxis.h" />
+    <ClInclude Include="ChartPropertyPage.h" />
     <ClInclude Include="ComputationResult.h" />
     <ClInclude Include="ComputationThread.h" />
     <ClInclude Include="Constants.h" />
@@ -262,6 +263,7 @@
     <ClCompile Include="CameraPropertyPage.cpp" />
     <ClCompile Include="Chart.cpp" />
     <ClCompile Include="ChartAxis.cpp" />
+    <ClCompile Include="ChartPropertyPage.cpp" />
     <ClCompile Include="ComputationResult.cpp" />
     <ClCompile Include="ComputationThread.cpp" />
     <ClCompile Include="DataSets.cpp" />

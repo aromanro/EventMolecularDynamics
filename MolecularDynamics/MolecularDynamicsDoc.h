@@ -27,6 +27,9 @@ public:
 	std::atomic<int> nrsteps;
 	int nrParticles;
 
+	int nrBigSpheres;
+	int nrSmallSpheres;
+
 	std::atomic<double> simulationTime;
 
 	MolecularDynamics::ComputationResult curResult;

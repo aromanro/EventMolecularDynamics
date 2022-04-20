@@ -29,7 +29,7 @@ END_MESSAGE_MAP()
 // CMolecularDynamicsDoc construction/destruction
 
 CMolecularDynamicsDoc::CMolecularDynamicsDoc()
-	: nrsteps(1), simulationTime(0), theThread(nullptr), nrParticles(0)
+	: nrsteps(1), simulationTime(0), theThread(nullptr), nrParticles(0), nrBigSpheres(0), nrSmallSpheres(0)
 {
 	// TODO: add one-time construction code here
 }
@@ -85,6 +85,17 @@ BOOL CMolecularDynamicsDoc::OnNewDocument()
 	// now copy data 
 	curResult.particles = theThread->GetParticles();
 	curResult.nextEventTime = theThread->GetNextEventTime();
+
+	const double avgRadius = (options.exteriorSpheresRadius + options.interiorSpheresRadius) / 2.;
+
+	nrBigSpheres = nrSmallSpheres = 0;
+	for (const MolecularDynamics::Particle& p : curResult.particles)
+	{
+		if (p.radius > avgRadius)
+			++nrBigSpheres;
+		else
+			++nrSmallSpheres;
+	}
 
 	if (reused) GetMainView()->Reset();
 	else GetMainView()->Setup();

@@ -14,6 +14,7 @@
 #include "DisplayPropertyPage.h"
 #include "CameraPropertyPage.h"
 #include "SimulationPropertyPage.h"
+#include "ChartPropertyPage.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -419,10 +420,12 @@ void CMainFrame::OnViewOptions()
 	SimulationPropertyPage page1;
 	DisplayPropertyPage page2;
 	CameraPropertyPage page3;
+	ChartPropertyPage page4;
 	
 	sheet->AddPage(&page1);
 	sheet->AddPage(&page2);
 	sheet->AddPage(&page3);
+	sheet->AddPage(&page4);
 
 	sheet->DoModal();
 	delete sheet;

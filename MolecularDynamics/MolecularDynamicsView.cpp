@@ -521,10 +521,12 @@ void CMolecularDynamicsView::SetBillboardText(const char* text)
 
 bool CMolecularDynamicsView::SetDataIntoChart()
 {
+	CMolecularDynamicsDoc* doc = GetDocument();
+	if (!doc) return false;
+
 	std::vector<unsigned int> results1;
 	std::vector<unsigned int> results2;
 
-	CMolecularDynamicsDoc* doc = GetDocument();
 	{
 		std::lock_guard<std::mutex> lock(doc->dataSection);
 		if (doc->results1.empty() || doc->results2.empty()) return false;
@@ -537,23 +539,13 @@ bool CMolecularDynamicsView::SetDataIntoChart()
 	const double maxSpeed = doc->options.maxSpeed;
 	const double vu = maxSpeed / nrBins;
 
-	std::vector<double> dresults1(nrBins, 0.);
-	std::vector<double> dresults2(nrBins, 0.);
+	std::vector<double> dresults1(nrBins);
+	std::vector<double> dresults2(nrBins);
 
-	std::copy(results1.begin(), results1.end(), dresults1.begin());
+	std::transform(results1.begin(), results1.end(), dresults1.begin(), [doc](unsigned int v) { return static_cast<double>(v) / doc->nrBigSpheres; });
 	results1.clear();
-	std::copy(results2.begin(), results2.end(), dresults2.begin());
+	std::transform(results2.begin(), results2.end(), dresults2.begin(), [doc](unsigned int v) { return static_cast<double>(v) / doc->nrSmallSpheres; });
 	results2.clear();
-
-	double nr1 = std::accumulate(dresults1.begin(), dresults1.end(), 0.);
-	if (nr1 < 1) nr1 = 1;
-	double nr2 = std::accumulate(dresults2.begin(), dresults2.end(), 0.);
-	if (nr2 < 1) nr2 = 1;
-
-	for (double& res : dresults1)
-		res /= nr1;
-	for (double& res : dresults2)
-		res /= nr2;
 
 	chart.clear();
 	chart.AddDataSet(vu / 2., vu, dresults1.data(), nrBins, 3, doc->options.bigSphereColor);
