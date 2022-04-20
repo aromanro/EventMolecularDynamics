@@ -57,8 +57,8 @@ namespace MolecularDynamics {
 
 					const double vu = maxSpeed / nrBins;
 
-					std::vector<unsigned int> res1(nrBins, 0);
-					std::vector<unsigned int> res2(nrBins, 0);
+					std::vector<double> res1(nrBins, 0);
+					std::vector<double> res2(nrBins, 0);
 
 					for (const Particle& p : res.particles)
 					{
@@ -68,10 +68,13 @@ namespace MolecularDynamics {
 						const unsigned int bin = static_cast<unsigned int>(floor(v / vu));
 						
 						if (abs(p.mass - doc->options.interiorSpheresMass) < 1E-10)
-							++res1[bin];
+							res1[bin] += 1.;
 						else
-							++res2[bin];
+							res2[bin] += 1.;
 					}
+
+					std::transform(res1.begin(), res1.end(), res1.begin(), [&](double v) { return v / doc->nrBigSpheres; });
+					std::transform(res2.begin(), res2.end(), res2.begin(), [&](double v) { return v / doc->nrSmallSpheres; });
 
 					results1.swap(res1);
 					results2.swap(res2);

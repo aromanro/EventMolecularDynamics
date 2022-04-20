@@ -526,38 +526,34 @@ bool CMolecularDynamicsView::SetDataIntoChart()
 
 	chart.useSpline = doc->options.useSpline;
 	
-	std::vector<unsigned int> results1;
-	std::vector<unsigned int> results2;
+	std::vector<double> results1;
+	std::vector<double> results2;
 
-	const unsigned int nrBins = doc->options.nrBins;
+	unsigned int nrBins;
+	double maxSpeed;
 
 	{
 		std::lock_guard<std::mutex> lock(doc->dataSection);
 		if (doc->results1.empty() || doc->results2.empty()) return false;
 
+		nrBins = doc->options.nrBins;
+
 		if (doc->results1.size() != nrBins || doc->results2.size() != nrBins) return false;
+
+		maxSpeed = doc->options.maxSpeed;
 
 		results1.swap(doc->results1);
 		results2.swap(doc->results2);
 	}
 
-	const double maxSpeed = doc->options.maxSpeed;
 	const double vu = maxSpeed / nrBins;
 
-	std::vector<double> dresults1(nrBins);
-	std::vector<double> dresults2(nrBins);
-
-	std::transform(results1.begin(), results1.end(), dresults1.begin(), [doc](unsigned int v) { return static_cast<double>(v) / doc->nrBigSpheres; });
-	results1.clear();
-	std::transform(results2.begin(), results2.end(), dresults2.begin(), [doc](unsigned int v) { return static_cast<double>(v) / doc->nrSmallSpheres; });
-	results2.clear();
-
 	chart.clear();
-	chart.AddDataSet(vu / 2., vu, dresults1.data(), nrBins, static_cast<float>(doc->options.lineThickness), doc->options.bigSphereColor);
-	chart.AddDataSet(vu / 2., vu, dresults2.data(), nrBins, static_cast<float>(doc->options.lineThickness), doc->options.smallSphereColor);
+	chart.AddDataSet(vu / 2., vu, results1.data(), nrBins, static_cast<float>(doc->options.lineThickness), doc->options.bigSphereColor);
+	chart.AddDataSet(vu / 2., vu, results2.data(), nrBins, static_cast<float>(doc->options.lineThickness), doc->options.smallSphereColor);
 
-	chart.XAxisMax = doc->options.maxSpeed;
-	const unsigned int ymax = static_cast<unsigned int>(10 * std::max(*std::max_element(dresults1.begin(), dresults1.end()), *std::max_element(dresults2.begin(), dresults2.end()))) + 1;
+	chart.XAxisMax = maxSpeed;
+	const unsigned int ymax = static_cast<unsigned int>(10 * std::max(*std::max_element(results1.begin(), results1.end()), *std::max_element(results2.begin(), results2.end()))) + 1;
 	chart.YAxisMax = ymax / 10.;
 	
 	return true;

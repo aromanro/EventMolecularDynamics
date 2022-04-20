@@ -36,8 +36,8 @@ public:
 
 	std::mutex dataSection;
 
-	std::vector<unsigned int> results1;
-	std::vector<unsigned int> results2;
+	std::vector<double> results1;
+	std::vector<double> results2;
 
 	std::queue<MolecularDynamics::ComputationResult> resultsQueue;
 

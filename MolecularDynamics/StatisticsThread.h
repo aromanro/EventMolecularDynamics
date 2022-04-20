@@ -27,8 +27,8 @@ namespace MolecularDynamics {
 
 		std::atomic_bool CalculateStatistics;
 
-		std::vector<unsigned int> results1;
-		std::vector<unsigned int> results2;
+		std::vector<double> results1;
+		std::vector<double> results2;
 
 	protected:
 		CMolecularDynamicsDoc* doc;
