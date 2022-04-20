@@ -84,7 +84,6 @@ void CMolecularDynamicsView::Setup()
 	chart.title = L"Speed distribution";
 	chart.XAxisLabel = L"Speed";
 	chart.YAxisLabel = L"Number (normalized)";
-	chart.useSpline = true;
 	chart.antialias = true;
 	chart.YAxisMax = chart.XAxisMin = 0;
 

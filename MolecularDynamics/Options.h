@@ -21,10 +21,14 @@ public:
 	COLORREF smallSphereColor;
 	COLORREF bigSphereColor;
 
+	// Chart options:
 	bool showBillboard;
 
 	unsigned int nrBins;
 	double maxSpeed;
+
+	bool useSpline;
+	unsigned int lineThickness;
 
 	Options();
 	~Options();

@@ -28,7 +28,6 @@
 #define IDD_DISPLAYPROPERTYPAGE         310
 #define IDD_CAMERAPROPERTYPAGE          311
 #define IDD_SIMULATIONPROPERTYPAGE      312
-#define IDD_CAMERAPROPERTYPAGE1         313
 #define IDD_CHARTPROPERTYPAGE           313
 #define IDC_SLIDER1                     1000
 #define IDC_STATIC1                     1001
@@ -44,7 +43,9 @@
 #define IDC_MFCLINK1                    1005
 #define IDC_EDIT4                       1006
 #define IDC_MFCLINK2                    1006
+#define IDC_CHECK1                      1006
 #define IDC_EDIT5                       1007
+#define IDC_CHECK2                      1007
 #define IDC_EDIT6                       1008
 #define IDC_EDIT7                       1009
 #define ID_SLIDER                       32772
@@ -57,7 +58,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        313
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif

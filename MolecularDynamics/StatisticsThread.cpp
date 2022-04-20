@@ -45,10 +45,16 @@ namespace MolecularDynamics {
 					// or maybe the main thread shuld ask for them from time to time (as in 5 seconds or so)
 
 					const ComputationResult& res = resultsQueue.front();
+
 					lock.unlock();
 
+					std::unique_lock<std::mutex> dlock(doc->dataSection);
+					
 					const unsigned int nrBins = doc->options.nrBins;
 					const double maxSpeed = doc->options.maxSpeed;
+					
+					dlock.unlock();
+
 					const double vu = maxSpeed / nrBins;
 
 					std::vector<unsigned int> res1(nrBins, 0);

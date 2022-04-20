@@ -524,18 +524,23 @@ bool CMolecularDynamicsView::SetDataIntoChart()
 	CMolecularDynamicsDoc* doc = GetDocument();
 	if (!doc) return false;
 
+	chart.useSpline = doc->options.useSpline;
+	
 	std::vector<unsigned int> results1;
 	std::vector<unsigned int> results2;
+
+	const unsigned int nrBins = doc->options.nrBins;
 
 	{
 		std::lock_guard<std::mutex> lock(doc->dataSection);
 		if (doc->results1.empty() || doc->results2.empty()) return false;
 
+		if (doc->results1.size() != nrBins || doc->results2.size() != nrBins) return false;
+
 		results1.swap(doc->results1);
 		results2.swap(doc->results2);
 	}
 
-	const unsigned int nrBins = doc->options.nrBins;
 	const double maxSpeed = doc->options.maxSpeed;
 	const double vu = maxSpeed / nrBins;
 
@@ -548,8 +553,8 @@ bool CMolecularDynamicsView::SetDataIntoChart()
 	results2.clear();
 
 	chart.clear();
-	chart.AddDataSet(vu / 2., vu, dresults1.data(), nrBins, 3, doc->options.bigSphereColor);
-	chart.AddDataSet(vu / 2., vu, dresults2.data(), nrBins, 3, doc->options.smallSphereColor);
+	chart.AddDataSet(vu / 2., vu, dresults1.data(), nrBins, static_cast<float>(doc->options.lineThickness), doc->options.bigSphereColor);
+	chart.AddDataSet(vu / 2., vu, dresults2.data(), nrBins, static_cast<float>(doc->options.lineThickness), doc->options.smallSphereColor);
 
 	chart.XAxisMax = doc->options.maxSpeed;
 	const unsigned int ymax = static_cast<unsigned int>(100 * std::max(*std::max_element(dresults1.begin(), dresults1.end()), *std::max_element(dresults2.begin(), dresults2.end()))) + 1;

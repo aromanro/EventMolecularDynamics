@@ -1,6 +1,8 @@
 #pragma once
 #include <afxpropertypage.h>
 
+#include "NumberEdit.h"
+
 // ChartPropertyPage dialog
 
 class ChartPropertyPage :
@@ -25,5 +27,18 @@ protected:
 	virtual BOOL OnApply();
 	virtual BOOL OnInitDialog();
 	void ApplyValues();
+
+	int m_ShowChart;
+	int m_UseSplines;
+
+	unsigned int m_NrBins;
+	double m_MaxSpeed;
+	unsigned int m_LineThickness;
+
+	CNumberEdit m_Edit2;
+public:
+	afx_msg void OnBnClickedCheck1();
+	afx_msg void OnEnChangeEdit1();
+	afx_msg void OnEnChangeEdit3();
 };
 

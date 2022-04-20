@@ -18,7 +18,9 @@ Options::Options()
 	bigSphereColor(RGB(255, 0, 0)),
 	showBillboard(false),
 	nrBins(30),
-	maxSpeed(15)
+	maxSpeed(15),
+	useSpline(true),
+	lineThickness(3)
 {
 }
 
@@ -54,6 +56,11 @@ void Options::Load()
 
 	nrBins = theApp.GetProfileInt(L"options", L"nrBins", 30);
 	maxSpeed = GetDouble(L"maxSpeed", 15.);
+
+	res = static_cast<int>(theApp.GetProfileInt(L"options", L"useSpline", 1));
+	useSpline = (res != 0 ? true : false);
+
+	lineThickness = theApp.GetProfileInt(L"options", L"lineThickness", 3);
 }
 
 
@@ -81,6 +88,8 @@ void Options::Save()
 
 	theApp.WriteProfileInt(L"options", L"nrBins", static_cast<int>(nrBins));
 	theApp.WriteProfileBinary(L"options", L"maxSpeed", (LPBYTE)&maxSpeed, sizeof(double));
+	theApp.WriteProfileInt(L"options", L"useSpline", useSpline ? 1 : 0);
+	theApp.WriteProfileInt(L"options", L"lineThickness", static_cast<int>(lineThickness));
 }
 
 COLORREF Options::GetColor(LPCTSTR param, COLORREF defval)
