@@ -64,7 +64,7 @@ private:
 	OpenGL::Rectangle* billboardRectangle;
 	OpenGL::Texture* billboardTexture;
 	MemoryBitmap memoryBitmap;
-	CFont font;
+	//CFont font;
 
 
 	bool keyDown;
@@ -125,7 +125,7 @@ public:
 	void EnableAntialias();
 	void DisableAntialias();
 	void DisplayBilboard(glm::mat4& mat);
-	void SetBillboardText(const char* text);
+	//void SetBillboardText(const char* text);
 	bool SetDataIntoChart();
 	void PaintBillboarChart();
 

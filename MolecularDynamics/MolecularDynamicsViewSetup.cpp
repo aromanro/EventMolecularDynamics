@@ -60,12 +60,14 @@ void CMolecularDynamicsView::Setup()
 	const int height = 1024;
 	memoryBitmap.SetSize(static_cast<int>(billboardAspectRatio * height), height);
 
+	/*
 	if (!font.GetSafeHandle())
 	{
 		const int fontSize = static_cast<int>(height * 0.8);
 		const int fontHeight = -MulDiv(fontSize, CDC::FromHandle(::GetDC(NULL))->GetDeviceCaps(LOGPIXELSY), 72);
 		font.CreateFont(fontHeight, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_MODERN, _T("Courier New"));
 	}
+	*/
 
 	billboardTexture = new OpenGL::Texture();
 

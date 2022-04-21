@@ -507,6 +507,7 @@ void CMolecularDynamicsView::SetSpeeds(double translate, double rotate)
 	camera.SetSpeeds(translate, rotate);
 }
 
+/*
 void CMolecularDynamicsView::SetBillboardText(const char* text)
 {
 	if (!billboardTexture) return;
@@ -517,7 +518,7 @@ void CMolecularDynamicsView::SetBillboardText(const char* text)
 	memoryBitmap.SetIntoTexture(*billboardTexture);
 	wglMakeCurrent(NULL, NULL);
 }
-
+*/
 
 bool CMolecularDynamicsView::SetDataIntoChart()
 {
