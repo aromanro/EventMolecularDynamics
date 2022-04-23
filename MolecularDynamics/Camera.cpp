@@ -165,6 +165,7 @@ namespace OpenGL {
 	{
 		return movement == Movements::moveLeft ||
 			movement == Movements::moveRight ||
+			movement == Movements::moveUp ||
 			movement == Movements::moveDown ||
 			movement == Movements::moveForward ||
 			movement == Movements::moveBackward;
