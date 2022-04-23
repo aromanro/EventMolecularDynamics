@@ -7,7 +7,7 @@ A more detailed description is on the blog: https://compphys.go.ro/event-driven-
 
 ### PROGRAM IN ACTION
 
-[![Program video](https://img.youtube.com/vi/nvIyzSbPECE/0.jpg)](https://youtu.be/nvIyzSbPECE)
+[![Program video](https://img.youtube.com/vi/OHmS61tHZdY/0.jpg)](https://youtu.be/OHmS61tHZdY)
 
 ### Tools
 
