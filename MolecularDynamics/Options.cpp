@@ -20,7 +20,8 @@ Options::Options()
 	nrBins(30),
 	maxSpeed(15),
 	useSpline(true),
-	lineThickness(3)
+	lineThickness(3),
+	alpha(60)
 {
 }
 
@@ -61,6 +62,7 @@ void Options::Load()
 	useSpline = (res != 0 ? true : false);
 
 	lineThickness = theApp.GetProfileInt(L"options", L"lineThickness", 3);
+	alpha = theApp.GetProfileInt(L"options", L"alpha", 60);
 }
 
 
@@ -90,6 +92,7 @@ void Options::Save()
 	theApp.WriteProfileBinary(L"options", L"maxSpeed", (LPBYTE)&maxSpeed, sizeof(double));
 	theApp.WriteProfileInt(L"options", L"useSpline", useSpline ? 1 : 0);
 	theApp.WriteProfileInt(L"options", L"lineThickness", static_cast<int>(lineThickness));
+	theApp.WriteProfileInt(L"options", L"alpha", static_cast<int>(alpha));
 }
 
 COLORREF Options::GetColor(LPCTSTR param, COLORREF defval)

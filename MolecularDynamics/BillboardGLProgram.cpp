@@ -23,6 +23,7 @@ void BillboardGLProgram::getUniformsLocations()
 	modelMatLocation = glGetUniformLocation(getID(), "modelMat");
 
 	// fragment shader uniform parameters
+	alphaLoc = glGetUniformLocation(getID(), "alpha");
 	textureLoc = glGetUniformLocation(getID(), "Texture");
 }
 
@@ -86,19 +87,19 @@ bool BillboardGLProgram::SetupFragmentShader()
 	OpenGL::FragmentShader fragmentShader;
 
 	fragmentShader.setSource(GLSL(
-	
-	in vec2 TexCoord;
-	out vec4 outputColor;
+		uniform float alpha;
 
-	uniform sampler2D Texture;
+		in vec2 TexCoord;
+		out vec4 outputColor;
 
-	void main()
-	{
-		vec4 color = texture(Texture, TexCoord);
+		uniform sampler2D Texture;
 
-		outputColor = vec4(color.xyz, 0.8);
-	}
+		void main()
+		{
+			vec4 color = texture(Texture, TexCoord);
 
+			outputColor = vec4(color.xyz, alpha);
+		}
 	));
 
 

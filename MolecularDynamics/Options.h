@@ -30,6 +30,8 @@ public:
 	bool useSpline;
 	unsigned int lineThickness;
 
+	unsigned int alpha;
+
 	Options();
 	~Options();
 

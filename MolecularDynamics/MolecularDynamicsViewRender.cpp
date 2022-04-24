@@ -88,12 +88,15 @@ void CMolecularDynamicsView::RenderScene()
 
 void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 {
-	if (!billboardProgram) return;
+	if (NULL == billboardProgram) return;
+
+	CMolecularDynamicsDoc* doc = GetDocument();
+	if (!doc) return;
 
 	billboardProgram->Use();
 
+	glUniform1f(billboardProgram->alphaLoc, static_cast<float>(doc->options.alpha) / 100.f);
 	glUniform1i(billboardProgram->textureLoc, 0);
-
 	glUniformMatrix4fv(billboardProgram->matLocation, 1, GL_FALSE, value_ptr(mat));
 
 	glm::dmat4 precisionMat(camera.getMatrixDouble());

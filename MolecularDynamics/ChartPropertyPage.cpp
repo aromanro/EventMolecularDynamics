@@ -36,6 +36,8 @@ void ChartPropertyPage::DoDataExchange(CDataExchange* pDX)
 	CMFCPropertyPage::DoDataExchange(pDX);
 
 	DDX_Control(pDX, IDC_EDIT2, m_Edit2);
+	DDX_Control(pDX, IDC_SLIDER1, m_Slider1);
+	DDX_Control(pDX, IDC_STATIC1, m_Static1);
 
 	DDX_Check(pDX, IDC_CHECK1, m_ShowChart);
 	DDX_Check(pDX, IDC_CHECK2, m_UseSplines);
@@ -55,6 +57,7 @@ BEGIN_MESSAGE_MAP(ChartPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT1, &ChartPropertyPage::OnEnChangeEdit1)
 	ON_EN_CHANGE(IDC_EDIT2, &ChartPropertyPage::OnEnChangeEdit1)
 	ON_EN_CHANGE(IDC_EDIT3, &ChartPropertyPage::OnEnChangeEdit1)
+	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER1, &ChartPropertyPage::OnTRBNThumbPosChangingSlider1)
 END_MESSAGE_MAP()
 
 
@@ -77,6 +80,14 @@ BOOL ChartPropertyPage::OnInitDialog()
 
 	m_Edit2.allowNegative = false;
 
+	m_Slider1.SetRange(0, 100);
+
+	m_Slider1.SetPos(static_cast<int>(theApp.options.alpha));
+
+	CString str;
+	str.Format(L"%d%%", theApp.options.alpha);
+	m_Static1.SetWindowText(str);
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -89,6 +100,7 @@ void ChartPropertyPage::ApplyValues()
 	theApp.options.nrBins = m_NrBins;
 	theApp.options.maxSpeed = m_MaxSpeed;
 	theApp.options.lineThickness = m_LineThickness;
+	theApp.options.alpha = static_cast<unsigned int>(m_Slider1.GetPos());
 
 	theApp.options.Save();
 
@@ -98,6 +110,7 @@ void ChartPropertyPage::ApplyValues()
 	doc->options.showBillboard = theApp.options.showBillboard;
 	doc->options.useSpline = theApp.options.useSpline;
 	doc->options.lineThickness = theApp.options.lineThickness;
+	doc->options.alpha = theApp.options.alpha;
 
 	std::unique_lock<std::mutex> dlock(doc->dataSection);
 	doc->options.nrBins = theApp.options.nrBins;
@@ -117,3 +130,20 @@ void ChartPropertyPage::OnEnChangeEdit1()
 {
 	SetModified();
 }
+
+void ChartPropertyPage::OnTRBNThumbPosChangingSlider1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	// This feature requires Windows Vista or greater.
+	// The symbol _WIN32_WINNT must be >= 0x0600.
+	NMTRBTHUMBPOSCHANGING* pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING*>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+
+	CString str;
+	str.Format(L"%d%%", pNMTPC->dwPos);
+	m_Static1.SetWindowText(str);
+
+	SetModified();
+}
+
+

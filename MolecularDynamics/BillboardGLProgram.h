@@ -17,7 +17,8 @@ public:
 	GLint matLocation;
 	GLint modelMatLocation;
 
-	// fragment shader uniform parameters
+	// fragment shader parameters
+	GLint alphaLoc;
 	GLint textureLoc;
 
 protected:
