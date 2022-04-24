@@ -134,14 +134,13 @@ void MemoryBitmap::WriteText(const char* text, CFont& font, DWORD color, DWORD b
 	const HDC hDC = GetDC(NULL);
 	if (NULL == hDC) return;
 	CDC* pDC = CDC::FromHandle(hDC);
-	if (!pDC) return;
+	if (NULL == pDC) return;
 
 	CBitmap bitmap;
 	CDC dcMemory;
 
 	dcMemory.CreateCompatibleDC(pDC);
 	bitmap.CreateCompatibleBitmap(pDC, m_width, m_height);
-	//pDC->DeleteDC();
 
 	CBitmap* pOldBitmap = dcMemory.SelectObject(&bitmap);
 
@@ -185,26 +184,18 @@ void MemoryBitmap::DrawChart(Chart& chart)
 	const HDC hDC = GetDC(NULL);
 	if (NULL == hDC) return;
 	CDC* pDC = CDC::FromHandle(hDC);
-	if (!pDC) return;
+	if (NULL == pDC) return;
+
+	CDC dcMemory;
+	dcMemory.CreateCompatibleDC(pDC);
 
 	CBitmap bitmap;
-	CDC dcMemory;
-
-	dcMemory.CreateCompatibleDC(pDC);
 	bitmap.CreateCompatibleBitmap(pDC, m_width, m_height);
-	//pDC->DeleteDC();
 
 	CBitmap* pOldBitmap = dcMemory.SelectObject(&bitmap);
 
-	RECT rect;
-	rect.left = rect.top = 0;
-	rect.right = m_width;
-	rect.bottom = m_height;
-
-	int nOldBkMode = dcMemory.SetBkMode(TRANSPARENT);
-
 	// paint the chart
-	CRect drawRect(rect);
+	CRect drawRect(0, 0, m_width, m_height);
 	chart.Draw(&dcMemory, drawRect);
 
 	BITMAPINFO bmi;
@@ -218,8 +209,6 @@ void MemoryBitmap::DrawChart(Chart& chart)
 	bmi.bmiHeader.biCompression = BI_RGB;
 
 	::GetDIBits(dcMemory.GetSafeHdc(), bitmap, 0, m_height, data, &bmi, DIB_RGB_COLORS);
-
-	dcMemory.SetBkMode(nOldBkMode);
 
 	dcMemory.SelectObject(pOldBitmap);
 }
