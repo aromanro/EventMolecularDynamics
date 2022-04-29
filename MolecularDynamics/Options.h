@@ -17,6 +17,7 @@ public:
 	double initialSpeed;
 
 	double interiorRadius;
+	bool rightSideInsteadOfSphere;
 
 	COLORREF smallSphereColor;
 	COLORREF bigSphereColor;

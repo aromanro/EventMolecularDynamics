@@ -26,6 +26,8 @@ SimulationPropertyPage::SimulationPropertyPage()
 	interiorSpheresMass = theApp.options.interiorSpheresMass;
 	exteriorSpheresRadius = theApp.options.exteriorSpheresRadius;
 	exteriorSpheresMass = theApp.options.exteriorSpheresMass;
+
+	rightSide = (theApp.options.rightSideInsteadOfSphere ? BST_CHECKED : BST_UNCHECKED);
 }
 
 SimulationPropertyPage::~SimulationPropertyPage()
@@ -53,6 +55,8 @@ void SimulationPropertyPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT6, exteriorSpheresRadius);
 	DDX_Text(pDX, IDC_EDIT7, exteriorSpheresMass);
 
+	DDX_Check(pDX, IDC_CHECK3, rightSide);
+
 	DDV_MinMaxUInt(pDX, nrSpheres, 1, 40000);
 	DDV_MinMaxDouble(pDX, interiorRadius, 0, spaceSize / 2.);
 	DDV_MinMaxDouble(pDX, initialSpeed, 0, 99999);
@@ -73,6 +77,7 @@ BEGIN_MESSAGE_MAP(SimulationPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT5, &SimulationPropertyPage::OnEnChangeEdit)
 	ON_EN_CHANGE(IDC_EDIT6, &SimulationPropertyPage::OnEnChangeEdit)
 	ON_EN_CHANGE(IDC_EDIT7, &SimulationPropertyPage::OnEnChangeEdit)
+	ON_BN_CLICKED(IDC_CHECK3, &SimulationPropertyPage::OnBnClickedCheck3)
 END_MESSAGE_MAP()
 
 
@@ -116,11 +121,19 @@ void SimulationPropertyPage::ApplyValues()
 	theApp.options.exteriorSpheresRadius = exteriorSpheresRadius;
 	theApp.options.exteriorSpheresMass = exteriorSpheresMass;
 
+	theApp.options.rightSideInsteadOfSphere = rightSide == BST_CHECKED;
+
 	theApp.options.Save();
 }
 
 
 void SimulationPropertyPage::OnEnChangeEdit()
+{
+	SetModified();
+}
+
+
+void SimulationPropertyPage::OnBnClickedCheck3()
 {
 	SetModified();
 }

@@ -33,7 +33,8 @@ namespace MolecularDynamics {
 		particles.reserve(numParticles);
 
 
-		double minSphereRadius = std::min<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius);
+		double minSphereRadius = theApp.options.rightSideInsteadOfSphere ? std::max<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius) : std::min<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius);
+
 
 		// now it's a cube, but it does not have to be cubic
 		std::uniform_real_distribution<double> rndXYZ{ minSphereRadius, spaceSize - minSphereRadius };
@@ -55,17 +56,33 @@ namespace MolecularDynamics {
 			particle.position.Z = rndXYZ(rndEngineZ);
 
 
-			// check if it's inside of sphere, if yes, make it bigger
-
-			if ((particle.position - centerSpace).Length() < sphereRadius)
+			if (theApp.options.rightSideInsteadOfSphere)
 			{
-				particle.mass = theApp.options.interiorSpheresMass;
-				particle.radius = theApp.options.interiorSpheresRadius;
+				if (particle.position.X < sphereRadius)
+				{
+					particle.mass = theApp.options.interiorSpheresMass;
+					particle.radius = theApp.options.interiorSpheresRadius;
+				}
+				else
+				{
+					particle.mass = theApp.options.exteriorSpheresMass;
+					particle.radius = theApp.options.exteriorSpheresRadius;
+				}
 			}
 			else
 			{
-				particle.mass = theApp.options.exteriorSpheresMass;
-				particle.radius = theApp.options.exteriorSpheresRadius;
+				// check if it's inside of sphere, if yes, make it bigger
+
+				if ((particle.position - centerSpace).Length() < sphereRadius)
+				{
+					particle.mass = theApp.options.interiorSpheresMass;
+					particle.radius = theApp.options.interiorSpheresRadius;
+				}
+				else
+				{
+					particle.mass = theApp.options.exteriorSpheresMass;
+					particle.radius = theApp.options.exteriorSpheresRadius;
+				}
 			}
 
 

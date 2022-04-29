@@ -39,9 +39,13 @@ protected:
 	double exteriorSpheresRadius;
 	double exteriorSpheresMass;
 
+	int rightSide;
+
 	virtual BOOL OnApply();
 	virtual BOOL OnInitDialog();
 	void ApplyValues();
 
 	afx_msg void OnEnChangeEdit();
+public:
+	afx_msg void OnBnClickedCheck3();
 };

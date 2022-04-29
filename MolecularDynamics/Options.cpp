@@ -14,6 +14,7 @@ Options::Options()
 	exteriorSpheresMass(1),
 	initialSpeed(1),
 	interiorRadius(30),
+	rightSideInsteadOfSphere(false),
 	smallSphereColor(RGB(0, 255, 0)),
 	bigSphereColor(RGB(255, 0, 0)),
 	showBillboard(false),
@@ -49,17 +50,20 @@ void Options::Load()
 	initialSpeed = GetDouble(L"initialSpeed", 1.);
 	interiorRadius = GetDouble(L"interiorRadius", 30);
 
+	res = static_cast<int>(theApp.GetProfileInt(L"options", L"rightSide", 0));
+	rightSideInsteadOfSphere = res != 0;
+
 	smallSphereColor = GetColor(L"smallSphereColor", RGB(0, 255, 0));
 	bigSphereColor = GetColor(L"bigSphereColor", RGB(255, 0, 0));
 
 	res = static_cast<int>(theApp.GetProfileInt(L"options", L"showBillboard", 1));
-	showBillboard = (res != 0 ? true : false);
+	showBillboard = res != 0;
 
 	nrBins = theApp.GetProfileInt(L"options", L"nrBins", 30);
 	maxSpeed = GetDouble(L"maxSpeed", 15.);
 
 	res = static_cast<int>(theApp.GetProfileInt(L"options", L"useSpline", 1));
-	useSpline = (res != 0 ? true : false);
+	useSpline = res != 0;
 
 	lineThickness = theApp.GetProfileInt(L"options", L"lineThickness", 3);
 	alpha = theApp.GetProfileInt(L"options", L"alpha", 60);
@@ -82,6 +86,8 @@ void Options::Save()
 
 	theApp.WriteProfileBinary(L"options", L"initialSpeed", (LPBYTE)&initialSpeed, sizeof(double));
 	theApp.WriteProfileBinary(L"options", L"interiorRadius", (LPBYTE)&interiorRadius, sizeof(double));
+
+	theApp.WriteProfileInt(L"options", L"rightSide", rightSideInsteadOfSphere ? 1 : 0);
 
 	theApp.WriteProfileBinary(L"options", L"smallSphereColor", (LPBYTE)&smallSphereColor, sizeof(COLORREF));
 	theApp.WriteProfileBinary(L"options", L"bigSphereColor", (LPBYTE)&bigSphereColor, sizeof(COLORREF));

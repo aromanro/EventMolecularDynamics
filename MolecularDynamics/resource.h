@@ -48,6 +48,7 @@
 #define IDC_CHECK2                      1007
 #define IDC_EDIT6                       1008
 #define IDC_EDIT7                       1009
+#define IDC_CHECK3                      1010
 #define ID_SLIDER                       32772
 #define ID_VIEW_OPTIONS                 32774
 #define ID_VIEW_FULLSCREEN              32775
@@ -58,7 +59,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        313
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1007
+#define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif
