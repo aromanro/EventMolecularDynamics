@@ -33,7 +33,7 @@ namespace MolecularDynamics {
 		particles.reserve(numParticles);
 
 
-		double minSphereRadius = theApp.options.rightSideInsteadOfSphere ? std::max<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius) : std::min<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius);
+		const double minSphereRadius = theApp.options.rightSideInsteadOfSphere ? std::max<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius) : std::min<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius);
 
 
 		// now it's a cube, but it does not have to be cubic
@@ -41,7 +41,7 @@ namespace MolecularDynamics {
 
 		std::uniform_real_distribution<double> rndV{ -1, 1 };
 
-		Vector3D<double> centerSpace(spaceSize / 2, spaceSize / 2, spaceSize / 2);
+		const Vector3D<double> centerSpace(spaceSize / 2, spaceSize / 2, spaceSize / 2);
 
 		// this is just some limit to prevent running forever
 		const unsigned long int maxAttempts = 300000ul * numParticles;
@@ -55,53 +55,12 @@ namespace MolecularDynamics {
 			particle.position.Y = rndXYZ(rndEngineY);
 			particle.position.Z = rndXYZ(rndEngineZ);
 
-
-			if (theApp.options.rightSideInsteadOfSphere)
-			{
-				if (particle.position.X < sphereRadius)
-				{
-					particle.mass = theApp.options.interiorSpheresMass;
-					particle.radius = theApp.options.interiorSpheresRadius;
-				}
-				else
-				{
-					particle.mass = theApp.options.exteriorSpheresMass;
-					particle.radius = theApp.options.exteriorSpheresRadius;
-				}
-			}
-			else
-			{
-				// check if it's inside of sphere, if yes, make it bigger
-
-				if ((particle.position - centerSpace).Length() < sphereRadius)
-				{
-					particle.mass = theApp.options.interiorSpheresMass;
-					particle.radius = theApp.options.interiorSpheresRadius;
-				}
-				else
-				{
-					particle.mass = theApp.options.exteriorSpheresMass;
-					particle.radius = theApp.options.exteriorSpheresRadius;
-				}
-			}
-
+			InitParticle(particle, sphereRadius, centerSpace); // only mass and radius
 
 			// check to see if it's not overlapping some already existing particle
 			// or a part outside the walls - should not happen unless the sphereRadius is set too big
 
-			bool overlap = false;
-			for (const auto &part : particles)
-			{
-				if ((part.position - particle.position).Length() <= part.radius + particle.radius ||
-					part.position.X > spaceSize - part.radius || part.position.Y > spaceSize - part.radius || part.position.Z > spaceSize - part.radius ||
-					part.position.X < part.radius || part.position.Y < part.radius || part.position.Z < part.radius)
-				{
-					overlap = true;
-					break;
-				}
-			}
-
-			if (overlap)
+			if (HasOverlap(particle))
 			{
 				--i;
 				++attempt;
@@ -128,6 +87,55 @@ namespace MolecularDynamics {
 		}
 	}
 
+	void Simulation::InitParticle(Particle& particle, double sphereRadius, const Vector3D<double>& centerSpace)
+	{
+		if (theApp.options.rightSideInsteadOfSphere)
+		{
+			if (particle.position.X < sphereRadius)
+			{
+				particle.mass = theApp.options.interiorSpheresMass;
+				particle.radius = theApp.options.interiorSpheresRadius;
+			}
+			else
+			{
+				particle.mass = theApp.options.exteriorSpheresMass;
+				particle.radius = theApp.options.exteriorSpheresRadius;
+			}
+		}
+		else
+		{
+			// check if it's inside of sphere, if yes, make it bigger
+
+			if ((particle.position - centerSpace).Length() < sphereRadius)
+			{
+				particle.mass = theApp.options.interiorSpheresMass;
+				particle.radius = theApp.options.interiorSpheresRadius;
+			}
+			else
+			{
+				particle.mass = theApp.options.exteriorSpheresMass;
+				particle.radius = theApp.options.exteriorSpheresRadius;
+			}
+		}
+	}
+
+
+	bool Simulation::HasOverlap(const Particle& particle) const
+	{
+		bool overlap = false;
+		for (const auto& part : particles)
+		{
+			if ((part.position - particle.position).Length() <= part.radius + particle.radius ||
+				part.position.X > spaceSize - part.radius || part.position.Y > spaceSize - part.radius || part.position.Z > spaceSize - part.radius ||
+				part.position.X < part.radius || part.position.Y < part.radius || part.position.Z < part.radius)
+			{
+				overlap = true;
+				break;
+			}
+		}
+
+		return overlap;
+	}
 
 
 	void Simulation::BuildEventQueue()

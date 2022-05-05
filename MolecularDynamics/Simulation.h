@@ -207,6 +207,9 @@ namespace MolecularDynamics {
 			particles[nextEvent.particle1].particleTime = nextEvent.eventTime;
 		}
 
+		bool HasOverlap(const Particle& particle) const;
+		void InitParticle(Particle& particle, double sphereRadius, const Vector3D<double>& centerSpace);
+
 
 		std::mt19937 rndEngineX, rndEngineY, rndEngineZ;
 		std::random_device rdev;
