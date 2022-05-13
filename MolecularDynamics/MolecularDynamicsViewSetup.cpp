@@ -15,6 +15,7 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 
+#include <GLFW/glfw3.h> // glfw
 
 #include "Camera.h"
 
@@ -136,6 +137,9 @@ void CMolecularDynamicsView::SetupGl()
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		glMatrixMode(GL_MODELVIEW);
+
+		glfwWindowHint(GLFW_SAMPLES, 4);
+		glEnable(GL_MULTISAMPLE);
 
 		CRect rect;
 		GetClientRect(rect);
