@@ -62,7 +62,7 @@ private:
 
 	BillboardGLProgram* billboardProgram;
 	OpenGL::Rectangle* billboardRectangle;
-	OpenGL::Texture* billboardTexture;
+	OpenGL::TextureWithPixelBuffer* billboardTexture;
 	MemoryBitmap memoryBitmap;
 	//CFont font;
 
@@ -128,6 +128,7 @@ public:
 	//void SetBillboardText(const char* text);
 	bool SetDataIntoChart();
 	void PaintBillboarChart();
+	void DrawIntoBillboardTexture();
 
 protected:
 	bool HandleKeyPress(WPARAM wParam, bool ctrl, bool shift);

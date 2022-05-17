@@ -59,7 +59,8 @@ void CMolecularDynamicsView::Setup()
 	billboardRectangle = new OpenGL::Rectangle(billboardAspectRatio);
 
 	const int height = 1024;
-	memoryBitmap.SetSize(static_cast<int>(billboardAspectRatio * height), height);
+	const int width = static_cast<int>(billboardAspectRatio * height);
+	memoryBitmap.SetSize(width, height);
 
 	/*
 	if (!font.GetSafeHandle())
@@ -70,7 +71,7 @@ void CMolecularDynamicsView::Setup()
 	}
 	*/
 
-	billboardTexture = new OpenGL::Texture();
+	billboardTexture = new OpenGL::TextureWithPixelBuffer();
 
 	SetupSpheres();
 
@@ -92,7 +93,10 @@ void CMolecularDynamicsView::Setup()
 
 
 	if (theApp.options.showBillboard)
+	{
 		PaintBillboarChart();
+		DrawIntoBillboardTexture();
+	}
 
 	wglMakeCurrent(NULL, NULL);
 

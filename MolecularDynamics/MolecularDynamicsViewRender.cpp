@@ -124,7 +124,7 @@ void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 
 	glUniformMatrix4fv(billboardProgram->modelMatLocation, 1, GL_FALSE, value_ptr(modelMat));
 
-	billboardTexture->Bind();
+	//billboardTexture->Bind();
 
 	DisableAntialias(); // otherwise a diagonal line is shown over the rectangle sometimes, with alpha blending on
 

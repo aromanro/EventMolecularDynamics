@@ -205,12 +205,16 @@ void CMolecularDynamicsView::OnTimer(UINT_PTR nIDEvent)
 		CMolecularDynamicsDoc *doc = GetDocument();
 
 		if (doc) {
-			if (++ticks % 100 == 0)
+			++ticks;
+			int r = ticks % 100;
+			if (r == 0)
 			{
 				PaintBillboarChart();
 				doc->RetrieveStatistics();
 			}
-
+			else if (r == 50)
+				DrawIntoBillboardTexture();
+				
 			doc->simulationTime = doc->simulationTime + doc->nrsteps * timeStep;
 			doc->Advance();
 		}
@@ -568,6 +572,13 @@ void CMolecularDynamicsView::PaintBillboarChart()
 
 	wglMakeCurrent(m_hDC, m_hRC);
 	memoryBitmap.SetIntoTexture(*billboardTexture);
+	wglMakeCurrent(NULL, NULL);
+}
+
+void CMolecularDynamicsView::DrawIntoBillboardTexture()
+{
+	wglMakeCurrent(m_hDC, m_hRC);
+	billboardTexture->Draw();
 	wglMakeCurrent(NULL, NULL);
 }
 
