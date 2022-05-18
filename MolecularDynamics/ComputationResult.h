@@ -37,7 +37,7 @@ namespace MolecularDynamics {
 			return *this;
 		}
 
-		ComputationResult& operator=(ComputationResult&& other)
+		ComputationResult& operator=(ComputationResult&& other) noexcept
 		{
 			if (this != &other) 
 			{

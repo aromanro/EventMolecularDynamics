@@ -38,7 +38,7 @@
 #define new DEBUG_NEW
 #endif
 
-
+unsigned int CMolecularDynamicsView::msFrame = 30;
 
 // CMolecularDynamicsView
 

@@ -76,6 +76,8 @@ private:
 
 	Chart chart;
 
+	static unsigned int msFrame;
+
 	void InitializePalette(void);
 	void Resize(GLsizei h, GLsizei w);
 	Vector3D<double> GetTowardsVector(CPoint& point, const Vector3D<double>& forward);

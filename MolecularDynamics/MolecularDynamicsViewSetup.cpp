@@ -100,7 +100,7 @@ void CMolecularDynamicsView::Setup()
 
 	wglMakeCurrent(NULL, NULL);
 
-	if (!timer) timer = SetTimer(1, 30, NULL);
+	if (!timer) timer = SetTimer(1, msFrame, NULL);
 
 	inited = true;
 }
