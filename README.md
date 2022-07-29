@@ -1,6 +1,7 @@
 # EventMolecularDynamics
 A program implementing event driven molecular dynamics for hard smooth spheres
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/38f31a6160fc44f0a9b6fe7e13e7acd9)](https://app.codacy.com/gh/aromanro/EventMolecularDynamics?utm_source=github.com&utm_medium=referral&utm_content=aromanro/EventMolecularDynamics&utm_campaign=Badge_Grade_Settings)
 [![CodeFactor](https://www.codefactor.io/repository/github/aromanro/eventmoleculardynamics/badge)](https://www.codefactor.io/repository/github/aromanro/eventmoleculardynamics)
 
 A more detailed description is on the blog: https://compphys.go.ro/event-driven-molecular-dynamics/
