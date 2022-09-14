@@ -348,8 +348,8 @@ bool CMolecularDynamicsView::KeyPressHandler(MSG* pMsg)
 	if (pMsg->message == WM_KEYDOWN)
 	{
 		keyDown = true;
-		ctrl = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0 ? true : false);
-		shift = ((::GetKeyState(VK_SHIFT) & 0x8000) != 0 ? true : false);
+		ctrl = (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
+		shift = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
 
 		// pMSG->wParam contains the key code
 		handled = HandleKeyPress(pMsg->wParam, ctrl, shift);
@@ -452,7 +452,7 @@ BOOL CMolecularDynamicsView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 	if (distanceTicks >= WHEEL_DELTA) {
 		distanceTicks /= WHEEL_DELTA;
-		const bool forward = (wheelAccumulator > 0 ? true : false);
+		const bool forward = wheelAccumulator > 0;
 		wheelAccumulator %= WHEEL_DELTA;
 
 		camera.ProgressiveMove(forward ? OpenGL::Camera::Movements::moveForward : OpenGL::Camera::Movements::moveBackward, distanceTicks, true);
