@@ -2,11 +2,11 @@
 #include "BillboardGLProgram.h"
 #include "MolecularDynamics.h"
 
-#define GLSL(src) "#version 330\n" #src
+#define GLSL(src) "#version 450 core\n" #src
 
 BillboardGLProgram::BillboardGLProgram()
 	: matLocation(0), modelMatLocation(0), 
-	textureLoc(0)
+	alphaLoc(0), textureLoc(0)
 {
 }
 
