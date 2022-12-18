@@ -28,17 +28,15 @@ namespace OpenGL {
 		void setSource(const char* src);
 	};
 
-
-	class VertexShader : public Shader {
+	class TessellationControlShader : public Shader {
 	public:
-		VertexShader();
+		TessellationControlShader();
 		GLuint getType() const override;
 	};
 
-
-	class FragmentShader : public Shader {
+	class TessellationEvaluationShader : public Shader {
 	public:
-		FragmentShader();
+		TessellationEvaluationShader();
 		GLuint getType() const override;
 	};
 
@@ -53,5 +51,19 @@ namespace OpenGL {
 		ComputeShader();
 		GLuint getType() const override;
 	};
+
+	class VertexShader : public Shader {
+	public:
+		VertexShader();
+		GLuint getType() const override;
+	};
+
+
+	class FragmentShader : public Shader {
+	public:
+		FragmentShader();
+		GLuint getType() const override;
+	};
+
 }
 
