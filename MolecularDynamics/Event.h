@@ -10,7 +10,7 @@ namespace MolecularDynamics {
 
 		double eventTime;
 
-		enum class EventType {
+		enum class EventType : unsigned char {
 			particleCollision,
 			wallCollision,
 			// here other kind of events could be added - of course they must be handled appropriately

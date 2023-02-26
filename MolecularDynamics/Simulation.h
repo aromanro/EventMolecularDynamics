@@ -159,8 +159,10 @@ namespace MolecularDynamics {
 		{
 			if (Event::EventType::particleCollision == colEvent.type)
 			{
-				for (auto &event : eventsQueue)
+				for (int i = 0; i < eventsQueue.size(); ++i)
 				{
+					Event& event = eventsQueue[i];
+
 					if (Event::EventType::noEvent == event.type) continue;
 
 					if (event.particle1 == colEvent.particle1 || event.particle1 == colEvent.particle2 || 
@@ -173,8 +175,10 @@ namespace MolecularDynamics {
 			}
 			else
 			{
-				for (auto &event : eventsQueue)
+				for (int i = 0; i < eventsQueue.size(); ++i)
 				{
+					Event& event = eventsQueue[i];
+
 					if (Event::EventType::noEvent == event.type) continue;
 
 					if (event.particle1 == colEvent.particle1 || (event.type == Event::EventType::particleCollision && event.particle2 == colEvent.particle1))

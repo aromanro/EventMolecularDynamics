@@ -203,11 +203,11 @@ namespace MolecularDynamics {
 
 			for (int i = 0; i < numParticles; ++i)
 			{
-				if (i != nextEvent.particle1 && i != nextEvent.particle2)
-				{
-					AddCollision(nextEvent.particle1, i);
-					AddCollision(nextEvent.particle2, i);
-				}
+				if (i == nextEvent.particle1 || i == nextEvent.particle2)
+					continue;
+				
+				AddCollision(nextEvent.particle1, i);
+				AddCollision(nextEvent.particle2, i);
 			}
 		}
 		else
