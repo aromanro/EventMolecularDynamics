@@ -201,22 +201,32 @@ namespace MolecularDynamics {
 			AddWallCollisionToQueue(nextEvent.particle2);
 			AddCollision(nextEvent.particle1, nextEvent.particle2);
 
-			for (int i = 0; i < numParticles; ++i)
+			int p1 = nextEvent.particle1;
+			int p2 = nextEvent.particle2;
+			if (p1 > p2) std::swap(p1, p2);
+
+			for (int i = 0; i < p1; ++i)
+			{				
+				AddCollision(nextEvent.particle1, i);
+				AddCollision(nextEvent.particle2, i);
+			}
+			for (int i = p1 + 1; i < p2; ++i)
 			{
-				if (i == nextEvent.particle1 || i == nextEvent.particle2)
-					continue;
-				
+				AddCollision(nextEvent.particle1, i);
+				AddCollision(nextEvent.particle2, i);
+			}
+			for (int i = p2 + 1; i < numParticles; ++i)
+			{
 				AddCollision(nextEvent.particle1, i);
 				AddCollision(nextEvent.particle2, i);
 			}
 		}
 		else
 		{
-			for (int i = 0; i < numParticles; ++i)
-			{
-				if (i != nextEvent.particle1)
-					AddCollision(nextEvent.particle1, i);
-			}
+			for (int i = 0; i < nextEvent.particle1; ++i)
+				AddCollision(nextEvent.particle1, i);
+			for (int i = nextEvent.particle1 + 1; i < numParticles; ++i)
+				AddCollision(nextEvent.particle1, i);
 		}
 	}
 
