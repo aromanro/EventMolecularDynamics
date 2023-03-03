@@ -162,11 +162,12 @@ void CMolecularDynamicsView::SetupGl()
 void CMolecularDynamicsView::SetupSpheres()
 {
 	sphere = new OpenGL::Sphere(1, 32, 32, false);
-
 	CMolecularDynamicsDoc* doc = GetDocument();
 
 	if (doc)
 	{
+		static const double scaleColor = 1. / 255.;
+
 		position.resize(doc->nrParticles * 3ULL);
 		colors.resize(doc->nrParticles * 3ULL);
 		scale.resize(doc->nrParticles);
@@ -177,9 +178,9 @@ void CMolecularDynamicsView::SetupSpheres()
 		{
 			scale[index] = static_cast<GLfloat>(particle.radius);
 
-			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3ULL * index + 1ULL] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3ULL * index + 2ULL] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) * scaleColor);
+			colors[3ULL * index + 1ULL] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) * scaleColor);
+			colors[3ULL * index + 2ULL] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) * scaleColor);
 
 			++index;
 		}
@@ -237,14 +238,15 @@ void CMolecularDynamicsView::SetColors()
 
 	if (doc && colorBuffer)
 	{
+		static const double scaleColor = 1. / 255.;
 		int index = 0;
 		const double avgRadius = (doc->options.exteriorSpheresRadius + doc->options.interiorSpheresRadius) / 2;
 
 		for (const auto& particle : doc->curResult.particles)
 		{
-			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3ULL * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) / 255.);
-			colors[3ULL * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) / 255.);
+			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) * scaleColor);
+			colors[3ULL * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) * scaleColor);
+			colors[3ULL * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) * scaleColor);
 
 			++index;
 		}
