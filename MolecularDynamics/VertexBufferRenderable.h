@@ -6,7 +6,6 @@ namespace OpenGL {
 	class VertexBufferRenderable :
 		public Renderable
 	{
-
 	public:
 		VertexBufferRenderable();
 		~VertexBufferRenderable() override;
@@ -19,6 +18,5 @@ namespace OpenGL {
 	private:
 		VertexBufferObject vbo;
 	};
-
 
 }
