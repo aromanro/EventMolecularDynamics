@@ -10,20 +10,20 @@ class CameraPropertyPage : public CMFCPropertyPage
 
 public:
 	CameraPropertyPage();
-	virtual ~CameraPropertyPage();
+	~CameraPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_CAMERAPROPERTYPAGE };
 #endif
 
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+private:
+	void DoDataExchange(CDataExchange* pDX) override;    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
 
-	virtual BOOL OnInitDialog();
-	virtual BOOL OnApply();
+	BOOL OnInitDialog() override;
+	BOOL OnApply() override;
 	void ApplyValues();
 
 	afx_msg void OnTRBNThumbPosChangingSlider1(NMHDR *pNMHDR, LRESULT *pResult);

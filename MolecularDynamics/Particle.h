@@ -69,8 +69,6 @@ namespace MolecularDynamics {
 			const double C = difPos * difPos - minDist * minDist;
 			const double difVel2 = difVel * difVel;
 
-			const double delta = b * b - difVel2 * C;
-
 			// a delta < 0 means to complex solutions, that is, no real solution = the spheres do not collide
 			// delta = 0 is the degenerate case, the spheres meet in the trajectory and depart at the same time = tangential touch, no need to handle it, they are smooth spheres
 			// delta > 0 is the only interesting case
@@ -79,7 +77,7 @@ namespace MolecularDynamics {
 			// the first time is the time they 'meet' and that's the needed time, the time of the collision event after which new velocities must be calculated
 
 			// the b < 0 condition is the condition that the centers approach, b > 0 means that they are departing
-			if (delta > 0 && b < 0)
+			if (const double delta = b * b - difVel2 * C; delta > 0 && b < 0)
 			{
 				const double sdelta = sqrt(delta);
 

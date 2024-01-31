@@ -6,7 +6,7 @@
 
 #include "Vector3D.h"
 
-#include <gtc\matrix_transform.hpp>
+#include <gtc/matrix_transform.hpp>
 
 namespace OpenGL {
 
@@ -30,30 +30,6 @@ namespace OpenGL {
 			rotateTowards
 		};
 
-	protected:
-		double rotateAngle;
-		double translateDist;
-
-		struct Movement {
-			Movements movement;
-			Vector3D<double> towardsVec;
-			int ticks;
-			bool fromMouse;
-
-			Movement(Movements move, int nrticks = 5, bool mouse = false)
-				: movement(move), ticks(nrticks), fromMouse(mouse)
-			{}
-		};
-
-		std::list<Movement> movements;
-
-		static bool NeedsRotation(Movements movement);
-		static bool NeedsTranslation(Movements movement);
-
-		void Rotate(Movements movement);
-		void Translate(Movements movement, bool fromMouse);
-
-	public:
 		Camera();
 		~Camera();
 
@@ -88,7 +64,6 @@ namespace OpenGL {
 		double GetRotateAngle() const { return rotateAngle; }
 		double GetTranslate() const { return translateDist; }
 
-	public:
 		void Tick();
 		void ProgressiveMove(Movements movement, int nrticks = 5, bool fromMouse = false);
 		void ProgressiveRotate(const Vector3D<double>& towards, int nrticks);
@@ -104,10 +79,33 @@ namespace OpenGL {
 			return glm::lookAt(glm::dvec3(eyePos.X, eyePos.Y, eyePos.Z), glm::dvec3(lookAt.X, lookAt.Y, lookAt.Z), glm::dvec3(up.X, up.Y, up.Z));
 		}
 
-		inline operator glm::mat4() const { return getMatrix(); };
-		inline operator glm::dmat4() const { return getMatrixDouble(); };
+		inline explicit operator glm::mat4() const { return getMatrix(); };
+		inline explicit operator glm::dmat4() const { return getMatrixDouble(); };
 
 		void SetSpeeds(double translate, double angle);
+
+	private:
+		double rotateAngle;
+		double translateDist;
+
+		struct Movement {
+			Movements movement;
+			Vector3D<double> towardsVec;
+			int ticks;
+			bool fromMouse;
+
+			Movement(Movements move, int nrticks = 5, bool mouse = false)
+				: movement(move), ticks(nrticks), fromMouse(mouse)
+			{}
+		};
+
+		std::list<Movement> movements;
+
+		static bool NeedsRotation(Movements movement);
+		static bool NeedsTranslation(Movements movement);
+
+		void Rotate(Movements movement);
+		void Translate(Movements movement, bool fromMouse);
 	};
 
 

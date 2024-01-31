@@ -8,7 +8,7 @@ namespace OpenGL {
 	{
 	public:
 		Texture();
-		virtual ~Texture();
+		~Texture() override;
 
 		void Bind() override;
 		void Bind(int nr);
@@ -25,18 +25,19 @@ namespace OpenGL {
 
 	class TextureWithPixelBuffer : public Texture
 	{
-	protected:
+	public:
+		TextureWithPixelBuffer();
+		~TextureWithPixelBuffer() override;
+
+		void setData(const void* data, int width, int height, int nr = 0, int nrBytes = 3) override;
+		void Draw();
+
+	private:
 		PixelBuffer* pixelBuffer;
 
 		int m_width;
 		int m_height;
 		int m_nrBytes;
-	public:
-		TextureWithPixelBuffer();
-		~TextureWithPixelBuffer();
-
-		void setData(const void* data, int width, int height, int nr = 0, int nrBytes = 3) override;
-		void Draw();
 	};
 
 }

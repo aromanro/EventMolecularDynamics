@@ -6,26 +6,25 @@
 // ChartPropertyPage dialog
 
 class ChartPropertyPage :
-    public CMFCPropertyPage
+	public CMFCPropertyPage
 {
 	DECLARE_DYNAMIC(ChartPropertyPage)
 
 public:
 	ChartPropertyPage();
-	virtual ~ChartPropertyPage();
 
 	// Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_CHARTPROPERTYPAGE };
 #endif
 
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+private:
+	void DoDataExchange(CDataExchange* pDX) override;    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
 
-	virtual BOOL OnApply();
-	virtual BOOL OnInitDialog();
+	BOOL OnApply() override;
+	BOOL OnInitDialog() override;
 	void ApplyValues();
 
 	int m_ShowChart;
@@ -39,10 +38,8 @@ protected:
 	CStatic m_Static1;
 	CSliderCtrl m_Slider1;
 
-public:
 	afx_msg void OnBnClickedCheck1();
 	afx_msg void OnEnChangeEdit1();
-	afx_msg void OnEnChangeEdit3();
 	afx_msg void OnTRBNThumbPosChangingSlider1(NMHDR* pNMHDR, LRESULT* pResult);
 };
 

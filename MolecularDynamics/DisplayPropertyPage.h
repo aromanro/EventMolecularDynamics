@@ -10,20 +10,20 @@ class DisplayPropertyPage : public CMFCPropertyPage
 
 public:
 	DisplayPropertyPage();
-	virtual ~DisplayPropertyPage();
+	~DisplayPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DISPLAYPROPERTYPAGE };
 #endif
 
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+private:
+	void DoDataExchange(CDataExchange* pDX) override;    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
 
-	virtual BOOL OnApply();
-	virtual BOOL OnInitDialog();
+	BOOL OnApply() override;
+	BOOL OnInitDialog() override;
 	void ApplyValues();
 	afx_msg void OnBnClickedMfccolorbutton();
 

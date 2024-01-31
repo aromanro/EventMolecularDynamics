@@ -53,7 +53,7 @@ BOOL CMolecularDynamicsDoc::OnNewDocument()
 		return FALSE;
 	CString title;
 
-	title.Format(L"%d Hard Smooth Spheres", theApp.options.nrSpheres);
+	title.Format(L"%d Hard Smooth Spheres", theApp.GetOptions().nrSpheres);
 	SetTitle(title);
 
 	bool reused = false;
@@ -74,7 +74,7 @@ BOOL CMolecularDynamicsDoc::OnNewDocument()
 	resultsQueue.swap(emptyQueue);
 
 	// copy the options, they can change during running and we need the ones set at initialization of the 'document'
-	options = theApp.options;
+	options = theApp.GetOptions();
 
 	//theThread = new MolecularDynamics::MolecularDynamicsThread();
 	theThread = new MolecularDynamics::StatisticsThread();

@@ -16,9 +16,22 @@ namespace MolecularDynamics {
 	{
 	public:
 		StatisticsThread();
-		virtual ~StatisticsThread();
+		~StatisticsThread() override;
 		
 		void Start() override;
+
+		void SetDocument(CMolecularDynamicsDoc* d)
+		{
+			doc = d;
+			molecularDynamicsThread.SetDocument(doc);
+			molecularDynamicsThread.SetStatisticsThread(this);
+		}
+
+		int Init();
+
+		// the following two are to be called after init but before having the thread running
+		double GetNextEventTime();
+		std::vector<Particle> GetParticles() const;
 
 		std::atomic_bool Terminate;
 
@@ -30,26 +43,13 @@ namespace MolecularDynamics {
 		std::vector<double> results1;
 		std::vector<double> results2;
 
-	protected:
+	private:
 		CMolecularDynamicsDoc* doc;
 
 		MolecularDynamics::MolecularDynamicsThread molecularDynamicsThread;
 
-		virtual void Calculate();
+		void Calculate() override;
 		bool PostDataToOtherThread();
-	public:
-		void SetDocument(CMolecularDynamicsDoc* d) 
-		{ 
-			doc = d; 
-			molecularDynamicsThread.SetDocument(doc);
-			molecularDynamicsThread.SetStatisticsThread(this);
-		}
-
-		int Init();
-
-		// the following two are to be called after init but before having the thread running
-		double GetNextEventTime();
-		std::vector<Particle> GetParticles() const;
 	};
 
 }

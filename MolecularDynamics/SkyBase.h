@@ -14,12 +14,16 @@ namespace OpenGL {
     {
     public:
         SkyBase();
-        virtual ~SkyBase();
+        ~SkyBase() override;
 
         virtual void Draw(const glm::mat4& mat) = 0;
 
         virtual bool SetShaders() = 0;
-    protected:
+
+        GLint GetTransformMatLoc() const { return transformMatLoc; }
+        void SetTransformMatLoc(GLint val) { transformMatLoc = val; }
+
+    private:
         GLint transformMatLoc;
     };
 

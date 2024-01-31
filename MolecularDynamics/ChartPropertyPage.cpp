@@ -20,16 +20,13 @@ IMPLEMENT_DYNAMIC(ChartPropertyPage, CMFCPropertyPage)
 ChartPropertyPage::ChartPropertyPage()
 	: CMFCPropertyPage(IDD_CHARTPROPERTYPAGE)
 {
-	m_ShowChart = (theApp.options.showBillboard ? BST_CHECKED : BST_UNCHECKED);
-	m_UseSplines = (theApp.options.useSpline ? BST_CHECKED : BST_UNCHECKED);
-	m_NrBins = theApp.options.nrBins;
-	m_MaxSpeed = theApp.options.maxSpeed;
-	m_LineThickness = theApp.options.lineThickness;
+	m_ShowChart = (theApp.GetOptions().showBillboard ? BST_CHECKED : BST_UNCHECKED);
+	m_UseSplines = (theApp.GetOptions().useSpline ? BST_CHECKED : BST_UNCHECKED);
+	m_NrBins = theApp.GetOptions().nrBins;
+	m_MaxSpeed = theApp.GetOptions().maxSpeed;
+	m_LineThickness = theApp.GetOptions().lineThickness;
 }
 
-ChartPropertyPage::~ChartPropertyPage()
-{
-}
 
 void ChartPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
@@ -82,10 +79,10 @@ BOOL ChartPropertyPage::OnInitDialog()
 
 	m_Slider1.SetRange(0, 100);
 
-	m_Slider1.SetPos(static_cast<int>(theApp.options.alpha));
+	m_Slider1.SetPos(static_cast<int>(theApp.GetOptions().alpha));
 
 	CString str;
-	str.Format(L"%d%%", theApp.options.alpha);
+	str.Format(L"%d%%", theApp.GetOptions().alpha);
 	m_Static1.SetWindowText(str);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -95,26 +92,26 @@ BOOL ChartPropertyPage::OnInitDialog()
 
 void ChartPropertyPage::ApplyValues()
 {
-	theApp.options.showBillboard = m_ShowChart == BST_CHECKED;
-	theApp.options.useSpline = m_UseSplines == BST_CHECKED;
-	theApp.options.nrBins = m_NrBins;
-	theApp.options.maxSpeed = m_MaxSpeed;
-	theApp.options.lineThickness = m_LineThickness;
-	theApp.options.alpha = static_cast<unsigned int>(m_Slider1.GetPos());
+	theApp.GetOptions().showBillboard = m_ShowChart == BST_CHECKED;
+	theApp.GetOptions().useSpline = m_UseSplines == BST_CHECKED;
+	theApp.GetOptions().nrBins = m_NrBins;
+	theApp.GetOptions().maxSpeed = m_MaxSpeed;
+	theApp.GetOptions().lineThickness = m_LineThickness;
+	theApp.GetOptions().alpha = static_cast<unsigned int>(m_Slider1.GetPos());
 
-	theApp.options.Save();
+	theApp.GetOptions().Save();
 
 	CMolecularDynamicsDoc* doc = dynamic_cast<CMolecularDynamicsDoc*>(dynamic_cast<CMainFrame*>(theApp.m_pMainWnd)->GetActiveDocument());
 	if (!doc) return;
 
-	doc->options.showBillboard = theApp.options.showBillboard;
-	doc->options.useSpline = theApp.options.useSpline;
-	doc->options.lineThickness = theApp.options.lineThickness;
-	doc->options.alpha = theApp.options.alpha;
+	doc->options.showBillboard = theApp.GetOptions().showBillboard;
+	doc->options.useSpline = theApp.GetOptions().useSpline;
+	doc->options.lineThickness = theApp.GetOptions().lineThickness;
+	doc->options.alpha = theApp.GetOptions().alpha;
 
 	std::unique_lock<std::mutex> dlock(doc->dataSection);
-	doc->options.nrBins = theApp.options.nrBins;
-	doc->options.maxSpeed = theApp.options.maxSpeed;
+	doc->options.nrBins = theApp.GetOptions().nrBins;
+	doc->options.maxSpeed = theApp.GetOptions().maxSpeed;
 	dlock.unlock();
 
 	doc->RetrieveStatistics();

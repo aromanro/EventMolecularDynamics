@@ -5,15 +5,15 @@
 #include "MolecularDynamics.h"
 #endif
 
-#include <GL\glew.h>
-#include <gl\gl.h>      // OpenGL Libraries
-#include <gl\glu.h>     // GLU OpenGL Libraries
+#include <gl/glew.h>
+#include <gl/GL.h>      // OpenGL Libraries
+#include <gl/GLU.h>     // GLU OpenGL Libraries
 
 #include <glm.hpp>
 
 
-#include <gtc\matrix_transform.hpp>
-#include <gtc\type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 #include <GLFW/glfw3.h> // glfw
 
@@ -92,7 +92,7 @@ void CMolecularDynamicsView::Setup()
 	chart.YAxisMax = chart.XAxisMin = 0;
 
 
-	if (theApp.options.showBillboard)
+	if (theApp.GetOptions().showBillboard)
 	{
 		PaintBillboarChart();
 		DrawIntoBillboardTexture();
@@ -135,7 +135,7 @@ void CMolecularDynamicsView::SetupGl()
 		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		if (theApp.options.gammaCorrection) glEnable(GL_FRAMEBUFFER_SRGB);
+		if (theApp.GetOptions().gammaCorrection) glEnable(GL_FRAMEBUFFER_SRGB);
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -153,7 +153,7 @@ void CMolecularDynamicsView::SetupGl()
 	else {
 		wglMakeCurrent(m_hDC, m_hRC);
 
-		if (theApp.options.gammaCorrection) glEnable(GL_FRAMEBUFFER_SRGB);
+		if (theApp.GetOptions().gammaCorrection) glEnable(GL_FRAMEBUFFER_SRGB);
 		else glDisable(GL_FRAMEBUFFER_SRGB);
 	}
 }
@@ -178,9 +178,9 @@ void CMolecularDynamicsView::SetupSpheres()
 		{
 			scale[index] = static_cast<GLfloat>(particle.radius);
 
-			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) * scaleColor);
-			colors[3ULL * index + 1ULL] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) * scaleColor);
-			colors[3ULL * index + 2ULL] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) * scaleColor);
+			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.GetOptions().bigSphereColor) : GetRValue(theApp.GetOptions().smallSphereColor)) * scaleColor);
+			colors[3ULL * index + 1ULL] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.GetOptions().bigSphereColor) : GetGValue(theApp.GetOptions().smallSphereColor)) * scaleColor);
+			colors[3ULL * index + 2ULL] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.GetOptions().bigSphereColor) : GetBValue(theApp.GetOptions().smallSphereColor)) * scaleColor);
 
 			++index;
 		}
@@ -244,9 +244,9 @@ void CMolecularDynamicsView::SetColors()
 
 		for (const auto& particle : doc->curResult.particles)
 		{
-			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.options.bigSphereColor) : GetRValue(theApp.options.smallSphereColor)) * scaleColor);
-			colors[3ULL * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.options.bigSphereColor) : GetGValue(theApp.options.smallSphereColor)) * scaleColor);
-			colors[3ULL * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.options.bigSphereColor) : GetBValue(theApp.options.smallSphereColor)) * scaleColor);
+			colors[3ULL * index] = static_cast<float>((particle.radius > avgRadius ? GetRValue(theApp.GetOptions().bigSphereColor) : GetRValue(theApp.GetOptions().smallSphereColor)) * scaleColor);
+			colors[3ULL * index + 1] = static_cast<float>((particle.radius > avgRadius ? GetGValue(theApp.GetOptions().bigSphereColor) : GetGValue(theApp.GetOptions().smallSphereColor)) * scaleColor);
+			colors[3ULL * index + 2] = static_cast<float>((particle.radius > avgRadius ? GetBValue(theApp.GetOptions().bigSphereColor) : GetBValue(theApp.GetOptions().smallSphereColor)) * scaleColor);
 
 			++index;
 		}

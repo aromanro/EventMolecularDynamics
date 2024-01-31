@@ -69,7 +69,7 @@ namespace MolecularDynamics {
 
 	int MolecularDynamicsThread::Init()
 	{
-		simulation.GenerateRandom(theApp.options.nrSpheres, theApp.options.interiorRadius);
+		simulation.GenerateRandom(theApp.GetOptions().nrSpheres, theApp.GetOptions().interiorRadius);
 		simulation.BuildEventQueue();
 
 		return simulation.count();

@@ -24,26 +24,31 @@ class CMolecularDynamicsApp : public CWinAppEx
 public:
 	CMolecularDynamicsApp();
 
-private:
-	ULONG_PTR gdiplusToken;
-
 // Overrides
-public:
-	virtual BOOL InitInstance();
+	BOOL InitInstance() override;
 
 // Implementation
+	void PreLoadState() override;
+	void LoadCustomState() override;
+	void SaveCustomState() override;
+
+	afx_msg void OnAppAbout();
+	int ExitInstance() override;
+
+	Options& GetOptions() { return options; }
+	UINT& GetAppLook() { return m_nAppLook; }
+
+	BOOL UseHiColorIcons() { return m_bHiColorIcons; }
+
+	DECLARE_MESSAGE_MAP()
+
+private:
 	UINT  m_nAppLook;
 	BOOL  m_bHiColorIcons;
 
 	Options options;
 
-	virtual void PreLoadState();
-	virtual void LoadCustomState();
-	virtual void SaveCustomState();
-
-	afx_msg void OnAppAbout();
-	virtual int ExitInstance();
-	DECLARE_MESSAGE_MAP()
+	ULONG_PTR gdiplusToken;
 };
 
 extern CMolecularDynamicsApp theApp;

@@ -9,7 +9,7 @@
 // to use direct transfer (that is, not copying data into 'texdata'
 // the stride must be of proper length, so not all resolutions will work
 
-#define USE_DIRECT_TRANSFER 1
+const int USE_DIRECT_TRANSFER = 1;
 
 class MemoryBitmap
 {
@@ -22,17 +22,7 @@ public:
 	MemoryBitmap& operator=(MemoryBitmap&& other) noexcept; // move assignment operator
 
 	~MemoryBitmap() noexcept;
-protected:
-	int m_width;
-	int m_height;
 
-	unsigned char* data;
-
-#if USE_DIRECT_TRANSFER == 0
-	std::vector<unsigned char> texdata;
-#endif
-
-public:
 	void SetSize(int width, int height);
 
 	inline void FillSquare(int Xpos, int Ypos, int size, COLORREF color)
@@ -88,5 +78,15 @@ public:
 	void SetIntoTexture(OpenGL::Texture& texture, int nr = 0);
 
 	void Save(const CString& name);
+
+private:
+	int m_width;
+	int m_height;
+
+	unsigned char* data;
+
+#if USE_DIRECT_TRANSFER == 0
+	std::vector<unsigned char> texdata;
+#endif
 };
 

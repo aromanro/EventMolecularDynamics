@@ -1,10 +1,10 @@
 #include "stdafx.h"
 
-#include <gl\gl.h>      // OpenGL Libraries
-#include <gl\glu.h>     // GLU OpenGL Libraries
+#include <gl/GL.h>      // OpenGL Libraries
+#include <gl/GLU.h>     // GLU OpenGL Libraries
 
 
-#include <gtc\type_ptr.hpp>
+#include <gtc/type_ptr.hpp>
 
 #include "Options.h"
 #include "MolecularDynamics.h"
@@ -21,7 +21,7 @@ namespace OpenGL {
 	Camera::Camera()
 		: rotateAngle(0), translateDist(0), eyePos(60., 220., 160.), up(0, 0, 1), lookAt(0,0,0)		
 	{
-		SetSpeeds(theApp.options.translationSpeed, theApp.options.rotationSpeed);
+		SetSpeeds(theApp.GetOptions().translationSpeed, theApp.GetOptions().rotationSpeed);
 	}
 
 	Camera::~Camera()
@@ -215,10 +215,10 @@ namespace OpenGL {
 			MoveDown(translateDist);
 			break;
 		case Movements::moveForward:
-			MoveForward(translateDist * (fromMouse ? theApp.options.scrollSpeed / 100. : 1.));
+			MoveForward(translateDist * (fromMouse ? theApp.GetOptions().scrollSpeed / 100. : 1.));
 			break;
 		case Movements::moveBackward:
-			MoveBackward(translateDist * (fromMouse ? theApp.options.scrollSpeed / 100. : 1.));
+			MoveBackward(translateDist * (fromMouse ? theApp.GetOptions().scrollSpeed / 100. : 1.));
 			break;
 		default:
 			break;

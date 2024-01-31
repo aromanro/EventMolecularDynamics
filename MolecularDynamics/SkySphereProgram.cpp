@@ -3,7 +3,7 @@
 
 #include "Constants.h"
 
-#include <gtc\type_ptr.hpp>
+#include <gtc/type_ptr.hpp>
 
 
 #ifdef _DEBUG
@@ -198,7 +198,7 @@ namespace OpenGL {
 		Use();
 
 		glUniform1i(textureLoc, 0);
-		glUniformMatrix4fv(transformMatLoc, 1, GL_FALSE, value_ptr(mat));
+		glUniformMatrix4fv(GetTransformMatLoc(), 1, GL_FALSE, value_ptr(mat));
 
 		skySphere->Bind();
 		sphereTexture->Bind();
@@ -269,7 +269,7 @@ namespace OpenGL {
 
 		SkyBase::Bind();
 
-		transformMatLoc = glGetUniformLocation(*this, "transformMat");
+		SetTransformMatLoc(glGetUniformLocation(getID(), "transformMat"));
 		textureLoc = glGetUniformLocation(getID(), "Texture");
 
 		return true;

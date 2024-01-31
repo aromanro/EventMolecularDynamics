@@ -9,18 +9,16 @@ class MolecularDynamicsGLProgram :
 {
 public:
 	MolecularDynamicsGLProgram();
-	virtual ~MolecularDynamicsGLProgram();
+	~MolecularDynamicsGLProgram() override;
 
 	bool SetupShaders();
 
 
 	struct Light {
-		GLint lightDirPos;
-		GLint attenPos;
-		glm::vec3 lightPos;
-		float atten;
-
-		Light() : lightDirPos(0), attenPos(0), lightPos(0, 0, 0), atten(0) {}
+		GLint lightDirPos = 0;
+		GLint attenPos = 0;
+		glm::vec3 lightPos{0,0,0};
+		float atten = 0.;
 	};
 
 	std::vector<Light> lights;

@@ -56,12 +56,9 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 {
 	// TODO: add member initialization code here
-	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_VS_2008);
+	theApp.GetAppLook() = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_VS_2008);
 }
 
-CMainFrame::~CMainFrame()
-{
-}
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -80,7 +77,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CMFCPopupMenu::SetForceMenuFocus(FALSE);
 
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
-		!m_wndToolBar.LoadToolBar(theApp.m_bHiColorIcons ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
+		!m_wndToolBar.LoadToolBar(theApp.UseHiColorIcons() ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
 	{
 		TRACE0("Failed to create toolbar\n");
 		return -1;      // fail to create
@@ -120,7 +117,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableAutoHidePanes(CBRS_ALIGN_ANY);
 
 	// set the visual manager and style based on persisted value
-	OnApplicationLook(theApp.m_nAppLook);
+	OnApplicationLook(theApp.GetAppLook());
 
 	// Enable toolbar and docking window menu replacement
 	EnablePaneMenu(TRUE, ID_VIEW_CUSTOMIZE, strCustomize, ID_VIEW_TOOLBAR);
@@ -223,9 +220,9 @@ void CMainFrame::OnApplicationLook(UINT id)
 {
 	CWaitCursor wait;
 
-	theApp.m_nAppLook = id;
+	theApp.GetAppLook() = id;
 
-	switch (theApp.m_nAppLook)
+	switch (id)
 	{
 	case ID_VIEW_APPLOOK_WIN_2000:
 		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManager));
@@ -261,7 +258,7 @@ void CMainFrame::OnApplicationLook(UINT id)
 		break;
 
 	default:
-		switch (theApp.m_nAppLook)
+		switch (id)
 		{
 		case ID_VIEW_APPLOOK_OFF_2007_BLUE:
 			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_LunaBlue);
@@ -278,6 +275,9 @@ void CMainFrame::OnApplicationLook(UINT id)
 		case ID_VIEW_APPLOOK_OFF_2007_AQUA:
 			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_Aqua);
 			break;
+		default:
+			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_Aqua);
+			break;
 		}
 
 		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2007));
@@ -286,12 +286,12 @@ void CMainFrame::OnApplicationLook(UINT id)
 
 	RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_FRAME | RDW_ERASE);
 
-	theApp.WriteInt(_T("ApplicationLook"), theApp.m_nAppLook);
+	theApp.WriteInt(_T("ApplicationLook"), id);
 }
 
 void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 {
-	pCmdUI->SetRadio(theApp.m_nAppLook == pCmdUI->m_nID);
+	pCmdUI->SetRadio(theApp.GetAppLook() == pCmdUI->m_nID);
 }
 
 

@@ -50,19 +50,18 @@ private:
 // Operations
 public:
 // Overrides
-	virtual BOOL OnNewDocument();
-	virtual void Serialize(CArchive& ar);
+	BOOL OnNewDocument() override;
+	void Serialize(CArchive& ar) override;
 #ifdef SHARED_HANDLERS
-	virtual void InitializeSearchContent();
-	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
+	void InitializeSearchContent() override;
+	void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds) override;
 #endif // SHARED_HANDLERS
 
 // Implementation
-public:
-	virtual ~CMolecularDynamicsDoc();
+	~CMolecularDynamicsDoc() override;
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+	void AssertValid() const override;
+	void Dump(CDumpContext& dc) const override;
 #endif
 
 	CMolecularDynamicsView* GetMainView();

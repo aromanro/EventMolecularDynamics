@@ -14,12 +14,12 @@ namespace OpenGL {
 
 	public:
 		Program();
-		virtual ~Program();
+		~Program() override;
 
 		void DetachShaders();
 
 		void Bind() override; // it's actually a link
-		GLuint getType() const;
+		GLuint getType() const override;
 
 		void Use();
 		void UnUse();

@@ -15,7 +15,6 @@ namespace MolecularDynamics {
 	{
 	public:
 		Simulation();
-		~Simulation();
 
 		std::vector<Particle> particles;
 
@@ -36,7 +35,7 @@ namespace MolecularDynamics {
 			return eventsQueue.front().eventTime;
 		}
 
-	protected:
+	private:
 		std::vector<Event> eventsQueue;
 
 		inline void RemoveFirstEventFromQueue()
@@ -48,15 +47,15 @@ namespace MolecularDynamics {
 		inline Event GetAndRemoveFirstEventFromQueue()
 		{
 			std::pop_heap(eventsQueue.begin(), eventsQueue.end());
-			Event nextEvent = std::move(eventsQueue.back());
+			Event nextEvent = eventsQueue.back();
 			eventsQueue.pop_back();
 
 			return nextEvent;
 		}
 
-		inline void AddEventToQueue(Event& event)
+		inline void AddEventToQueue(const Event& event)
 		{
-			eventsQueue.emplace_back(std::move(event));
+			eventsQueue.emplace_back(event);
 			std::push_heap(eventsQueue.begin(), eventsQueue.end());
 		}
 
@@ -215,10 +214,8 @@ namespace MolecularDynamics {
 		void InitParticle(Particle& particle, double sphereRadius, const Vector3D<double>& centerSpace);
 
 
-		std::mt19937 rndEngineX, rndEngineY, rndEngineZ;
+		std::mt19937 rndEngine;
 		std::random_device rdev;
-
-		std::mt19937 rndEngineVX, rndEngineVY, rndEngineVZ;
 	};
 
 }

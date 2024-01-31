@@ -60,10 +60,10 @@ BOOL DisplayPropertyPage::OnInitDialog()
 	CMFCPropertyPage::OnInitDialog();
 
 	m_ColorControl1.EnableOtherButton(_T("More Colors..."));
-	m_ColorControl1.SetColor(theApp.options.bigSphereColor);
+	m_ColorControl1.SetColor(theApp.GetOptions().bigSphereColor);
 
 	m_ColorControl2.EnableOtherButton(_T("More Colors..."));
-	m_ColorControl2.SetColor(theApp.options.smallSphereColor);
+	m_ColorControl2.SetColor(theApp.GetOptions().smallSphereColor);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
@@ -72,10 +72,10 @@ BOOL DisplayPropertyPage::OnInitDialog()
 
 void DisplayPropertyPage::ApplyValues()
 {
-	theApp.options.bigSphereColor = m_ColorControl1.GetColor();
-	theApp.options.smallSphereColor = m_ColorControl2.GetColor();
+	theApp.GetOptions().bigSphereColor = m_ColorControl1.GetColor();
+	theApp.GetOptions().smallSphereColor = m_ColorControl2.GetColor();
 
-	theApp.options.Save();
+	theApp.GetOptions().Save();
 
 	CMolecularDynamicsDoc* doc = dynamic_cast<CMolecularDynamicsDoc*>(dynamic_cast<CMainFrame*>(theApp.m_pMainWnd)->GetActiveDocument());
 	if (!doc) return;
@@ -83,8 +83,8 @@ void DisplayPropertyPage::ApplyValues()
 	CMolecularDynamicsView *view = doc->GetMainView();
 	if (!view) return;
 
-	doc->options.bigSphereColor = theApp.options.bigSphereColor;
-	doc->options.smallSphereColor = theApp.options.smallSphereColor;
+	doc->options.bigSphereColor = theApp.GetOptions().bigSphereColor;
+	doc->options.smallSphereColor = theApp.GetOptions().smallSphereColor;
 
 	view->SetColors();
 }

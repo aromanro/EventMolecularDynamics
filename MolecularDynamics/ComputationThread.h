@@ -10,11 +10,21 @@ public:
 	ComputationThread();
 
 	virtual void Start();
+
+	void join();
+
+	void WakeUp();
+	void WaitForData();
+	void WaitForWork();
+	void SignalMoreData();
+
 protected:
-	std::thread mThread;
 	virtual ~ComputationThread();
 
+private:
 	virtual void Calculate() = 0;
+
+	std::thread mThread;
 
 	std::mutex mw;
 	std::mutex mp;
@@ -23,13 +33,5 @@ protected:
 
 	bool wakeup;
 	bool processed;
-
-public:
-	void join();
-
-	void WakeUp();
-	void WaitForData();
-	void WaitForWork();
-	void SignalMoreData();
 };
 

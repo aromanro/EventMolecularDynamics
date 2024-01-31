@@ -18,16 +18,16 @@ IMPLEMENT_DYNAMIC(SimulationPropertyPage, CMFCPropertyPage)
 SimulationPropertyPage::SimulationPropertyPage()
 	: CMFCPropertyPage(IDD_SIMULATIONPROPERTYPAGE)
 {
-	nrSpheres = theApp.options.nrSpheres;
-	interiorRadius = theApp.options.interiorRadius;
-	initialSpeed = theApp.options.initialSpeed;
+	nrSpheres = theApp.GetOptions().nrSpheres;
+	interiorRadius = theApp.GetOptions().interiorRadius;
+	initialSpeed = theApp.GetOptions().initialSpeed;
 	
-	interiorSpheresRadius = theApp.options.interiorSpheresRadius;
-	interiorSpheresMass = theApp.options.interiorSpheresMass;
-	exteriorSpheresRadius = theApp.options.exteriorSpheresRadius;
-	exteriorSpheresMass = theApp.options.exteriorSpheresMass;
+	interiorSpheresRadius = theApp.GetOptions().interiorSpheresRadius;
+	interiorSpheresMass = theApp.GetOptions().interiorSpheresMass;
+	exteriorSpheresRadius = theApp.GetOptions().exteriorSpheresRadius;
+	exteriorSpheresMass = theApp.GetOptions().exteriorSpheresMass;
 
-	rightSide = (theApp.options.rightSideInsteadOfSphere ? BST_CHECKED : BST_UNCHECKED);
+	rightSide = (theApp.GetOptions().rightSideInsteadOfSphere ? BST_CHECKED : BST_UNCHECKED);
 }
 
 SimulationPropertyPage::~SimulationPropertyPage()
@@ -112,18 +112,18 @@ BOOL SimulationPropertyPage::OnInitDialog()
 
 void SimulationPropertyPage::ApplyValues()
 {
-	theApp.options.nrSpheres = nrSpheres;
-	theApp.options.interiorRadius = interiorRadius;
-	theApp.options.initialSpeed = initialSpeed;
+	theApp.GetOptions().nrSpheres = nrSpheres;
+	theApp.GetOptions().interiorRadius = interiorRadius;
+	theApp.GetOptions().initialSpeed = initialSpeed;
 
-	theApp.options.interiorSpheresRadius = interiorSpheresRadius;
-	theApp.options.interiorSpheresMass = interiorSpheresMass;
-	theApp.options.exteriorSpheresRadius = exteriorSpheresRadius;
-	theApp.options.exteriorSpheresMass = exteriorSpheresMass;
+	theApp.GetOptions().interiorSpheresRadius = interiorSpheresRadius;
+	theApp.GetOptions().interiorSpheresMass = interiorSpheresMass;
+	theApp.GetOptions().exteriorSpheresRadius = exteriorSpheresRadius;
+	theApp.GetOptions().exteriorSpheresMass = exteriorSpheresMass;
 
-	theApp.options.rightSideInsteadOfSphere = rightSide == BST_CHECKED;
+	theApp.GetOptions().rightSideInsteadOfSphere = rightSide == BST_CHECKED;
 
-	theApp.options.Save();
+	theApp.GetOptions().Save();
 }
 
 

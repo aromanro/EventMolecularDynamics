@@ -11,19 +11,18 @@ class SimulationPropertyPage : public CMFCPropertyPage
 
 public:
 	SimulationPropertyPage();
-	virtual ~SimulationPropertyPage();
+	~SimulationPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_SIMULATIONPROPERTYPAGE };
 #endif
 
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+private:
+	void DoDataExchange(CDataExchange* pDX) override;    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
 
-protected:
 	CNumberEdit interiorRadiusControl;
 	CNumberEdit initialSpeedControl;
 	CNumberEdit interiorSpheresMassControl;
@@ -41,11 +40,10 @@ protected:
 
 	int rightSide;
 
-	virtual BOOL OnApply();
-	virtual BOOL OnInitDialog();
+	BOOL OnApply() override;
+	BOOL OnInitDialog() override;
 	void ApplyValues();
 
 	afx_msg void OnEnChangeEdit();
-public:
 	afx_msg void OnBnClickedCheck3();
 };

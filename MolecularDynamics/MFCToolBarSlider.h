@@ -13,21 +13,21 @@ public:
 
 	CMFCToolBarSlider();
 	CMFCToolBarSlider(UINT uiId, int iImage = -1, DWORD dwStyle = 0, int iWidth = 0);
-	virtual ~CMFCToolBarSlider();
+	~CMFCToolBarSlider() override;
 
-	virtual void OnDraw(CDC* /*pDC*/, const CRect& /*rect*/, CMFCToolBarImages* /*pImages*/, BOOL /*bHorz*/ = TRUE, BOOL /*bCustomizeMode*/ = FALSE, BOOL /*bHighlight*/ = FALSE, BOOL /*bDrawBorder*/ = TRUE, BOOL /*bGrayDisabledButtons*/ = TRUE);
+	void OnDraw(CDC* /*pDC*/, const CRect& /*rect*/, CMFCToolBarImages* /*pImages*/, BOOL /*bHorz*/ = TRUE, BOOL /*bCustomizeMode*/ = FALSE, BOOL /*bHighlight*/ = FALSE, BOOL /*bDrawBorder*/ = TRUE, BOOL /*bGrayDisabledButtons*/ = TRUE) override;
 
-	virtual HWND GetHwnd();
-	virtual BOOL CanBeStretched() const;
-	virtual BOOL HaveHotBorder() const;
-	virtual void OnShow(BOOL bShow);
-	virtual void OnMove();
-	virtual void OnSize(int iSize);
-	virtual SIZE OnCalculateSize(CDC* pDC, const CSize& sizeDefault, BOOL bHorz);
-	virtual void OnChangeParentWnd(CWnd* pWndParent);
+	HWND GetHwnd() override;
+	BOOL CanBeStretched() const override;
+	BOOL HaveHotBorder() const override;
+	void OnShow(BOOL bShow) override;
+	void OnMove() override;
+	void OnSize(int iSize) override;
+	SIZE OnCalculateSize(CDC* pDC, const CSize& sizeDefault, BOOL bHorz) override;
+	void OnChangeParentWnd(CWnd* pWndParent) override;
 
-	virtual void Serialize(CArchive& ar);
-	virtual void CopyFrom(const CMFCToolBarButton& src);
+	void Serialize(CArchive& ar) override;
+	void CopyFrom(const CMFCToolBarButton& src) override;
 
 
 	static int GetPos(UINT uiCmd);

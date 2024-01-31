@@ -15,25 +15,14 @@ namespace MolecularDynamics {
 	}
 
 
-	Simulation::~Simulation()
-	{
-	}
-
-
 	void Simulation::GenerateRandom(int numParticles, double sphereRadius)
 	{
-		rndEngineX.seed(rdev());
-		rndEngineY.seed(rdev());
-		rndEngineZ.seed(rdev());
-
-		rndEngineVX.seed(rdev());
-		rndEngineVY.seed(rdev());
-		rndEngineVZ.seed(rdev());
+		rndEngine.seed(rdev());
 
 		particles.reserve(numParticles);
 
 
-		const double minSphereRadius = theApp.options.rightSideInsteadOfSphere ? std::max<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius) : std::min<double>(theApp.options.interiorSpheresRadius, theApp.options.exteriorSpheresRadius);
+		const double minSphereRadius = theApp.GetOptions().rightSideInsteadOfSphere ? std::max<double>(theApp.GetOptions().interiorSpheresRadius, theApp.GetOptions().exteriorSpheresRadius) : std::min<double>(theApp.GetOptions().interiorSpheresRadius, theApp.GetOptions().exteriorSpheresRadius);
 
 
 		// now it's a cube, but it does not have to be cubic
@@ -51,9 +40,9 @@ namespace MolecularDynamics {
 		{
 			Particle particle;
 
-			particle.position.X = rndXYZ(rndEngineX);
-			particle.position.Y = rndXYZ(rndEngineY);
-			particle.position.Z = rndXYZ(rndEngineZ);
+			particle.position.X = rndXYZ(rndEngine);
+			particle.position.Y = rndXYZ(rndEngine);
+			particle.position.Z = rndXYZ(rndEngine);
 
 			InitParticle(particle, sphereRadius, centerSpace); // only mass and radius
 
@@ -74,14 +63,14 @@ namespace MolecularDynamics {
 
 			// now the velocity
 
-			particle.velocity.X = rndV(rndEngineVX);
-			particle.velocity.Y = rndV(rndEngineVY);
-			particle.velocity.Z = rndV(rndEngineVZ);
+			particle.velocity.X = rndV(rndEngine);
+			particle.velocity.Y = rndV(rndEngine);
+			particle.velocity.Z = rndV(rndEngine);
 
 			particle.velocity = particle.velocity.Normalize();
 
 			// now the magnitude, can be a constant or distributed as a gaussian, for now just a single value
-			particle.velocity *= theApp.options.initialSpeed;
+			particle.velocity *= theApp.GetOptions().initialSpeed;
 
 			particles.emplace_back(particle);
 		}
@@ -89,17 +78,17 @@ namespace MolecularDynamics {
 
 	void Simulation::InitParticle(Particle& particle, double sphereRadius, const Vector3D<double>& centerSpace)
 	{
-		if (theApp.options.rightSideInsteadOfSphere)
+		if (theApp.GetOptions().rightSideInsteadOfSphere)
 		{
 			if (particle.position.X < sphereRadius)
 			{
-				particle.mass = theApp.options.interiorSpheresMass;
-				particle.radius = theApp.options.interiorSpheresRadius;
+				particle.mass = theApp.GetOptions().interiorSpheresMass;
+				particle.radius = theApp.GetOptions().interiorSpheresRadius;
 			}
 			else
 			{
-				particle.mass = theApp.options.exteriorSpheresMass;
-				particle.radius = theApp.options.exteriorSpheresRadius;
+				particle.mass = theApp.GetOptions().exteriorSpheresMass;
+				particle.radius = theApp.GetOptions().exteriorSpheresRadius;
 			}
 		}
 		else
@@ -108,13 +97,13 @@ namespace MolecularDynamics {
 
 			if ((particle.position - centerSpace).Length() < sphereRadius)
 			{
-				particle.mass = theApp.options.interiorSpheresMass;
-				particle.radius = theApp.options.interiorSpheresRadius;
+				particle.mass = theApp.GetOptions().interiorSpheresMass;
+				particle.radius = theApp.GetOptions().interiorSpheresRadius;
 			}
 			else
 			{
-				particle.mass = theApp.options.exteriorSpheresMass;
-				particle.radius = theApp.options.exteriorSpheresRadius;
+				particle.mass = theApp.GetOptions().exteriorSpheresMass;
+				particle.radius = theApp.GetOptions().exteriorSpheresRadius;
 			}
 		}
 	}

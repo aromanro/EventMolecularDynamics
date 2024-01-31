@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include <GL\glew.h>
-#include <gl\gl.h>      // OpenGL Libraries
-#include <gl\glu.h>     // GLU OpenGL Libraries
+#include <gl/glew.h>
+#include <gl/GL.h>      // OpenGL Libraries
+#include <gl/GLU.h>     // GLU OpenGL Libraries
 
 #include "VertexBufferRenderable.h"
 
@@ -13,7 +13,7 @@ namespace OpenGL {
 	{
 	public:
 		Rectangle(float aspectRatio = 1.0f);
-		virtual ~Rectangle();
+		~Rectangle() override;
 
 		void Draw() override;
 	};

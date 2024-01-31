@@ -5,15 +5,15 @@
 #include "MolecularDynamics.h"
 #endif
 
-#include <GL\glew.h>
-#include <gl\gl.h>      // OpenGL Libraries
-#include <gl\glu.h>     // GLU OpenGL Libraries
+#include <gl/glew.h>
+#include <gl/GL.h>      // OpenGL Libraries
+#include <gl/GLU.h>     // GLU OpenGL Libraries
 
 #include <glm.hpp>
 
 
-#include <gtc\matrix_transform.hpp>
-#include <gtc\type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 
 #include "Camera.h"
@@ -81,7 +81,7 @@ void CMolecularDynamicsView::RenderScene()
 
 	program->UnUse();
 
-	if (theApp.options.showBillboard)
+	if (theApp.GetOptions().showBillboard)
 		DisplayBilboard(mat);
 }
 

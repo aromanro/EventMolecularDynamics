@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include <GL\glew.h>
-#include <gl\gl.h>      // OpenGL Libraries
-#include <gl\glu.h>     // GLU OpenGL Libraries
+#include <gl/glew.h>
+#include <gl/GL.h>      // OpenGL Libraries
+#include <gl/GLU.h>     // GLU OpenGL Libraries
 
 #include <glm.hpp>
 
@@ -85,24 +85,36 @@ private:
 // Operations
 public:
 // Overrides
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	void OnDraw(CDC* pDC) override;  // overridden to draw this view
+	BOOL PreCreateWindow(CREATESTRUCT& cs) override;
 
 // Implementation
-	virtual ~CMolecularDynamicsView();
+	~CMolecularDynamicsView() override;
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+	void AssertValid() const override;
+	 void Dump(CDumpContext& dc) const override;
 #endif
 
-protected:
-// Generated message map functions
-	afx_msg void OnFilePrintPreview();
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	DECLARE_MESSAGE_MAP()
+	 void ClearProgram();
+	 void ClearBillboardProgram();
+	 void Setup();
+	 bool SetupShaders();
+	 bool SetupBillboardShaders();
+	 void RenderScene();
+	 void Reset();
+	 bool KeyPressHandler(MSG* pMsg);
+	 void SetColors();
+	 void SetSpeeds(double translate, double rotate);
 
-public:
+	 void EnableAntialias();
+	 void DisableAntialias();
+	 void DisplayBilboard(glm::mat4& mat);
+	 //void SetBillboardText(const char* text);
+	 bool SetDataIntoChart();
+	 void PaintBillboarChart();
+	 void DrawIntoBillboardTexture();
+
+	// Generated message map functions
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnDestroy();
@@ -110,28 +122,10 @@ public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg BOOL OnQueryNewPalette();
 	afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	BOOL PreTranslateMessage(MSG* pMsg) override;
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	void ClearProgram();
-	void ClearBillboardProgram();
-	void Setup();
-	bool SetupShaders();
-	bool SetupBillboardShaders();
-	void RenderScene();
-	void Reset();
-	bool KeyPressHandler(MSG* pMsg);
-	void SetColors();
-	void SetSpeeds(double translate, double rotate);
-
-	void EnableAntialias();
-	void DisableAntialias();
-	void DisplayBilboard(glm::mat4& mat);
-	//void SetBillboardText(const char* text);
-	bool SetDataIntoChart();
-	void PaintBillboarChart();
-	void DrawIntoBillboardTexture();
-
+	
 protected:
 	bool HandleKeyPress(WPARAM wParam, bool ctrl, bool shift);
 	void SetupProgram();
@@ -143,6 +137,12 @@ protected:
 	void HandleDown(bool ctrl, bool shift);
 	void HandleLeft(bool ctrl, bool shift);
 	void HandleRight(bool ctrl, bool shift);
+
+	afx_msg void OnFilePrintPreview();
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+
+	DECLARE_MESSAGE_MAP()
 };
 
 #ifndef _DEBUG  // debug version in MolecularDynamicsView.cpp

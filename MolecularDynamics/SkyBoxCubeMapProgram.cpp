@@ -2,7 +2,7 @@
 #include "SkyBoxCubeMapProgram.h"
 
 
-#include <gtc\type_ptr.hpp>
+#include <gtc/type_ptr.hpp>
 
 
 #ifdef _DEBUG
@@ -53,7 +53,7 @@ namespace OpenGL {
 		glDisable(GL_DEPTH_TEST);
 		Use();
 
-		glUniformMatrix4fv(transformMatLoc, 1, GL_FALSE, value_ptr(mat));
+		glUniformMatrix4fv(GetTransformMatLoc(), 1, GL_FALSE, value_ptr(mat));
 
 		skyBox->Bind();
 		cubeMapTextures->Bind();
@@ -356,7 +356,7 @@ namespace OpenGL {
 
 		SkyBase::Bind();
 
-		transformMatLoc = glGetUniformLocation(*this, "transformMat");
+		SetTransformMatLoc(glGetUniformLocation(getID(), "transformMat"));
 
 		return true;
 	}

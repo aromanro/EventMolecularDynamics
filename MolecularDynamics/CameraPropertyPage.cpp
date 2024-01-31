@@ -57,18 +57,18 @@ BOOL CameraPropertyPage::OnInitDialog()
 	m_Slider2.SetRange(25, 400);
 	m_Slider3.SetRange(10, 400);
 
-	m_Slider1.SetPos(static_cast<int>(theApp.options.translationSpeed));
-	m_Slider2.SetPos(static_cast<int>(theApp.options.rotationSpeed));
-	m_Slider3.SetPos(static_cast<int>(theApp.options.scrollSpeed));
+	m_Slider1.SetPos(static_cast<int>(theApp.GetOptions().translationSpeed));
+	m_Slider2.SetPos(static_cast<int>(theApp.GetOptions().rotationSpeed));
+	m_Slider3.SetPos(static_cast<int>(theApp.GetOptions().scrollSpeed));
 
 	CString str;
-	str.Format(L"%d%%", theApp.options.translationSpeed);
+	str.Format(L"%d%%", theApp.GetOptions().translationSpeed);
 	m_Static1.SetWindowText(str);
 
-	str.Format(L"%d%%", theApp.options.rotationSpeed);
+	str.Format(L"%d%%", theApp.GetOptions().rotationSpeed);
 	m_Static2.SetWindowText(str);
 
-	str.Format(L"%d%%", theApp.options.scrollSpeed);
+	str.Format(L"%d%%", theApp.GetOptions().scrollSpeed);
 	m_Static3.SetWindowText(str);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -88,11 +88,11 @@ BOOL CameraPropertyPage::OnApply()
 
 void CameraPropertyPage::ApplyValues()
 {
-	theApp.options.translationSpeed = static_cast<unsigned int>(m_Slider1.GetPos());
-	theApp.options.rotationSpeed = static_cast<unsigned int>(m_Slider2.GetPos());
-	theApp.options.scrollSpeed = static_cast<unsigned int>(m_Slider3.GetPos());
+	theApp.GetOptions().translationSpeed = static_cast<unsigned int>(m_Slider1.GetPos());
+	theApp.GetOptions().rotationSpeed = static_cast<unsigned int>(m_Slider2.GetPos());
+	theApp.GetOptions().scrollSpeed = static_cast<unsigned int>(m_Slider3.GetPos());
 
-	theApp.options.Save();
+	theApp.GetOptions().Save();
 
 	CMainFrame *mainFrm = dynamic_cast<CMainFrame*>(theApp.m_pMainWnd);
 	if (!mainFrm) return;
@@ -103,7 +103,7 @@ void CameraPropertyPage::ApplyValues()
 	CMolecularDynamicsView *view = doc->GetMainView();
 	if (!view) return;
 
-	view->SetSpeeds(theApp.options.translationSpeed, theApp.options.rotationSpeed);
+	view->SetSpeeds(theApp.GetOptions().translationSpeed, theApp.GetOptions().rotationSpeed);
 }
 
 
