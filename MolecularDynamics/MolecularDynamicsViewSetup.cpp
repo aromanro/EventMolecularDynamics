@@ -66,7 +66,7 @@ void CMolecularDynamicsView::Setup()
 	if (!font.GetSafeHandle())
 	{
 		const int fontSize = static_cast<int>(height * 0.8);
-		const int fontHeight = -MulDiv(fontSize, CDC::FromHandle(::GetDC(NULL))->GetDeviceCaps(LOGPIXELSY), 72);
+		const int fontHeight = -MulDiv(fontSize, CDC::FromHandle(::GetDC(nullptr))->GetDeviceCaps(LOGPIXELSY), 72);
 		font.CreateFont(fontHeight, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_MODERN, _T("Courier New"));
 	}
 	*/
@@ -98,9 +98,9 @@ void CMolecularDynamicsView::Setup()
 		DrawIntoBillboardTexture();
 	}
 
-	wglMakeCurrent(NULL, NULL);
+	wglMakeCurrent(nullptr, nullptr);
 
-	if (!timer) timer = SetTimer(1, msFrame, NULL);
+	if (!timer) timer = SetTimer(1, msFrame, nullptr);
 
 	inited = true;
 }
@@ -189,7 +189,7 @@ void CMolecularDynamicsView::SetupSpheres()
 	posBuffer = new OpenGL::VertexBufferObject();
 	if (doc) {
 		glEnableVertexAttribArray(2);
-		posBuffer->setData(NULL, doc->nrParticles * 3 * sizeof(GLfloat), GL_STREAM_DRAW);
+		posBuffer->setData(nullptr, doc->nrParticles * 3 * sizeof(GLfloat), GL_STREAM_DRAW);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 	}
 
@@ -261,7 +261,7 @@ void CMolecularDynamicsView::SetColors()
 		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 		glVertexAttribDivisor(3, 1);
 
-		wglMakeCurrent(NULL, NULL);
+		wglMakeCurrent(nullptr, nullptr);
 	}
 }
 
@@ -296,10 +296,10 @@ void CMolecularDynamicsView::Reset()
 	scaleBuffer = nullptr;
 
 	delete billboardRectangle;
-	billboardRectangle = NULL;
+	billboardRectangle = nullptr;
 
 	delete billboardTexture;
-	billboardTexture = NULL;
+	billboardTexture = nullptr;
 
 	ClearProgram();
 	ClearBillboardProgram();

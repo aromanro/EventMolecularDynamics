@@ -19,13 +19,8 @@
 namespace OpenGL {
 
 	Camera::Camera()
-		: rotateAngle(0), translateDist(0), eyePos(60., 220., 160.), up(0, 0, 1), lookAt(0,0,0)		
 	{
 		SetSpeeds(theApp.GetOptions().translationSpeed, theApp.GetOptions().rotationSpeed);
-	}
-
-	Camera::~Camera()
-	{
 	}
 
 	void Camera::SetSpeeds(double translate, double angle)
@@ -184,11 +179,11 @@ namespace OpenGL {
 		case Movements::yawLeft:
 			YawLeft(rotateAngle);
 			break;
-		case Movements::rollLeft:
-			RollLeft(rotateAngle);
-			break;
 		case Movements::yawRight:
 			YawRight(rotateAngle);
+			break;
+		case Movements::rollLeft:
+			RollLeft(rotateAngle);
 			break;
 		case Movements::rollRight:
 			RollRight(rotateAngle);
@@ -229,7 +224,7 @@ namespace OpenGL {
 
 void OpenGL::Camera::Tick()
 {
-	if (movements.size() > 0)
+	if (!movements.empty())
 	{
 		if (movements.front().movement == Movements::rotateTowards) RotateTowards(rotateAngle, movements.front().towardsVec);
 		else Move(movements.front().movement, movements.front().fromMouse);
@@ -249,7 +244,7 @@ void OpenGL::Camera::ProgressiveMove(Movements movement, int nrticks, bool fromM
 
 void OpenGL::Camera::ProgressiveRotate(const Vector3D<double>& towards, int nrticks)
 {
-	if (movements.size() == 0)
+	if (movements.empty())
 	{
 		movements.emplace_back(Movement(Movements::rotateTowards, nrticks));
 		movements.back().towardsVec = towards;

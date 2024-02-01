@@ -153,7 +153,7 @@ void CMFCToolBarSlider::OnMove()
 	CMFCToolBarButton::OnMove();
 
 	if (GetHwnd() && (slider.GetStyle() & WS_VISIBLE))
-	   slider.SetWindowPos(NULL, m_rect.left + 1, m_rect.top + 1, m_rect.Width() - 2, m_rect.Height() - 2, SWP_NOZORDER | SWP_NOACTIVATE);
+	   slider.SetWindowPos(nullptr, m_rect.left + 1, m_rect.top + 1, m_rect.Width() - 2, m_rect.Height() - 2, SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 void CMFCToolBarSlider::OnSize(int iSize)
@@ -196,7 +196,7 @@ void CMFCToolBarSlider::OnChangeParentWnd(CWnd* pWndParent)
 		slider.DestroyWindow();
 	}
 
-	if (NULL == pWndParent || NULL == pWndParent->GetSafeHwnd())
+	if (nullptr == pWndParent || nullptr == pWndParent->GetSafeHwnd())
 		return;
 
 	slider.RetrievePos();

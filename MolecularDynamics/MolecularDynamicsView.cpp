@@ -62,7 +62,7 @@ END_MESSAGE_MAP()
 // CMolecularDynamicsView construction/destruction
 
 CMolecularDynamicsView::CMolecularDynamicsView()
-	: timer(NULL), sphere(NULL), inited(false),
+	: timer(0), sphere(nullptr), inited(false),
 	keyDown(false), ctrl(false), shift(false), wheelAccumulator(0),
 	movement(OpenGL::Camera::Movements::noMove), m_hRC(0), m_hDC(0),
 	Width(0), Height(0), program(nullptr),
@@ -102,7 +102,7 @@ BOOL CMolecularDynamicsView::PreCreateWindow(CREATESTRUCT& cs)
 		{
 			wndcls.lpszClassName = className;
 			wndcls.style |= CS_OWNDC;
-			wndcls.hbrBackground = NULL;
+			wndcls.hbrBackground = nullptr;
 
 			if (!AfxRegisterClass(&wndcls))
 				return FALSE;
@@ -128,7 +128,7 @@ void CMolecularDynamicsView::OnDraw(CDC* /*pDC*/)
 
 		//glFlush(); // not really needed, SwapBuffers should take care of things
 		SwapBuffers(m_hDC);
-		wglMakeCurrent(m_hDC, NULL);
+		wglMakeCurrent(m_hDC, nullptr);
 	}
 }
 
@@ -310,7 +310,7 @@ BOOL CMolecularDynamicsView::OnQueryNewPalette()
 	{
 		SelectPalette(m_hDC, (HPALETTE)m_GLPalette, FALSE);
 		const unsigned int nRet = RealizePalette(m_hDC);
-		InvalidateRect(NULL, FALSE);
+		InvalidateRect(nullptr, FALSE);
 
 		return nRet ? TRUE : FALSE;
 	}
@@ -321,7 +321,7 @@ BOOL CMolecularDynamicsView::OnQueryNewPalette()
 
 void CMolecularDynamicsView::OnPaletteChanged(CWnd* pFocusWnd)
 {
-	if (((HPALETTE)m_GLPalette != NULL) && (pFocusWnd != this))
+	if (((HPALETTE)m_GLPalette != nullptr) && (pFocusWnd != this))
 	{
 		SelectPalette(m_hDC, (HPALETTE)m_GLPalette, FALSE);
 		RealizePalette(m_hDC);
@@ -472,7 +472,7 @@ Vector3D<double> CMolecularDynamicsView::GetTowardsVector(CPoint& point, const V
 	point.y -= rect.Height() / 2;
 	point.y = -point.y;
 
-	const Vector3D<double> right = (forward % camera.up).Normalize();
+	const Vector3D<double> right = (forward % camera.GetUp()).Normalize();
 	const Vector3D<double> up = (right % forward).Normalize();
 
 	return (nearPlaneDistance*forward + pixelSize * point.x * right + pixelSize * point.y * up).Normalize();
@@ -481,7 +481,7 @@ Vector3D<double> CMolecularDynamicsView::GetTowardsVector(CPoint& point, const V
 
 void CMolecularDynamicsView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	Vector3D<double> forward = (camera.lookAt - camera.eyePos).Normalize();
+	Vector3D<double> forward = (camera.GetLookAt() - camera.GetEyePos()).Normalize();
 	Vector3D<double> towards = GetTowardsVector(point, forward);
 
 	double angle = acos(towards * forward);
@@ -520,7 +520,7 @@ void CMolecularDynamicsView::SetBillboardText(const char* text)
 
 	wglMakeCurrent(m_hDC, m_hRC);
 	memoryBitmap.SetIntoTexture(*billboardTexture);
-	wglMakeCurrent(NULL, NULL);
+	wglMakeCurrent(nullptr, nullptr);
 }
 */
 
@@ -572,14 +572,14 @@ void CMolecularDynamicsView::PaintBillboarChart()
 
 	wglMakeCurrent(m_hDC, m_hRC);
 	memoryBitmap.SetIntoTexture(*billboardTexture);
-	wglMakeCurrent(NULL, NULL);
+	wglMakeCurrent(nullptr, nullptr);
 }
 
 void CMolecularDynamicsView::DrawIntoBillboardTexture()
 {
 	wglMakeCurrent(m_hDC, m_hRC);
 	billboardTexture->Draw();
-	wglMakeCurrent(NULL, NULL);
+	wglMakeCurrent(nullptr, nullptr);
 }
 
 

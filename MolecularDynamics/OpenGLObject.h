@@ -9,22 +9,24 @@ namespace OpenGL {
 
 	class OpenGLObject
 	{
-	protected:
-		GLuint ID;
 	public:
-		OpenGLObject();
-		virtual ~OpenGLObject();
+		OpenGLObject() = default;
+		virtual ~OpenGLObject() = default;
 
 		virtual void Bind() = 0;
 		virtual void UnBind() = 0;
 		virtual GLuint getType() const = 0;
 
-		GLuint getID() const { return ID; }
+		GLuint& getID() { return ID; }
+		const GLuint& getID() const { return ID; }
+
 		explicit operator GLuint() const { return getID(); }
 
 	private: 
 		OpenGLObject(const OpenGLObject&) = delete;
 		OpenGLObject& operator=(const OpenGLObject&) = delete;
+
+		GLuint ID = 0;
 	};
 
 

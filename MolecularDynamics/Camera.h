@@ -31,12 +31,6 @@ namespace OpenGL {
 		};
 
 		Camera();
-		~Camera();
-
-		
-		Vector3D<double> eyePos;
-		Vector3D<double> lookAt;
-		Vector3D<double> up;
 
 		void MoveForward(double amount);
 		void MoveBackward(double amount);
@@ -84,9 +78,17 @@ namespace OpenGL {
 
 		void SetSpeeds(double translate, double angle);
 
+		const Vector3D<double>& GetEyePos() const { return eyePos; }
+		const Vector3D<double>& GetLookAt() const { return lookAt; }
+		const Vector3D<double>& GetUp() const { return up; }
+
 	private:
-		double rotateAngle;
-		double translateDist;
+		Vector3D<double> eyePos{ 60., 220., 160. };
+		Vector3D<double> lookAt;
+		Vector3D<double> up{ 0, 0, 1 };
+
+		double rotateAngle = 0;
+		double translateDist = 0;
 
 		struct Movement {
 			Movements movement;

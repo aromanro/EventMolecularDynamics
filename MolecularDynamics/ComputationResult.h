@@ -12,7 +12,6 @@ namespace MolecularDynamics {
 	public:
 		ComputationResult();
 		ComputationResult(const std::vector<Particle>& part, double ne);
-		~ComputationResult();
 
 		ComputationResult(const ComputationResult& other)
 			: particles(other.particles),

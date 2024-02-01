@@ -100,7 +100,7 @@ namespace OpenGL {
 
 
 	SkySphereProgram::SkySphereProgram()
-		: skySphere(NULL), sphereTexture(NULL), textureLoc(0)
+		: skySphere(nullptr), sphereTexture(nullptr), textureLoc(0)
 	{
 	}
 
@@ -157,8 +157,8 @@ namespace OpenGL {
 				delete skySphere;
 				delete sphereTexture;
 
-				skySphere = NULL;
-				sphereTexture = NULL;
+				skySphere = nullptr;
+				sphereTexture = nullptr;
 
 				return false;
 			}
@@ -167,8 +167,8 @@ namespace OpenGL {
 				delete skySphere;
 				delete sphereTexture;
 
-				skySphere = NULL;
-				sphereTexture = NULL;
+				skySphere = nullptr;
+				sphereTexture = nullptr;
 
 				return false;
 			}
@@ -178,8 +178,8 @@ namespace OpenGL {
 			delete skySphere;
 			delete sphereTexture;
 
-			skySphere = NULL;
-			sphereTexture = NULL;
+			skySphere = nullptr;
+			sphereTexture = nullptr;
 
 			return false;
 		}

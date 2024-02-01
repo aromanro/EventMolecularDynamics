@@ -8,30 +8,20 @@
 
 namespace OpenGL {
 
-	OpenGLObject::OpenGLObject()
-		: ID(0)
-	{
-	}
-
-
-	OpenGLObject::~OpenGLObject()
-	{
-	}
-
 	VertexArrayObject::VertexArrayObject()
 	{
-		glGenVertexArrays(1, &ID);
+		glGenVertexArrays(1, &getID());
 	}
 
 	VertexArrayObject::~VertexArrayObject()
 	{
 		glBindVertexArray(0);
-		glDeleteVertexArrays(1, &ID);
+		glDeleteVertexArrays(1, &getID());
 	}
 
 	void VertexArrayObject::Bind()
 	{
-		glBindVertexArray(ID);
+		glBindVertexArray(getID());
 	}
 
 	void VertexArrayObject::UnBind()
@@ -47,18 +37,18 @@ namespace OpenGL {
 	
 	BufferObject::BufferObject()
 	{
-		glGenBuffers(1, &ID);
+		glGenBuffers(1, &getID());
 	}
 
 	BufferObject::~BufferObject()
 	{
 		glBindBuffer(getType(), 0);
-		glDeleteBuffers(1, &ID);
+		glDeleteBuffers(1, &getID());
 	}
 
 	void BufferObject::Bind()
 	{
-		glBindBuffer(getType(), ID);
+		glBindBuffer(getType(), getID());
 	}
 
 	void BufferObject::UnBind()
@@ -100,18 +90,18 @@ namespace OpenGL {
 
 	FrameBufferObject::FrameBufferObject()
 	{
-		glGenFramebuffers(1, &ID);
+		glGenFramebuffers(1, &getID());
 	}
 
 	FrameBufferObject::~FrameBufferObject()
 	{
 		glBindFramebuffer(getType(), 0);
-		glDeleteFramebuffers(1, &ID);
+		glDeleteFramebuffers(1, &getID());
 	}
 
 	void FrameBufferObject::Bind()
 	{
-		glBindFramebuffer(getType(), ID);
+		glBindFramebuffer(getType(), getID());
 	}
 
 	void FrameBufferObject::UnBind()

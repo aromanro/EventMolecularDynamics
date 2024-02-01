@@ -4,17 +4,6 @@
 
 #define GLSL(src) "#version 450 core\n" #src
 
-BillboardGLProgram::BillboardGLProgram()
-	: matLocation(0), modelMatLocation(0), 
-	alphaLoc(0), textureLoc(0)
-{
-}
-
-
-BillboardGLProgram::~BillboardGLProgram()
-{
-}
-
 
 void BillboardGLProgram::getUniformsLocations()
 {

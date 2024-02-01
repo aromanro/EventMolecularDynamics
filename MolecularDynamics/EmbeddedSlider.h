@@ -10,7 +10,6 @@ class CEmbeddedSlider : public CSliderCtrl
 
 public:
 	CEmbeddedSlider(CMFCToolBarSlider* toolbarBtn);
-	~CEmbeddedSlider() override;
 
 	void RetrievePos();
 

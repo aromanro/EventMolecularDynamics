@@ -23,10 +23,6 @@ CEmbeddedSlider::CEmbeddedSlider(CMFCToolBarSlider *toolbarBtn)
 {
 }
 
-CEmbeddedSlider::~CEmbeddedSlider()
-{
-}
-
 
 BEGIN_MESSAGE_MAP(CEmbeddedSlider, CSliderCtrl)
 	ON_WM_KEYDOWN()

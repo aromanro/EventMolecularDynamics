@@ -11,7 +11,6 @@ class SimulationPropertyPage : public CMFCPropertyPage
 
 public:
 	SimulationPropertyPage();
-	~SimulationPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

@@ -104,7 +104,7 @@ void Options::Save()
 COLORREF Options::GetColor(LPCTSTR param, COLORREF defval)
 {
 	UINT sz = 0;
-	LPBYTE buf = NULL;
+	LPBYTE buf = nullptr;
 
 	if (theApp.GetProfileBinary(L"options", param, &buf, &sz))
 	{
@@ -121,7 +121,7 @@ double Options::GetDouble(LPCTSTR param, double defval)
 	double val = defval;
 
 	UINT sz = 0;
-	LPBYTE buf = NULL;
+	LPBYTE buf = nullptr;
 
 	if (theApp.GetProfileBinary(L"options", param, &buf, &sz))
 	{

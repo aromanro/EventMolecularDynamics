@@ -82,7 +82,7 @@ void MemoryBitmap::SetSize(int width, int height)
 }
 
 
-void MemoryBitmap::Draw(CDC* pDC)
+void MemoryBitmap::Draw(CDC* pDC) const
 {
 	BITMAPINFO bmi;
 	ZeroMemory(&bmi, sizeof(BITMAPINFOHEADER));
@@ -105,7 +105,7 @@ void MemoryBitmap::Draw(CDC* pDC)
 	dcMemory.SelectObject(pOldBitmap);
 }
 
-void MemoryBitmap::Draw(CDC* pDC, CRect& rect, int origWidth, int origHeight)
+void MemoryBitmap::Draw(CDC* pDC, CRect& rect, int origWidth, int origHeight) const
 {
 	BITMAPINFO bmi;
 	ZeroMemory(&bmi, sizeof(BITMAPINFOHEADER));
@@ -131,10 +131,10 @@ void MemoryBitmap::Draw(CDC* pDC, CRect& rect, int origWidth, int origHeight)
 
 void MemoryBitmap::WriteText(const char* text, CFont& font, DWORD color, DWORD bkcolor)
 {
-	const HDC hDC = GetDC(NULL);
-	if (NULL == hDC) return;
+	const HDC hDC = GetDC(nullptr);
+	if (nullptr == hDC) return;
 	CDC* pDC = CDC::FromHandle(hDC);
-	if (NULL == pDC) return;
+	if (nullptr == pDC) return;
 
 	CBitmap bitmap;
 	CDC dcMemory;
@@ -181,10 +181,10 @@ void MemoryBitmap::WriteText(const char* text, CFont& font, DWORD color, DWORD b
 
 void MemoryBitmap::DrawChart(Chart& chart)
 {
-	const HDC hDC = GetDC(NULL);
-	if (NULL == hDC) return;
+	const HDC hDC = GetDC(nullptr);
+	if (nullptr == hDC) return;
 	CDC* pDC = CDC::FromHandle(hDC);
-	if (NULL == pDC) return;
+	if (nullptr == pDC) return;
 
 	CDC dcMemory;
 	dcMemory.CreateCompatibleDC(pDC);

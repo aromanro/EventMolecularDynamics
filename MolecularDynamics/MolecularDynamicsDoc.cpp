@@ -116,7 +116,7 @@ CMolecularDynamicsView* CMolecularDynamicsDoc::GetMainView(void)
 			return dynamic_cast<CMolecularDynamicsView*>(pView);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 
@@ -178,9 +178,9 @@ void CMolecularDynamicsDoc::SetSearchContent(const CString& value)
 	}
 	else
 	{
-		CMFCFilterChunkValueImpl *pChunk = NULL;
+		CMFCFilterChunkValueImpl *pChunk = nullptr;
 		ATLTRY(pChunk = new CMFCFilterChunkValueImpl);
-		if (pChunk != NULL)
+		if (pChunk != nullptr)
 		{
 			pChunk->SetTextValue(PKEY_Search_Contents, value, CHUNK_TEXT);
 			SetChunkValue(pChunk);

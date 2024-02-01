@@ -37,7 +37,7 @@
 
 void CMolecularDynamicsView::RenderScene()
 {
-	if (NULL == program) return;
+	if (nullptr == program) return;
 
 	CMolecularDynamicsDoc* doc = GetDocument();
 	if (!doc) return;
@@ -46,7 +46,7 @@ void CMolecularDynamicsView::RenderScene()
 
 	program->Use();
 
-	glUniform3f(program->viewPosLocation, static_cast<float>(camera.eyePos.X), static_cast<float>(camera.eyePos.Y), static_cast<float>(camera.eyePos.Z));
+	glUniform3f(program->viewPosLocation, static_cast<float>(camera.GetEyePos().X), static_cast<float>(camera.GetEyePos().Y), static_cast<float>(camera.GetEyePos().Z));
 	glUniformMatrix4fv(program->matLocation, 1, GL_FALSE, value_ptr(mat));
 
 	for (unsigned int i = 0; i < program->lights.size(); ++i)
@@ -74,7 +74,7 @@ void CMolecularDynamicsView::RenderScene()
 	}
 
 	glEnableVertexAttribArray(2);
-	posBuffer->setData(NULL, doc->nrParticles * 3 * sizeof(GLfloat), GL_STREAM_DRAW); // orphaning
+	posBuffer->setData(nullptr, doc->nrParticles * 3 * sizeof(GLfloat), GL_STREAM_DRAW); // orphaning
 	posBuffer->setSubData(position.data(), doc->nrParticles * 3 * sizeof(GLfloat));
 
 	sphere->DrawInstanced(doc->nrParticles);
@@ -88,7 +88,7 @@ void CMolecularDynamicsView::RenderScene()
 
 void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 {
-	if (NULL == billboardProgram) return;
+	if (nullptr == billboardProgram) return;
 
 	CMolecularDynamicsDoc* doc = GetDocument();
 	if (!doc) return;
@@ -114,7 +114,7 @@ void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 	const Vector3D<double> up = camera.getNormalizedUp();
 	pos -= 0.025 * glm::dvec3(up.X, up.Y, up.Z);
 
-	const glm::dvec3 cameraVector = glm::dvec3(camera.eyePos.X, camera.eyePos.Y, camera.eyePos.Z);
+	const glm::dvec3 cameraVector = glm::dvec3(camera.GetEyePos().X, camera.GetEyePos().Y, camera.GetEyePos().Z);
 	const glm::dvec3 billboardPos = cameraVector + pos;
 
 	const double bscale = 0.03f;

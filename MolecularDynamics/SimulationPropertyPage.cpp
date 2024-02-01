@@ -30,10 +30,6 @@ SimulationPropertyPage::SimulationPropertyPage()
 	rightSide = (theApp.GetOptions().rightSideInsteadOfSphere ? BST_CHECKED : BST_UNCHECKED);
 }
 
-SimulationPropertyPage::~SimulationPropertyPage()
-{
-}
-
 void SimulationPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMFCPropertyPage::DoDataExchange(pDX);

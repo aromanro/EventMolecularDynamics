@@ -8,18 +8,15 @@ class BillboardGLProgram :
 	public OpenGL::Program
 {
 public:
-	BillboardGLProgram();
-	virtual ~BillboardGLProgram();
-
 	bool SetupShaders();
 
 	// vertex shader parameters
-	GLint matLocation;
-	GLint modelMatLocation;
+	GLint matLocation = 0;
+	GLint modelMatLocation = 0;
 
 	// fragment shader parameters
-	GLint alphaLoc;
-	GLint textureLoc;
+	GLint alphaLoc = 0;
+	GLint textureLoc = 0;
 
 protected:
 	void getUniformsLocations();

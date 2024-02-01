@@ -13,9 +13,4 @@ namespace MolecularDynamics {
 	{
 	}
 
-
-	ComputationResult::~ComputationResult()
-	{
-	}
-
 }
