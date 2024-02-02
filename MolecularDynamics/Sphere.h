@@ -8,7 +8,6 @@ namespace OpenGL {
 	{
 	public:
 		Sphere(float r = 1., unsigned int lats = 64, unsigned int longs = 64, bool useTexture = true);
-		~Sphere() override;
 
 		void Draw() override;
 		void DrawInstanced(unsigned int count);

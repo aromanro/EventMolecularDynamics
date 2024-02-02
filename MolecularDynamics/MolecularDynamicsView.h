@@ -114,19 +114,9 @@ public:
 	 void PaintBillboarChart();
 	 void DrawIntoBillboardTexture();
 
-	// Generated message map functions
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	afx_msg void OnDestroy();
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg BOOL OnQueryNewPalette();
-	afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
-	BOOL PreTranslateMessage(MSG* pMsg) override;
-	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	 afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	
-protected:
+private:
 	bool HandleKeyPress(WPARAM wParam, bool ctrl, bool shift);
 	void SetupProgram();
 	void SetupBillboardProgram();
@@ -138,6 +128,16 @@ protected:
 	void HandleLeft(bool ctrl, bool shift);
 	void HandleRight(bool ctrl, bool shift);
 
+	// Generated message map functions
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnDestroy();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg BOOL OnQueryNewPalette();
+	afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
+	BOOL PreTranslateMessage(MSG* pMsg) override;
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);

@@ -10,7 +10,6 @@ class CameraPropertyPage : public CMFCPropertyPage
 
 public:
 	CameraPropertyPage();
-	~CameraPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

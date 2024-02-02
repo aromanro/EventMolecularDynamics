@@ -15,17 +15,16 @@ namespace MolecularDynamics {
 	class Particle
 	{
 	public:
-		Particle();
-		~Particle();
+		virtual ~Particle() = default;
 
 
 		Vector3D<double> position;
 		Vector3D<double> velocity;
 
-		double mass;
-		double radius;
+		double mass = 1;
+		double radius = 1;
 
-		double particleTime;
+		double particleTime = 0;
 
 		inline Vector3D<double> GetPosition(double simTime) const
 		{

@@ -22,8 +22,19 @@ protected: // create from serialization only
 	CMolecularDynamicsDoc();
 	DECLARE_DYNCREATE(CMolecularDynamicsDoc)
 
-// Attributes
 public:
+	// Implementation
+	~CMolecularDynamicsDoc() override;
+
+	CMolecularDynamicsView* GetMainView();
+
+	void RetrieveStatistics()
+	{
+		if (theThread)
+			theThread->CalculateStatistics = true;
+	}
+
+	// Attributes
 	std::atomic<int> nrsteps;
 	int nrParticles;
 
@@ -48,7 +59,6 @@ private:
 	MolecularDynamics::StatisticsThread* theThread;
 
 // Operations
-public:
 // Overrides
 	BOOL OnNewDocument() override;
 	void Serialize(CArchive& ar) override;
@@ -57,23 +67,15 @@ public:
 	void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds) override;
 #endif // SHARED_HANDLERS
 
-// Implementation
-	~CMolecularDynamicsDoc() override;
+
 #ifdef _DEBUG
 	void AssertValid() const override;
 	void Dump(CDumpContext& dc) const override;
 #endif
 
-	CMolecularDynamicsView* GetMainView();
 
-	void RetrieveStatistics()
-	{
-		if (theThread)
-			theThread->CalculateStatistics = true;
-	}
 
 // Generated message map functions
-protected:
 	DECLARE_MESSAGE_MAP()
 
 #ifdef SHARED_HANDLERS

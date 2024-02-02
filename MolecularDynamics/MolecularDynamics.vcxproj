@@ -270,7 +270,6 @@
     <ClCompile Include="DataSets.cpp" />
     <ClCompile Include="DisplayPropertyPage.cpp" />
     <ClCompile Include="EmbeddedSlider.cpp" />
-    <ClCompile Include="Event.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MemoryBitmap.cpp" />
     <ClCompile Include="MFCToolBarSlider.cpp" />
@@ -285,7 +284,6 @@
     <ClCompile Include="OpenGLObject.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsPropertySheet.cpp" />
-    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Rectangle.cpp" />

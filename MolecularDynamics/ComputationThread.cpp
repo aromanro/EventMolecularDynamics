@@ -1,16 +1,6 @@
 #include "stdafx.h"
 #include "ComputationThread.h"
 
-ComputationThread::ComputationThread()
-	: wakeup(false), processed(false)
-{
-}
-
-ComputationThread::~ComputationThread()
-{
-}
-
-
 void ComputationThread::Start()
 {
 	mThread = std::thread([this]() {

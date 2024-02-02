@@ -28,6 +28,14 @@ public:
 	BOOL InitInstance() override;
 
 // Implementation
+	Options& GetOptions() { return options; }
+	UINT& GetAppLook() { return m_nAppLook; }
+
+	BOOL UseHiColorIcons() const { return m_bHiColorIcons; }
+
+	DECLARE_MESSAGE_MAP()
+
+private:
 	void PreLoadState() override;
 	void LoadCustomState() override;
 	void SaveCustomState() override;
@@ -35,14 +43,6 @@ public:
 	afx_msg void OnAppAbout();
 	int ExitInstance() override;
 
-	Options& GetOptions() { return options; }
-	UINT& GetAppLook() { return m_nAppLook; }
-
-	BOOL UseHiColorIcons() { return m_bHiColorIcons; }
-
-	DECLARE_MESSAGE_MAP()
-
-private:
 	UINT  m_nAppLook;
 	BOOL  m_bHiColorIcons;
 

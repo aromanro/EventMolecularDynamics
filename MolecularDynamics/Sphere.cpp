@@ -99,11 +99,6 @@ namespace OpenGL {
 		}
 	}
 
-
-	Sphere::~Sphere()
-	{
-	}
-
 	void Sphere::Draw()
 	{
 		VertexBufferRenderable::Bind();

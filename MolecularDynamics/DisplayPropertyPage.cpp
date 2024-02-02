@@ -24,10 +24,6 @@ DisplayPropertyPage::DisplayPropertyPage()
 {
 }
 
-DisplayPropertyPage::~DisplayPropertyPage()
-{
-}
-
 void DisplayPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMFCPropertyPage::DoDataExchange(pDX);

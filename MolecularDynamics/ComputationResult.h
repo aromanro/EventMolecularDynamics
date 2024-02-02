@@ -13,27 +13,10 @@ namespace MolecularDynamics {
 		ComputationResult();
 		ComputationResult(const std::vector<Particle>& part, double ne);
 
-		ComputationResult(const ComputationResult& other)
-			: particles(other.particles),
-			nextEventTime(other.nextEventTime)
-		{					
-		}
-
 		ComputationResult(ComputationResult&& other) noexcept
 			: nextEventTime(other.nextEventTime)
 		{
 			particles.swap(other.particles);
-		}
-
-		ComputationResult& operator=(const ComputationResult& other)
-		{
-			if (this != &other) 
-			{ 
-				particles = other.particles;
-				nextEventTime = other.nextEventTime;
-			}
-
-			return *this;
 		}
 
 		ComputationResult& operator=(ComputationResult&& other) noexcept

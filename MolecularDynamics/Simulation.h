@@ -47,15 +47,15 @@ namespace MolecularDynamics {
 		inline Event GetAndRemoveFirstEventFromQueue()
 		{
 			std::pop_heap(eventsQueue.begin(), eventsQueue.end());
-			Event nextEvent = eventsQueue.back();
+			Event nextEvent = std::move(eventsQueue.back());
 			eventsQueue.pop_back();
 
 			return nextEvent;
 		}
 
-		inline void AddEventToQueue(const Event& event)
+		inline void AddEventToQueue(Event&& event)
 		{
-			eventsQueue.emplace_back(event);
+			eventsQueue.emplace_back(std::move(event));
 			std::push_heap(eventsQueue.begin(), eventsQueue.end());
 		}
 
@@ -94,17 +94,15 @@ namespace MolecularDynamics {
 			case Walls::back:
 				particle.velocity.Y *= -1;
 				break;
+			default:
+				break;
 			}
 		}
 
 
 		inline void AddWallCollisionToQueue(int particle)
 		{
-			//return;
-
-			const double colTime = particles[particle].WallCollisionTime();
-
-			if (std::numeric_limits<double>::infinity() != colTime)
+			if (const double colTime = particles[particle].WallCollisionTime(); std::numeric_limits<double>::infinity() != colTime)
 			{
 				Event wallEvent;
 
@@ -112,18 +110,14 @@ namespace MolecularDynamics {
 				wallEvent.particle1 = particle;
 				wallEvent.eventTime = colTime;
 
-				AddEventToQueue(wallEvent);
+				AddEventToQueue(std::move(wallEvent));
 			}
 		}
 
 
 		inline void AddCollision(int i, int j)
 		{
-			//return;  // to test only collisions with the walls
-
-			const double colTime = particles[i].CollisionTime(particles[j]);
-
-			if (std::numeric_limits<double>::infinity() != colTime)
+			if (const double colTime = particles[i].CollisionTime(particles[j]); std::numeric_limits<double>::infinity() != colTime)
 			{
 				Event collisionEvent;
 
@@ -131,7 +125,7 @@ namespace MolecularDynamics {
 				collisionEvent.particle2 = j;
 				collisionEvent.eventTime = colTime;
 
-				AddEventToQueue(collisionEvent);
+				AddEventToQueue(std::move(collisionEvent));
 			}
 		}
 
@@ -158,10 +152,8 @@ namespace MolecularDynamics {
 		{
 			if (Event::EventType::particleCollision == colEvent.type)
 			{
-				for (int i = 0; i < eventsQueue.size(); ++i)
+				for (Event& event : eventsQueue)
 				{
-					Event& event = eventsQueue[i];
-
 					if (Event::EventType::noEvent == event.type) continue;
 
 					if (event.particle1 == colEvent.particle1 || event.particle1 == colEvent.particle2 || 
@@ -174,10 +166,8 @@ namespace MolecularDynamics {
 			}
 			else
 			{
-				for (int i = 0; i < eventsQueue.size(); ++i)
+				for (Event& event : eventsQueue)
 				{
-					Event& event = eventsQueue[i];
-
 					if (Event::EventType::noEvent == event.type) continue;
 
 					if (event.particle1 == colEvent.particle1 || (event.type == Event::EventType::particleCollision && event.particle2 == colEvent.particle1))
@@ -203,9 +193,7 @@ namespace MolecularDynamics {
 				particles[nextEvent.particle2].particleTime = nextEvent.eventTime;
 			}
 			else
-			{
 				AdjustVelocityForCollision(particles[nextEvent.particle1], particles[nextEvent.particle1].CollisionWall(nextEvent));
-			}
 
 			particles[nextEvent.particle1].particleTime = nextEvent.eventTime;
 		}

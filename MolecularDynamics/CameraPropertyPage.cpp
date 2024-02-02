@@ -22,10 +22,6 @@ CameraPropertyPage::CameraPropertyPage()
 {
 }
 
-CameraPropertyPage::~CameraPropertyPage()
-{
-}
-
 void CameraPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMFCPropertyPage::DoDataExchange(pDX);

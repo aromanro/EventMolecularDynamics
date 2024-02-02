@@ -5,10 +5,7 @@ namespace MolecularDynamics {
 	class Event
 	{
 	public:
-		Event();
-		~Event();
-
-		double eventTime;
+		double eventTime = 0;
 
 		enum class EventType : unsigned char {
 			particleCollision,
@@ -19,10 +16,10 @@ namespace MolecularDynamics {
 			noEvent
 		};
 
-		EventType type;
+		EventType type = EventType::particleCollision;
 
-		int particle1;
-		int particle2;
+		int particle1 = -1;
+		int particle2 = -1;
 
 		inline bool InvolvesParticle(int particle) const { return particle1 == particle || (type == EventType::particleCollision && particle2 == particle); }
 

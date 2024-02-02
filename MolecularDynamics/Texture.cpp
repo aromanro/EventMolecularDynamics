@@ -61,11 +61,6 @@ namespace OpenGL {
 		glGenerateMipmap(getType());
 	}
 
-	TextureWithPixelBuffer::TextureWithPixelBuffer()
-		: pixelBuffer(nullptr), m_width(0), m_height(0), m_nrBytes(0)
-	{
-	}
-
 	TextureWithPixelBuffer::~TextureWithPixelBuffer()
 	{
 		delete pixelBuffer;
