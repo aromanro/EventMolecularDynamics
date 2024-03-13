@@ -96,7 +96,7 @@ BOOL CMolecularDynamicsView::PreCreateWindow(CREATESTRUCT& cs)
 	HINSTANCE hInst = AfxGetInstanceHandle();
 
 	const wchar_t *className = L"OpenGLClass";
-	if (!(::GetClassInfo(hInst, className, &wndcls)))
+	if (!::GetClassInfo(hInst, className, &wndcls))
 	{
 		if (::GetClassInfo(hInst, cs.lpszClass, &wndcls))
 		{
@@ -202,12 +202,10 @@ void CMolecularDynamicsView::OnTimer(UINT_PTR nIDEvent)
 	{
 		static long long int ticks = 0;
 
-		CMolecularDynamicsDoc *doc = GetDocument();
-
-		if (doc) {
+		if (CMolecularDynamicsDoc* doc = GetDocument()) {
 			++ticks;
-			int r = ticks % 100;
-			if (r == 0)
+			
+			if (int r = ticks % 100; r == 0)
 			{
 				PaintBillboarChart();
 				doc->RetrieveStatistics();
@@ -265,14 +263,13 @@ BOOL CMolecularDynamicsView::OnEraseBkgnd(CDC* /*pDC*/)
 void CMolecularDynamicsView::InitializePalette(void)
 {
 	PIXELFORMATDESCRIPTOR pfd;
-	BYTE RedRng = 0, GreenRng = 0, BlueRng = 0;
 
 	const int nPixelFormat = GetPixelFormat(m_hDC);
 	DescribePixelFormat(m_hDC, nPixelFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
 
 	if (!(pfd.dwFlags & PFD_NEED_PALETTE)) return;
 
-	const WORD nColors = static_cast<WORD>(1 << pfd.cColorBits);
+	const auto nColors = static_cast<WORD>(1 << pfd.cColorBits);
 
 	LOGPALETTE *pPal = (LOGPALETTE*)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
 
@@ -281,9 +278,9 @@ void CMolecularDynamicsView::InitializePalette(void)
 		pPal->palVersion = 0x300;
 		pPal->palNumEntries = nColors;
 
-		RedRng = static_cast<BYTE>((1 << pfd.cRedBits) - 1);
-		GreenRng = static_cast<BYTE>((1 << pfd.cGreenBits) - 1);
-		BlueRng = static_cast<BYTE>((1 << pfd.cBlueBits) - 1);
+		auto RedRng = static_cast<BYTE>((1 << pfd.cRedBits) - 1);
+		auto GreenRng = static_cast<BYTE>((1 << pfd.cGreenBits) - 1);
+		auto BlueRng = static_cast<BYTE>((1 << pfd.cBlueBits) - 1);
 
 		for (unsigned int i = 0; i < nColors; i++)
 		{
@@ -448,9 +445,7 @@ BOOL CMolecularDynamicsView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	wheelAccumulator += zDelta;
 
-	int distanceTicks = abs(wheelAccumulator);
-
-	if (distanceTicks >= WHEEL_DELTA) {
+	if (int distanceTicks = abs(wheelAccumulator); distanceTicks >= WHEEL_DELTA) {
 		distanceTicks /= WHEEL_DELTA;
 		const bool forward = wheelAccumulator > 0;
 		wheelAccumulator %= WHEEL_DELTA;
@@ -485,7 +480,7 @@ void CMolecularDynamicsView::OnLButtonDown(UINT nFlags, CPoint point)
 	Vector3D<double> towards = GetTowardsVector(point, forward);
 
 	double angle = acos(towards * forward);
-	const int numticks = static_cast<int>(angle / camera.GetRotateAngle());
+	const auto numticks = static_cast<int>(angle / camera.GetRotateAngle());
 
 	camera.RotateTowards(angle - numticks * camera.GetRotateAngle(), towards);
 	camera.ProgressiveRotate(towards, numticks);
@@ -538,7 +533,7 @@ bool CMolecularDynamicsView::SetDataIntoChart()
 	double maxSpeed;
 
 	{
-		std::lock_guard<std::mutex> lock(doc->dataSection);
+		std::lock_guard lock(doc->dataSection);
 		if (doc->results1.empty() || doc->results2.empty()) return false;
 
 		nrBins = doc->options.nrBins;

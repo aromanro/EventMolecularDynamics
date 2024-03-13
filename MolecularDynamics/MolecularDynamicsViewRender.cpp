@@ -39,7 +39,7 @@ void CMolecularDynamicsView::RenderScene()
 {
 	if (nullptr == program) return;
 
-	CMolecularDynamicsDoc* doc = GetDocument();
+	const CMolecularDynamicsDoc* doc = GetDocument();
 	if (!doc) return;
 
 	glm::mat4 mat = perspectiveMatrix * (glm::mat4)camera;
@@ -49,12 +49,12 @@ void CMolecularDynamicsView::RenderScene()
 	glUniform3f(program->viewPosLocation, static_cast<float>(camera.GetEyePos().X), static_cast<float>(camera.GetEyePos().Y), static_cast<float>(camera.GetEyePos().Z));
 	glUniformMatrix4fv(program->matLocation, 1, GL_FALSE, value_ptr(mat));
 
-	for (unsigned int i = 0; i < program->lights.size(); ++i)
+	for (const auto& light : program->lights)
 	{
-		glm::vec3 lightDir = program->lights[i].lightPos;
+		auto lightDir = light.lightPos;
 		lightDir = glm::normalize(lightDir);
-		glUniform3f(program->lights[i].lightDirPos, lightDir.x, lightDir.y, lightDir.z);
-		glUniform1f(program->lights[i].attenPos, program->lights[i].atten);
+		glUniform3f(light.lightDirPos, lightDir.x, lightDir.y, lightDir.z);
+		glUniform1f(light.attenPos, light.atten);
 	}
 
 	// now particles!!!
@@ -62,13 +62,11 @@ void CMolecularDynamicsView::RenderScene()
 	int index = 0;
 	for (const auto& particle : doc->curResult.particles)
 	{
-		Vector3D<double> particlePos = particle.GetPosition(doc->simulationTime/*, spaceSize*/);
-		glm::vec3 pos = glm::vec3(particlePos.X, particlePos.Y, particlePos.Z);
-		//glm::vec3 pos = glm::vec3(particle.position.X, particle.position.Y, particle.position.Z);
+		const auto particlePos = particle.GetPosition(doc->simulationTime/*, spaceSize*/);
 
-		position[3ULL * index] = pos.x;
-		position[3ULL * index + 1ULL] = pos.y;
-		position[3ULL * index + 2ULL] = pos.z;
+		position[3ULL * index] = static_cast<float>(particlePos.X);
+		position[3ULL * index + 1ULL] = static_cast<float>(particlePos.Y);
+		position[3ULL * index + 2ULL] = static_cast<float>(particlePos.Z);
 
 		++index;
 	}
@@ -90,7 +88,7 @@ void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 {
 	if (nullptr == billboardProgram) return;
 
-	CMolecularDynamicsDoc* doc = GetDocument();
+	const CMolecularDynamicsDoc* doc = GetDocument();
 	if (!doc) return;
 
 	billboardProgram->Use();
@@ -106,16 +104,16 @@ void CMolecularDynamicsView::DisplayBilboard(glm::mat4& mat)
 	precisionMat[3][2] = 0;
 
 	// put the billboard in front of the camera
-	const Vector3D<double> forward = camera.getNormalizedForward();
+	const auto forward = camera.getNormalizedForward();
 	glm::dvec3 pos(forward.X, forward.Y, forward.Z);
 	pos *= 0.101;
 
 	// but shifted downwards a little
-	const Vector3D<double> up = camera.getNormalizedUp();
+	const auto up = camera.getNormalizedUp();
 	pos -= 0.025 * glm::dvec3(up.X, up.Y, up.Z);
 
-	const glm::dvec3 cameraVector = glm::dvec3(camera.GetEyePos().X, camera.GetEyePos().Y, camera.GetEyePos().Z);
-	const glm::dvec3 billboardPos = cameraVector + pos;
+	const auto cameraVector = glm::dvec3(camera.GetEyePos().X, camera.GetEyePos().Y, camera.GetEyePos().Z);
+	const auto billboardPos = cameraVector + pos;
 
 	const double bscale = 0.03f;
 

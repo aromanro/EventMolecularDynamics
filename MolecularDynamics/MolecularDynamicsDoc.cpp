@@ -87,11 +87,12 @@ BOOL CMolecularDynamicsDoc::OnNewDocument()
 	curResult.nextEventTime = theThread->GetNextEventTime();
 
 	const double avgRadius = (options.exteriorSpheresRadius + options.interiorSpheresRadius) / 2.;
+	const double avgMass = (options.exteriorSpheresMass + options.interiorSpheresMass) / 2.;
 
 	nrBigSpheres = nrSmallSpheres = 0;
 	for (const MolecularDynamics::Particle& p : curResult.particles)
 	{
-		if (p.radius > avgRadius)
+		if (p.radius > avgRadius || (p.radius == avgRadius && p.mass > avgMass))
 			++nrBigSpheres;
 		else
 			++nrSmallSpheres;
@@ -215,7 +216,7 @@ void CMolecularDynamicsDoc::Advance()
 	while (curResult.nextEventTime < simulationTime)
 	{
 		{
-			std::lock_guard<std::mutex> lock(dataSection);
+			std::lock_guard lock(dataSection);
 			isEmpty = resultsQueue.empty();
 		}
 
@@ -226,7 +227,7 @@ void CMolecularDynamicsDoc::Advance()
 		}
 		else {
 			{
-				std::lock_guard<std::mutex> lock(dataSection);
+				std::lock_guard lock(dataSection);
 				curResult = std::move(resultsQueue.front());
 				resultsQueue.pop();
 			}
