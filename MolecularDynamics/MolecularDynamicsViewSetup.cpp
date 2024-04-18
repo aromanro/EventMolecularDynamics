@@ -53,6 +53,10 @@ void CMolecularDynamicsView::Setup()
 {
 	if (inited) return;
 
+	// this is to orient back the camera to the default position
+	OpenGL::Camera newCam;
+	camera = newCam;
+
 	SetupGl();
 
 	const double billboardAspectRatio = 2;
